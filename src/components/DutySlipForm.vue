@@ -362,7 +362,19 @@
         <div class="border-t pt-2 font-medium">Client's Signature</div>
         <div
           class="border border-gray-400 h-20 w-48 mt-2 rounded-md bg-gray-100"
-        ></div>
+        >
+          <canvas
+            id="signatureCanvas"
+            class="w-full h-full"
+            style="border: 1px solid #ddd"
+          ></canvas>
+        </div>
+        <button
+          @click="clearSignature"
+          class="mt-2 px-4 py-2 bg-red-500 text-white rounded-md"
+        >
+          Clear Signature
+        </button>
       </div>
     </div>
 
@@ -379,23 +391,10 @@
 </template>
 
 <script>
-// import { ref } from 'vue';
 import axios from "axios";
 import VueDatepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import Swal from "sweetalert2";
-
-// const form = ref({
-//   partyName: '',
-//   busNo: '',
-//   phone: '',
-//   time: '',
-//   address: '',
-//   startKms: '',
-//   endKms: '',
-//   totalHours: '',
-//   driverName: ''
-// });
 
 export default {
   name: "DutyReceipt",
@@ -406,19 +405,8 @@ export default {
     return {
       email: "excel.travel@rediffmail.com",
       companyName: "Excel Travels",
-      // dateFrom: new Date(),
-      // dateTo: new Date(),
-      // time: new Date(),
-      // partyName: "",
-      // address: "",
-      // phone: "",
-      // busNo: "",
-      // closingKms: "",
-      // totalHours: "",
-      // tripRoute: "",
       duty: {
         DutySlipID: "",
-        // DutySlipDate: new Date(),
         DutySlipDate: null,
         partyName: "",
         CustomerName: "",
@@ -448,10 +436,89 @@ export default {
       },
     };
   },
-
+  mounted() {
+    this.setupCanvas();
+  },
   methods: {
+    setupCanvas() {
+      const canvas = document.getElementById("signatureCanvas");
+      const ctx = canvas.getContext("2d");
+
+      // Set canvas width and height to match the container
+      canvas.width = canvas.clientWidth;
+      canvas.height = canvas.clientHeight;
+
+      // Initial canvas settings
+      ctx.lineWidth = 2;
+      ctx.lineCap = "round";
+      ctx.strokeStyle = "#000";
+
+      let isDrawing = false;
+      let lastX = 0;
+      let lastY = 0;
+
+      // Mouse events for desktop
+      canvas.addEventListener("mousedown", (e) => this.startDrawing(e, ctx));
+      canvas.addEventListener("mousemove", (e) => this.draw(e, ctx));
+      canvas.addEventListener("mouseup", () => this.stopDrawing());
+      canvas.addEventListener("mouseout", () => this.stopDrawing());
+
+      // Touch events for mobile
+      canvas.addEventListener("touchstart", (e) => this.startDrawing(e, ctx));
+      canvas.addEventListener("touchmove", (e) => this.draw(e, ctx));
+      canvas.addEventListener("touchend", () => this.stopDrawing());
+      canvas.addEventListener("touchcancel", () => this.stopDrawing());
+
+      this.startDrawing = (e, ctx) => {
+        isDrawing = true;
+        const { x, y } = this.getPosition(e);
+        lastX = x;
+        lastY = y;
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+      };
+
+      this.draw = (e, ctx) => {
+        if (!isDrawing) return;
+
+        const { x, y } = this.getPosition(e);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        lastX = x;
+        lastY = y;
+      };
+
+      this.stopDrawing = () => {
+        isDrawing = false;
+      };
+
+      this.getPosition = (e) => {
+        const canvas = document.getElementById("signatureCanvas");
+        const rect = canvas.getBoundingClientRect();
+        let x = e.clientX || e.touches[0].clientX;
+        let y = e.clientY || e.touches[0].clientY;
+
+        x = x - rect.left;
+        y = y - rect.top;
+
+        return { x, y };
+      };
+    },
+
+    clearSignature() {
+      const canvas = document.getElementById("signatureCanvas");
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+      this.duty.ClientSignature = ""; // Reset the signature data
+    },
+
     async submitForm() {
+      // Get the base64 signature data URL
+      const canvas = document.getElementById("signatureCanvas");
+      this.duty.ClientSignature = canvas.toDataURL(); // Store the signature image
+
       try {
+        // Save data to backend
         await axios.post("http://localhost:5000/dutyslips", this.duty);
         Swal.fire({
           title: "Success!",
@@ -471,6 +538,7 @@ export default {
         });
       }
     },
+
     updateDate(value) {
       this.selectedDate = value;
     },
@@ -484,5 +552,9 @@ textarea:focus {
   outline: none;
   border-color: #6366f1;
   box-shadow: 0 0 5px #6366f1;
+}
+canvas {
+  border: 1px solid #bbb;
+  background-color: #f4f4f4;
 }
 </style>
