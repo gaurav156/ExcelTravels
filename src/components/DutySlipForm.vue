@@ -31,6 +31,9 @@
           class="w-28 text-sm"
           placeholder="Select current Date"
         />
+        <div v-if="errors.DutySlipDate" class="text-red-500 text-sm mt-1">
+          {{ errors.DutySlipDate }}
+        </div>
       </div>
     </div>
 
@@ -46,6 +49,9 @@
           class="w-full border border-gray-300 px-3 py-2 rounded-md focus:ring focus:ring-indigo-200"
           placeholder="Enter Party Name"
         />
+        <div v-if="errors.partyName" class="text-red-500 text-sm mt-1">
+          {{ errors.partyName }}
+        </div>
       </div>
 
       <div class="flex items-center w-1/2">
@@ -58,6 +64,9 @@
           class="w-full border border-gray-300 px-3 py-2 rounded-md focus:ring focus:ring-indigo-200"
           placeholder="Enter Customer Name"
         />
+        <div v-if="errors.CustomerName" class="text-red-500 text-sm mt-1">
+          {{ errors.CustomerName }}
+        </div>
       </div>
     </div>
 
@@ -70,6 +79,9 @@
         rows="3"
         placeholder="Enter Address"
       ></textarea>
+      <div v-if="errors.address" class="text-red-500 text-sm mt-1">
+        {{ errors.address }}
+      </div>
     </div>
 
     <!-- Phone -->
@@ -83,6 +95,9 @@
         class="w-1/3 border border-gray-300 px-3 py-2 rounded-md focus:ring focus:ring-indigo-200"
         placeholder="Enter Phone Number"
       />
+      <div v-if="errors.phone" class="text-red-500 text-sm mt-1">
+        {{ errors.phone }}
+      </div>
     </div>
 
     <!-- Bus No & Time -->
@@ -95,18 +110,24 @@
           class="w-full border border-gray-300 px-3 py-2 rounded-md focus:ring focus:ring-indigo-200"
           placeholder="Enter Bus Number"
         />
+        <div v-if="errors.busNo" class="text-red-500 text-sm mt-1">
+          {{ errors.busNo }}
+        </div>
       </div>
 
       <div class="flex items-center w-1/2">
-        <label class="w-32 font-medium text-gray-700 text-center mr-2">
-          Time:
-        </label>
+        <label class="w-32 font-medium text-gray-700 text-center mr-2"
+          >Time:</label
+        >
         <input
           type="time"
           v-model="duty.time"
           class="w-full border border-gray-300 px-3 py-2 rounded-md focus:ring focus:ring-indigo-200"
           placeholder="Select Trip time"
         />
+        <div v-if="errors.time" class="text-red-500 text-sm mt-1">
+          {{ errors.time }}
+        </div>
       </div>
     </div>
 
@@ -434,12 +455,82 @@ export default {
         tripRoute: "",
         ClientSignature: "",
       },
+      errors: {
+        DutySlipDate: "",
+        partyName: "",
+        CustomerName: "",
+        address: "",
+        phone: "",
+        busNo: "",
+        time: "",
+      },
     };
   },
   mounted() {
     this.setupCanvas();
   },
   methods: {
+    validateForm() {
+      this.errors = {
+        DutySlipDate: "",
+        busNo: "",
+        time: "",
+        address: "",
+        phone: "",
+        partyName: "",
+        CustomerName: "",
+      }; // Reset errors
+
+      let isValid = true;
+
+      // Validate Date
+      if (!this.duty.DutySlipDate) {
+        this.errors.DutySlipDate = "Duty Slip Date is required.";
+        isValid = false;
+      }
+
+      // Validate Party Name
+      if (!this.duty.partyName) {
+        this.errors.partyName = "Party Name is required.";
+        isValid = false;
+      }
+
+      // Validate Customer Name
+      if (!this.duty.CustomerName) {
+        this.errors.CustomerName = "Customer Name is required.";
+        isValid = false;
+      }
+
+      // Validate Address
+      if (!this.duty.address) {
+        this.errors.address = "Address is required.";
+        isValid = false;
+      }
+
+      // Validate Phone Number
+      const phoneRegex = /^[0-9]{10}$/;
+      if (!this.duty.phone) {
+        this.errors.phone = "Phone number is required.";
+        isValid = false;
+      } else if (!phoneRegex.test(this.duty.phone)) {
+        this.errors.phone = "Phone number must be 10 digits.";
+        isValid = false;
+      }
+
+      // Validate Bus Number
+      if (!this.duty.busNo) {
+        this.errors.busNo = "Bus Number is required.";
+        isValid = false;
+      }
+
+      // Validate Time
+      if (!this.duty.time) {
+        this.errors.time = "Time is required.";
+        isValid = false;
+      }
+
+      return isValid;
+    },
     setupCanvas() {
       const canvas = document.getElementById("signatureCanvas");
       const ctx = canvas.getContext("2d");
@@ -516,25 +607,34 @@ export default {
       // Get the base64 signature data URL
       const canvas = document.getElementById("signatureCanvas");
       this.duty.ClientSignature = canvas.toDataURL(); // Store the signature image
-
-      try {
-        // Save data to backend
-        await axios.post("http://localhost:5000/dutyslips", this.duty);
-        Swal.fire({
-          title: "Success!",
-          text: "Duty slip submitted successfully!",
-          icon: "success",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "OK",
-        });
-      } catch (error) {
-        console.error("Error saving duty slip:", error);
+      if (this.validateForm()) {
+        try {
+          // Save data to backend
+          await axios.post("http://localhost:5000/dutyslips", this.duty);
+          Swal.fire({
+            title: "Success!",
+            text: "Duty slip submitted successfully!",
+            icon: "success",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "OK",
+          });
+        } catch (error) {
+          console.error("Error saving duty slip:", error);
+          Swal.fire({
+            title: "Error!",
+            text: "Failed to submit duty slip!",
+            icon: "error",
+            confirmButtonColor: "#d33",
+            confirmButtonText: "Try Again",
+          });
+        }
+      } else {
         Swal.fire({
           title: "Error!",
-          text: "Failed to submit duty slip!",
+          text: "Please fill in all required fields.",
           icon: "error",
           confirmButtonColor: "#d33",
-          confirmButtonText: "Try Again",
+          confirmButtonText: "OK",
         });
       }
     },
