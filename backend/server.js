@@ -38,7 +38,7 @@ const dutySlipSchema = new mongoose.Schema({
   TaxRs: Number,
   TaxRsPerDay: Number,
   tripRoute: String,
-  ClientSignature: String
+  ClientSignature: String,
 });
 
 const DutySlip = mongoose.model("DutySlip", dutySlipSchema);
@@ -48,6 +48,34 @@ app.post("/dutyslips", async (req, res) => {
     const newSlip = new DutySlip(req.body);
     await newSlip.save();
     res.status(201).json({ message: "Duty Slip Saved!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Fetch duty slips based on date range
+app.get("/dutyslips", async (req, res) => {
+  try {
+    let { startDate, endDate } = req.query;
+
+    // Ensure valid date range
+    let start = startDate ? new Date(startDate) : new Date("1900-01-01");
+    let end = endDate ? new Date(endDate) : new Date();
+
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+      return res
+        .status(400)
+        .json({ error: "Invalid date format. Use YYYY-MM-DD." });
+    }
+
+    const dutySlips = await DutySlip.find({
+      DutySlipDate: {
+        $gte: start.toISOString().split("T")[0],
+        $lte: end.toISOString().split("T")[0],
+      },
+    });
+
+    res.status(200).json(dutySlips);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
