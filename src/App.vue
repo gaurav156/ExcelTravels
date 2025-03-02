@@ -1,26 +1,15 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <DutySlipForm></DutySlipForm>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import DutySlipForm from './components/DutySlipForm.vue';
+import "@vuepic/vue-datepicker/dist/main.css";
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    DutySlipForm
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
