@@ -29,6 +29,7 @@
           v-model="duty.DutySlipDate"
           @update:model-value="updateDate"
           class="w-28 text-sm"
+          placeholder="Select current Date"
         />
       </div>
     </div>
@@ -43,6 +44,7 @@
           type="text"
           v-model="duty.partyName"
           class="w-full border border-gray-300 px-3 py-2 rounded-md focus:ring focus:ring-indigo-200"
+          placeholder="Enter Party Name"
         />
       </div>
 
@@ -54,6 +56,7 @@
           type="text"
           v-model="duty.CustomerName"
           class="w-full border border-gray-300 px-3 py-2 rounded-md focus:ring focus:ring-indigo-200"
+          placeholder="Enter Customer Name"
         />
       </div>
     </div>
@@ -65,6 +68,7 @@
         v-model="duty.address"
         class="w-full border border-gray-300 px-3 py-2 rounded-md focus:ring focus:ring-indigo-200"
         rows="3"
+        placeholder="Enter Address"
       ></textarea>
     </div>
 
@@ -77,6 +81,7 @@
         type="text"
         v-model="duty.phone"
         class="w-1/3 border border-gray-300 px-3 py-2 rounded-md focus:ring focus:ring-indigo-200"
+        placeholder="Enter Phone Number"
       />
     </div>
 
@@ -88,6 +93,7 @@
           type="text"
           v-model="duty.busNo"
           class="w-full border border-gray-300 px-3 py-2 rounded-md focus:ring focus:ring-indigo-200"
+          placeholder="Enter Bus Number"
         />
       </div>
 
@@ -99,6 +105,7 @@
           type="time"
           v-model="duty.time"
           class="w-full border border-gray-300 px-3 py-2 rounded-md focus:ring focus:ring-indigo-200"
+          placeholder="Select Trip time"
         />
       </div>
     </div>
@@ -119,6 +126,7 @@
             type="date"
             :enable-time-picker="false"
             class="w-full max-w-[180px] text-lg"
+            placeholder="Trip Start On"
           />
         </div>
 
@@ -132,6 +140,7 @@
             type="date"
             :enable-time-picker="false"
             class="w-full max-w-[180px] text-lg"
+            placeholder="Trip End Date"
           />
         </div>
       </div>
@@ -144,7 +153,8 @@
             Starting Kms.:
           </label>
           <input
-            type="text"
+            type="number"
+            placeholder="Km"
             v-model="duty.startKms"
             class="w-24 border border-gray-300 px-3 py-2 rounded-md focus:ring focus:ring-indigo-200"
           />
@@ -156,7 +166,8 @@
             Closing Kms.:
           </label>
           <input
-            type="text"
+            type="number"
+            placeholder="Km"
             v-model="duty.closingKms"
             class="w-24 border border-gray-300 px-3 py-2 rounded-md focus:ring focus:ring-indigo-200"
           />
@@ -169,6 +180,7 @@
           </label>
           <input
             type="text"
+            placeholder="Km"
             v-model="duty.totalKms"
             class="w-24 border border-gray-300 px-3 py-2 rounded-md focus:ring focus:ring-indigo-200"
             readonly
@@ -212,19 +224,19 @@
             v-model="duty.totalHours"
             class="w-24 border border-gray-300 px-3 py-2 rounded-md focus:ring focus:ring-indigo-200"
             readonly
+            placeholder="Hrs"
           />
         </div>
       </div>
     </div>
 
-    <div class="flex flex-col items-center w-full mt-4">
+    <div class="w-full max-w-3xl mx-auto">
       <!-- Driver Name & Advance -->
-      <div class="flex items-center justify-center gap-6 w-full max-w-3xl">
-        <!-- Driver Name -->
+      <div class="flex items-center gap-6 w-full mt-4">
         <div class="flex items-center w-1/2">
-          <label class="w-36 font-medium text-gray-700 text-right mr-2">
-            Driver Name:
-          </label>
+          <label class="w-36 mr-1 font-medium text-gray-700"
+            >Driver Name:</label
+          >
           <input
             type="text"
             v-model="duty.driverName"
@@ -233,11 +245,8 @@
           />
         </div>
 
-        <!-- Advance -->
         <div class="flex items-center w-1/2">
-          <label class="w-36 font-medium text-gray-700 text-right mr-2">
-            Advance:
-          </label>
+          <label class="mr-1 font-medium text-gray-700">Advance:</label>
           <input
             type="number"
             v-model="duty.advance"
@@ -246,47 +255,115 @@
           />
         </div>
       </div>
-    </div>
-    <div class="flex flex-col items-start w-full mt-6">
-      <!-- Balance Payment Field -->
-      <div class="flex items-center w-full max-w-2xl">
-        <label class="w-64 font-medium text-gray-700 text-right">
-          Please Pay Balance Rs.
-        </label>
+
+      <!-- Balance Payment -->
+      <div class="flex items-center w-full mt-8">
+        <label class="font-medium text-gray-700">Please Pay Balance Rs.</label>
         <input
           type="number"
           v-model="duty.Balance"
-          class="w-1/3 min-w-[180px] border border-gray-300 px-4 py-2 rounded-md focus:ring focus:ring-indigo-200 mx-3 text-center"
+          class="border border-gray-300 px-4 py-2 rounded-md focus:ring focus:ring-indigo-200 text-center mx-3"
           placeholder="Enter balance amount"
         />
         <span class="font-medium text-gray-700">to Driver Before Start</span>
       </div>
-    </div>
 
-    <div class="mb-4">
-      <div class="grid grid-cols-2 gap-4 text-gray-700">
-        <p>Extra Km. @ Rs. ______ Per Km.</p>
-        <p>Extra Hrs. @ Rs. ______ Per Hr.</p>
-        <p>Tax Rs.: ______</p>
-        <p>D.A. Rs.: ______ Per day</p>
+      <!-- Extra Charges Section -->
+      <div class="w-full mt-6 space-y-4">
+        <!-- Extra Km Charges -->
+        <div class="flex items-center">
+          <label class="mr-2 font-medium text-gray-700">Upto</label>
+          <input
+            type="number"
+            v-model="duty.UptoKms"
+            class="w-20 border border-gray-300 px-3 py-2 rounded-md focus:ring focus:ring-indigo-200 text-center"
+            placeholder="Km"
+          />
+          <span class="mx-2 font-medium text-gray-700"
+            >Km. Extra km. @ Rs.</span
+          >
+          <input
+            type="number"
+            v-model="duty.ExtraKmsRs"
+            class="w-20 border border-gray-300 px-3 py-2 rounded-md focus:ring focus:ring-indigo-200 text-center"
+            placeholder="Rate"
+          />
+          <span class="ml-2 font-medium text-gray-700">Per Km.</span>
+        </div>
+
+        <!-- Extra Hours Charges -->
+        <div class="flex items-center">
+          <label class="mr-2 font-medium text-gray-700">Upto</label>
+          <input
+            type="number"
+            v-model="duty.UptoHrs"
+            class="w-20 border border-gray-300 px-3 py-2 rounded-md focus:ring focus:ring-indigo-200 text-center"
+            placeholder="Hrs"
+          />
+          <span class="mx-2 font-medium text-gray-700"
+            >Hrs. Extra Hrs. @ Rs.</span
+          >
+          <input
+            type="number"
+            v-model="duty.UptoHrsRs"
+            class="w-20 border border-gray-300 px-3 py-2 rounded-md focus:ring focus:ring-indigo-200 text-center"
+            placeholder="Rate"
+          />
+          <span class="ml-2 font-medium text-gray-700">Per Hr.</span>
+        </div>
+
+        <!-- Tax and D.A. Charges -->
+        <div class="flex items-center">
+          <label class="mr-2 font-medium text-gray-700">Tax Rs.:</label>
+          <input
+            type="number"
+            v-model="duty.TaxRs"
+            class="w-20 border border-gray-300 px-3 py-2 rounded-md focus:ring focus:ring-indigo-200 text-center"
+            placeholder="Tax"
+          />
+          <span class="mx-4 font-medium text-gray-700">D.A. Rs.:</span>
+          <input
+            type="number"
+            v-model="duty.TaxRsPerDay"
+            class="w-24 border border-gray-300 px-3 py-2 rounded-md focus:ring focus:ring-indigo-200 text-center"
+            placeholder="Per Day"
+          />
+        </div>
       </div>
-      <div class="flex items-center mt-3">
-        <label class="w-24 font-medium">Mumbai to:</label>
-        <input
-          type="text"
+
+      <!-- Trip Type Dropdown -->
+      <div class="mt-10 relative">
+        <label class="w-36 font-medium text-gray-700">Mumbai to:</label>
+        <select
           v-model="duty.tripRoute"
-          class="border border-gray-400 px-3 py-2 rounded-md focus:ring focus:ring-indigo-200"
-        />
+          class="ml-2 border border-gray-400 px-3 py-2 rounded-md focus:ring focus:ring-indigo-200 w-48"
+        >
+          <option value="" disabled>Select Trip Type</option>
+          <option value="local">Local</option>
+          <option value="outstation">Outstation</option>
+          <option value="airport">Airport Transfer</option>
+          <option value="roundTrip">Round Trip</option>
+          <option value="oneWay">One Way</option>
+        </select>
       </div>
     </div>
 
-    <div class="text-sm text-gray-700">
-      <p>KILOMETERS AND TIMING WILL BE CHARGED FROM GARAGE TO GARAGE.</p>
-      <p>TOLL TAX, ENTRY, PARKING TO BE PAID BY PARTY.</p>
-    </div>
+    <div
+      class="mt-6 flex justify-between items-end w-full border-t border-gray-400"
+    >
+      <!-- Left Side: Text Information -->
+      <div class="text-sm text-gray-700">
+        <p>KILOMETERS AND TIMING WILL BE CHARGED FROM GARAGE TO GARAGE.</p>
+        <p>TOLL TAX, ENTRY, PARKING TO BE PAID BY PARTY.</p>
+      </div>
 
-    <div class="text-right mt-4">
-      <div class="border-t pt-2 font-medium">Client's Signature</div>
+      <!-- Right Side: Signature Box -->
+      <div class="text-right">
+        <div class="border-t pt-2 font-medium">Client's Signature</div>
+        <div
+          class="border border-gray-400 h-20 w-48 mt-2 rounded-md bg-gray-100"
+        ></div>
+      </div>
     </div>
 
     <div class="mt-4">
