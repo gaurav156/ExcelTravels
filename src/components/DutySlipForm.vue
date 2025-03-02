@@ -383,6 +383,7 @@
 import axios from "axios";
 import VueDatepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
+import Swal from "sweetalert2";
 
 // const form = ref({
 //   partyName: '',
@@ -451,11 +452,23 @@ export default {
   methods: {
     async submitForm() {
       try {
-        // Save data to backend
         await axios.post("http://localhost:5000/dutyslips", this.duty);
-        alert("Duty slip submitted successfully!");
+        Swal.fire({
+          title: "Success!",
+          text: "Duty slip submitted successfully!",
+          icon: "success",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "OK",
+        });
       } catch (error) {
         console.error("Error saving duty slip:", error);
+        Swal.fire({
+          title: "Error!",
+          text: "Failed to submit duty slip!",
+          icon: "error",
+          confirmButtonColor: "#d33",
+          confirmButtonText: "Try Again",
+        });
       }
     },
     updateDate(value) {
