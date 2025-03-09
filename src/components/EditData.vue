@@ -83,73 +83,36 @@
         </button>
       </div>
     </div>
-    <!-- Cards Section -->
-    <div
-      class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:grid-cols-2 lg:grid-rows-2 lg:gap-6"
-    >
-      <!-- Duty Slip Card -->
-      <div class="bg-white p-6 rounded-lg shadow-md border border-gray-300">
-        <h3 class="text-xl font-semibold text-maroon mb-4 text-center">
-          Duty Slip Actions
-        </h3>
-        <div class="flex flex-col gap-4">
-          <button
-            @click="viewDutySlip"
-            class="bg-maroon-light text-white px-4 py-3 rounded-md text-lg font-semibold"
-          >
-            View Duty Slip
-          </button>
-          <button
-            @click="editDutySlip"
-            class="bg-maroon text-white px-4 py-3 rounded-md text-lg font-semibold"
-          >
-            Edit Duty Slip
-          </button>
-        </div>
-      </div>
 
-      <!-- Driver Details Card -->
-      <div class="bg-white p-6 rounded-lg shadow-md border border-gray-300">
-        <h3 class="text-xl text-center font-semibold text-maroon mb-4">
-          Driver Details Actions
-        </h3>
-        <div class="flex flex-col gap-4">
-          <button
-            @click="viewDriverDetails"
-            class="bg-maroon-light text-white px-4 py-3 rounded-md text-lg font-semibold"
-          >
-            View Driver Details
-          </button>
-          <button
-            @click="editDriverDetails"
-            class="bg-maroon text-white px-4 py-3 rounded-md text-lg font-semibold"
-          >
-            Edit Driver Details
-          </button>
-        </div>
-      </div>
+    <!-- Single Card with Buttons -->
+    <div class="bg-white p-6 rounded-lg shadow-md border border-gray-300">
+      <h3 class="text-xl font-semibold text-maroon mb-4 text-center">
+        Data Actions
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Payslip Button -->
+        <button
+          @click="viewPayslipData"
+          class="bg-maroon text-white px-4 py-3 rounded-md text-lg font-semibold hover:bg-maroon-dark transition duration-300"
+        >
+          View Pay-Slips
+        </button>
 
-      <!-- Company Details Card (Centered in the second row) -->
-      <div
-        class="bg-white p-6 rounded-lg shadow-md border border-gray-300 lg:col-span-2 lg:justify-self-center w-full max-w-md"
-      >
-        <h3 class="text-xl text-center font-semibold text-maroon mb-4">
-          Company Details Actions
-        </h3>
-        <div class="flex flex-col gap-4">
-          <button
-            @click="viewCompanyDetails"
-            class="bg-maroon-light text-white px-4 py-3 rounded-md text-lg font-semibold"
-          >
-            View Company Details
-          </button>
-          <button
-            @click="editCompanyDetails"
-            class="bg-maroon text-white px-4 py-3 rounded-md text-lg font-semibold"
-          >
-            Edit Company Details
-          </button>
-        </div>
+        <!-- Driver Button -->
+        <button
+          @click="viewDriverData"
+          class="bg-maroon text-white px-4 py-3 rounded-md text-lg font-semibold hover:bg-maroon-dark transition duration-300"
+        >
+          View Driver Data
+        </button>
+
+        <!-- Company Button -->
+        <button
+          @click="viewCompanyData"
+          class="bg-maroon text-white px-4 py-3 rounded-md text-lg font-semibold hover:bg-red-700 transition duration-300"
+        >
+          View Company Data
+        </button>
       </div>
     </div>
   </div>
@@ -158,6 +121,7 @@
 <script>
 import axios from "axios";
 import XLSX from "xlsx";
+import Swal from "sweetalert2";
 
 export default {
   name: "EditData",
@@ -181,6 +145,13 @@ export default {
         this.duty = response.data;
       } catch (error) {
         console.error("Error fetching duty slips:", error);
+        Swal.fire({
+          title: "Error!",
+          text: "Failed to fetch duty slips. Please try again.",
+          icon: "error",
+          confirmButtonColor: "#d33",
+          confirmButtonText: "OK",
+        });
       }
     },
 
@@ -188,7 +159,13 @@ export default {
       await this.fetchDutySlips();
 
       if (this.duty.length === 0) {
-        alert("No data available for the selected date range.");
+        Swal.fire({
+          title: "No Data!",
+          text: "No data available for the selected date range.",
+          icon: "warning",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "OK",
+        });
         return;
       }
 
@@ -199,37 +176,31 @@ export default {
 
       // Generate and download the Excel file
       XLSX.writeFile(workbook, "Duty_Slips.xlsx");
+
+      // Show success message
+      Swal.fire({
+        title: "Success!",
+        text: "Data exported successfully. Check your downloads for the Excel sheet.",
+        icon: "success",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "OK",
+      });
     },
 
-    viewDutySlip() {
-      // Navigate to view duty slip page
-      alert("View Duty Slip functionality will be implemented here.");
-    },
+    // viewPayslipData() {
+    //   // Navigate to view data page
+    //   alert("View Data functionality will be implemented here.");
+    // },
 
-    editDutySlip() {
-      // Navigate to edit duty slip page
-      alert("Edit Duty Slip functionality will be implemented here.");
-    },
+    // viewDriverpData() {
+    //   // Navigate to edit data page
+    //   alert("Edit Data functionality will be implemented here.");
+    // },
 
-    viewDriverDetails() {
-      // Navigate to view driver details page
-      alert("View Driver Details functionality will be implemented here.");
-    },
-
-    editDriverDetails() {
-      // Navigate to edit driver details page
-      alert("Edit Driver Details functionality will be implemented here.");
-    },
-
-    viewCompanyDetails() {
-      // Navigate to view company details page
-      alert("View Company Details functionality will be implemented here.");
-    },
-
-    editCompanyDetails() {
-      // Navigate to edit company details page
-      alert("Edit Company Details functionality will be implemented here.");
-    },
+    // viewCompanyData() {
+    //   // Navigate to remove data page
+    //   alert("Remove Data functionality will be implemented here.");
+    // },
   },
 };
 </script>

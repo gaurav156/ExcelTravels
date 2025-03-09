@@ -372,13 +372,11 @@ export default {
         console.log("Data saved successfully:", response.data);
 
         Swal.fire({
-          icon: "success",
           title: "Success!",
           text: "Duty slip created successfully.",
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
+          icon: "success",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "OK",
         });
 
         // Reset form after successful submission
@@ -386,13 +384,11 @@ export default {
       } catch (error) {
         console.error("Error submitting form:", error);
         Swal.fire({
-          icon: "error",
-          title: "Error submitting form",
+          title: "Error!",
           text: "Failed to submit. Please try again.",
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
+          icon: "error",
+          confirmButtonColor: "#d33",
+          confirmButtonText: "Try Again",
         });
         return;
       } finally {

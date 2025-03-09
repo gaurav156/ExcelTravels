@@ -24,19 +24,12 @@
     </div>
 
     <!-- Logo and Email Section -->
-    <div
-      class="flex flex-col sm:flex-row justify-center sm:justify-between items-center text-center sm:text-left mb-6"
-    >
-      <img
-        src="@/assets/logo.png"
-        alt="Company Logo"
-        class="w-24 h-12 mb-2 sm:mb-0"
-      />
+    <div class="flex justify-between items-center mb-6">
       <div class="text-m font-semibold text-maroon cursor-pointer">
         {{ email }}
       </div>
+      <img src="@/assets/logo.png" alt="Company Logo" class="w-24 h-12" />
     </div>
-
     <h2 class="text-3xl font-extrabold text-maroon text-center mb-6">
       Add Company Data
     </h2>
@@ -44,7 +37,7 @@
     <!-- Form -->
     <form
       @submit.prevent="handleSubmit"
-      class="bg-white p-0 sm:p-6 rounded-lg shadow-md border border-gray-300"
+      class="bg-white p-6 rounded-lg shadow-md border border-gray-300"
     >
       <!-- Company ID (Auto-populated) -->
       <div class="mb-6">
@@ -167,13 +160,11 @@ export default {
       } catch (error) {
         console.error("Error fetching companies:", error);
         Swal.fire({
-          icon: "error",
-          title: "Error",
+          title: "Error!",
           text: "Error fetching companies.",
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
+          icon: "error",
+          confirmButtonColor: "#d33",
+          confirmButtonText: "OK",
         });
       }
 
@@ -188,13 +179,11 @@ export default {
 
       if (!this.validateForm()) {
         Swal.fire({
-          icon: "error",
-          title: "Input Error",
+          title: "Input Error!",
           text: "Please fill all fields correctly.",
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
+          icon: "error",
+          confirmButtonColor: "#d33",
+          confirmButtonText: "OK",
         });
         return;
       }
@@ -210,13 +199,11 @@ export default {
         console.log("Company Data Submitted:", this.form);
 
         Swal.fire({
-          icon: "success",
           title: "Success!",
           text: "Company data submitted successfully.",
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
+          icon: "success",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "OK",
         });
 
         this.clearForm();
@@ -224,13 +211,11 @@ export default {
       } catch (error) {
         console.error("Error submitting form:", error);
         Swal.fire({
-          icon: "error",
-          title: "Error submitting form",
+          title: "Error!",
           text: "Failed to submit. Please try again.",
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
+          icon: "error",
+          confirmButtonColor: "#d33",
+          confirmButtonText: "Try Again",
         });
         return;
       } finally {

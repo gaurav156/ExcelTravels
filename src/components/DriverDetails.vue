@@ -374,13 +374,11 @@ export default {
       } catch (error) {
         console.error("Error fetching drivers:", error);
         Swal.fire({
-          icon: "error",
-          title: "Error",
+          title: "Error!",
           text: "Error fetching drivers.",
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
+          icon: "error",
+          confirmButtonColor: "#d33",
+          confirmButtonText: "OK",
         });
       }
 
@@ -395,13 +393,11 @@ export default {
       // Validate form inputs
       if (!this.validateForm()) {
         Swal.fire({
-          icon: "error",
-          title: "Input Error",
+          title: "Input Error!",
           text: "Please fill all fields correctly.",
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
+          icon: "error",
+          confirmButtonColor: "#d33",
+          confirmButtonText: "OK",
         });
         return;
       }
@@ -413,34 +409,28 @@ export default {
         );
         console.log("Data saved successfully:", response.data);
 
-        // this.companies.push({ ...this.form });
-        console.log("Form Submitted:", this.form);
-
         // Show success message
         Swal.fire({
-          icon: "success",
           title: "Success!",
           text: "Driver details submitted successfully.",
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
+          icon: "success",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "OK",
         });
 
         // Clear form data
         this.clearForm();
 
+        // Generate new driver ID
         this.generateDriverId();
       } catch (error) {
         console.error("Error submitting form:", error);
         Swal.fire({
-          icon: "error",
-          title: "Error submitting form",
+          title: "Error!",
           text: "Failed to submit. Please try again.",
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
+          icon: "error",
+          confirmButtonColor: "#d33",
+          confirmButtonText: "Try Again",
         });
         return;
       } finally {
@@ -473,7 +463,7 @@ export default {
     clearForm() {
       // Reset form data
       this.form = {
-        driverId: "",
+        driverId: this.form.driverId, // Retain the driverId for the next submission
         name: "",
         age: "",
         email: "",
