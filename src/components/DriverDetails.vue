@@ -1,25 +1,13 @@
 <template>
-  <div
-    style="background-color: #f5f5dc"
-    class="p-8 rounded-lg shadow-xl border-2 border-maroon max-w-4xl mx-auto transform transition duration-300 hover:shadow-2xl relative hover:border-glow"
-  >
+  <div style="background-color: #f5f5dc"
+    class="p-8 rounded-lg shadow-xl border-2 border-maroon max-w-4xl mx-auto transform transition duration-300 hover:shadow-2xl relative hover:border-glow">
     <!-- Driver Icon -->
     <div
-      class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-white p-2 rounded-full border-2 border-maroon shadow-lg"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-10 w-10 text-maroon"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-        />
+      class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-white p-2 rounded-full border-2 border-maroon shadow-lg">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-maroon" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
       </svg>
     </div>
 
@@ -36,10 +24,7 @@
     </h2>
 
     <!-- Form -->
-    <form
-      @submit.prevent="handleSubmit"
-      class="bg-white p-6 rounded-lg shadow-md border border-gray-300"
-    >
+    <form @submit.prevent="handleSubmit" class="bg-white p-6 rounded-lg shadow-md border border-gray-300">
       <!-- Personal Details Section -->
       <div class="mb-8">
         <h3 class="text-xl font-semibold text-maroon mb-4">Personal Details</h3>
@@ -49,14 +34,9 @@
             <label for="name" class="block text-sm font-medium text-maroon">
               Full Name
             </label>
-            <input
-              type="text"
-              id="name"
-              v-model="form.name"
-              placeholder="Enter full name"
+            <input type="text" id="name" v-model="form.name" placeholder="Enter full name"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required
-            />
+              required />
           </div>
 
           <!-- Age -->
@@ -64,15 +44,9 @@
             <label for="age" class="block text-sm font-medium text-maroon">
               Age
             </label>
-            <input
-              type="number"
-              id="age"
-              v-model="form.age"
-              placeholder="Enter age"
+            <input type="number" id="age" v-model="form.age" placeholder="Enter age"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required
-              min="18"
-            />
+              required min="18" />
           </div>
 
           <!-- Email -->
@@ -80,14 +54,9 @@
             <label for="email" class="block text-sm font-medium text-maroon">
               Email Address
             </label>
-            <input
-              type="email"
-              id="email"
-              v-model="form.email"
-              placeholder="Enter email address"
+            <input type="email" id="email" v-model="form.email" placeholder="Enter email address"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required
-            />
+              required />
           </div>
 
           <!-- Contact Number -->
@@ -95,16 +64,9 @@
             <label for="contact" class="block text-sm font-medium text-maroon">
               Contact Number
             </label>
-            <input
-              type="tel"
-              id="contact"
-              v-model="form.contact"
-              placeholder="Enter 10-digit contact number"
+            <input type="tel" id="contact" v-model="form.contact" placeholder="Enter 10-digit contact number"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required
-              pattern="[0-9]{10}"
-              title="Please enter a 10-digit phone number"
-            />
+              required pattern="[0-9]{10}" title="Please enter a 10-digit phone number" />
           </div>
         </div>
       </div>
@@ -118,14 +80,9 @@
             <label for="address" class="block text-sm font-medium text-maroon">
               Full Address
             </label>
-            <textarea
-              id="address"
-              v-model="form.address"
-              placeholder="Enter full address"
-              rows="3"
+            <textarea id="address" v-model="form.address" placeholder="Enter full address" rows="3"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required
-            ></textarea>
+              required></textarea>
           </div>
         </div>
       </div>
@@ -138,40 +95,24 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <!-- Emergency Contact Name -->
           <div>
-            <label
-              for="emergencyName"
-              class="block text-sm font-medium text-maroon"
-            >
+            <label for="emergencyName" class="block text-sm font-medium text-maroon">
               Emergency Contact Name
             </label>
-            <input
-              type="text"
-              id="emergencyName"
-              v-model="form.emergencyName"
+            <input type="text" id="emergencyName" v-model="form.emergencyName"
               placeholder="Enter emergency contact name"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required
-            />
+              required />
           </div>
 
           <!-- Emergency Contact Number -->
           <div>
-            <label
-              for="emergencyContact"
-              class="block text-sm font-medium text-maroon"
-            >
+            <label for="emergencyContact" class="block text-sm font-medium text-maroon">
               Emergency Contact Number
             </label>
-            <input
-              type="tel"
-              id="emergencyContact"
-              v-model="form.emergencyContact"
+            <input type="tel" id="emergencyContact" v-model="form.emergencyContact"
               placeholder="Enter 10-digit emergency contact number"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required
-              pattern="[0-9]{10}"
-              title="Please enter a 10-digit phone number"
-            />
+              required pattern="[0-9]{10}" title="Please enter a 10-digit phone number" />
           </div>
         </div>
       </div>
@@ -185,14 +126,9 @@
             <label for="bankName" class="block text-sm font-medium text-maroon">
               Bank Name
             </label>
-            <input
-              type="text"
-              id="bankName"
-              v-model="form.bankName"
-              placeholder="Enter bank name"
+            <input type="text" id="bankName" v-model="form.bankName" placeholder="Enter bank name"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required
-            />
+              required />
           </div>
 
           <!-- IFSC Code -->
@@ -200,32 +136,29 @@
             <label for="ifscCode" class="block text-sm font-medium text-maroon">
               IFSC Code
             </label>
-            <input
-              type="text"
-              id="ifscCode"
-              v-model="form.ifscCode"
-              placeholder="Enter IFSC code"
+            <input type="text" id="ifscCode" v-model="form.ifscCode" placeholder="Enter IFSC code"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required
-            />
+              required />
+          </div>
+
+          <!-- Branch -->
+          <div>
+            <label for="branchName" class="block text-sm font-medium text-maroon">
+              Branch Name
+            </label>
+            <input type="text" id="branchName" v-model="form.branch" placeholder="Enter branch name"
+              class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+              required />
           </div>
 
           <!-- Account Number -->
           <div>
-            <label
-              for="accountNumber"
-              class="block text-sm font-medium text-maroon"
-            >
+            <label for="accountNumber" class="block text-sm font-medium text-maroon">
               Account Number
             </label>
-            <input
-              type="text"
-              id="accountNumber"
-              v-model="form.accountNumber"
-              placeholder="Enter account number"
+            <input type="text" id="accountNumber" v-model="form.accountNumber" placeholder="Enter account number"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required
-            />
+              required />
           </div>
         </div>
       </div>
@@ -236,71 +169,41 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <!-- Aadhar Number -->
           <div>
-            <label
-              for="aadharNumber"
-              class="block text-sm font-medium text-maroon"
-            >
+            <label for="aadharNumber" class="block text-sm font-medium text-maroon">
               Aadhar Number
             </label>
-            <input
-              type="text"
-              id="aadharNumber"
-              v-model="form.aadharNumber"
-              placeholder="Enter 12-digit Aadhar number"
+            <input type="text" id="aadharNumber" v-model="form.aadharNumber" placeholder="Enter 12-digit Aadhar number"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required
-              pattern="[0-9]{12}"
-              title="Please enter a 12-digit Aadhar number"
-            />
+              required pattern="[0-9]{12}" title="Please enter a 12-digit Aadhar number" />
           </div>
 
           <!-- PAN Number -->
           <div>
-            <label
-              for="panNumber"
-              class="block text-sm font-medium text-maroon"
-            >
+            <label for="panNumber" class="block text-sm font-medium text-maroon">
               PAN Number
             </label>
-            <input
-              type="text"
-              id="panNumber"
-              @input="capitalizePan"
-              v-model="form.panNumber"
+            <input type="text" id="panNumber" @input="capitalizePan" v-model="form.panNumber"
               placeholder="Enter PAN number (e.g., ABCDE1234F)"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required
-              pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
-              title="Please enter a valid PAN number (e.g., ABCDE1234F)"
-            />
+              required pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" title="Please enter a valid PAN number (e.g., ABCDE1234F)" />
           </div>
 
           <!-- License Number -->
           <div>
-            <label
-              for="licenseNumber"
-              class="block text-sm font-medium text-maroon"
-            >
+            <label for="licenseNumber" class="block text-sm font-medium text-maroon">
               License Number
             </label>
-            <input
-              type="text"
-              id="licenseNumber"
-              v-model="form.licenseNumber"
-              placeholder="Enter license number"
+            <input type="text" id="licenseNumber" v-model="form.licenseNumber" placeholder="Enter license number"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required
-            />
+              required />
           </div>
         </div>
       </div>
 
       <!-- Submit Button -->
       <div class="mt-6">
-        <button
-          type="submit"
-          class="w-full bg-maroon text-white px-4 py-3 rounded-md text-lg font-semibold shadow-md transition duration-300 hover:bg-maroon-dark hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-maroon focus:ring-offset-2"
-        >
+        <button type="submit"
+          class="w-full bg-maroon text-white px-4 py-3 rounded-md text-lg font-semibold shadow-md transition duration-300 hover:bg-maroon-dark hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-maroon focus:ring-offset-2">
           Submit
         </button>
       </div>
@@ -309,6 +212,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import Swal from "sweetalert2";
 
 export default {
@@ -318,6 +222,7 @@ export default {
     return {
       email: "excel.travel@rediffmail.com",
       form: {
+        driverId: "",
         name: "",
         age: "",
         email: "",
@@ -333,10 +238,39 @@ export default {
         panNumber: "",
         licenseNumber: "",
       },
+      drivers: [],
+      isLoading: false,
     };
   },
+  created() {
+    this.fetchDrivers();
+  },
   methods: {
-    handleSubmit() {
+    async fetchDrivers() {
+      try {
+        const response = await axios.get("http://localhost:5000/api/drivers");
+        this.drivers = response.data;
+      } catch (error) {
+        console.error("Error fetching drivers:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Error fetching drivers.",
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+        });
+      }
+
+      this.generateDriverId();
+    },
+    generateDriverId() {
+      const nextId = `C${String(this.drivers.length + 1).padStart(3, "0")}`;
+      this.form.driverId = nextId;
+      console.log(this.form.driverId);
+    },
+    async handleSubmit() {
       // Validate form inputs
       if (!this.validateForm()) {
         Swal.fire({
@@ -351,22 +285,43 @@ export default {
         return;
       }
 
-      // Simulate form submission
-      console.log("Form Submitted:", this.form);
+      try {
+        const response = await axios.post("http://localhost:5000/api/drivers", this.form);
+        console.log("Data saved successfully:", response.data);
 
-      // Show success message
-      Swal.fire({
-        icon: "success",
-        title: "Success!",
-        text: "Driver details submitted successfully.",
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-      });
+        // this.companies.push({ ...this.form });
+        console.log("Form Submitted:", this.form);
 
-      // Clear form data
-      this.clearForm();
+        // Show success message
+        Swal.fire({
+          icon: "success",
+          title: "Success!",
+          text: "Driver details submitted successfully.",
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+        });
+
+        // Clear form data
+        this.clearForm();
+
+        this.generateDriverId();
+      } catch (error) {
+        console.error("Error submitting form:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error submitting form",
+          text: "Failed to submit. Please try again.",
+          toast: true,
+          position: "top-end",
+          showConfirmButton: false,
+          timer: 3000,
+        });
+        return;
+      } finally {
+        this.isLoading = false;
+      }
     },
     capitalizePan(event) {
       // Convert the input value to uppercase
@@ -375,25 +330,26 @@ export default {
     validateForm() {
       // Check if all required fields are filled
       return (
-        this.form.name &&
-        this.form.age &&
-        this.form.email &&
-        this.form.contact &&
-        this.form.address &&
-        this.form.emergencyName &&
-        this.form.emergencyContact &&
-        this.form.bankName &&
-        this.form.accountNumber &&
-        this.form.ifscCode &&
-        this.form.branch &&
-        this.form.aadharNumber &&
-        this.form.panNumber &&
-        this.form.licenseNumber
+        this.form.name !== "" &&
+        this.form.age !== "" &&
+        this.form.email !== "" &&
+        this.form.contact !== "" &&
+        this.form.address !== "" &&
+        this.form.emergencyName !== "" &&
+        this.form.emergencyContact !== "" &&
+        this.form.bankName !== "" &&
+        this.form.accountNumber !== "" &&
+        this.form.ifscCode !== "" &&
+        this.form.branch !== "" &&
+        this.form.aadharNumber !== "" &&
+        this.form.panNumber !== "" &&
+        this.form.licenseNumber !== ""
       );
     },
     clearForm() {
       // Reset form data
       this.form = {
+        driverId: "",
         name: "",
         age: "",
         email: "",
@@ -431,8 +387,11 @@ export default {
 .focus\:border-maroon:focus {
   border-color: #800000;
 }
+
 .border-maroon {
-  border-color: #800000; /* Maroon Solid Border */
-  box-shadow: 0 0 10px rgba(128, 0, 0, 0.8); /* Glowing Effect */
+  border-color: #800000;
+  /* Maroon Solid Border */
+  box-shadow: 0 0 10px rgba(128, 0, 0, 0.8);
+  /* Glowing Effect */
 }
 </style>

@@ -1,0 +1,137 @@
+const express = require("express");
+const router = express.Router();
+const DutySlip = require("../models/DutySlip");
+const upload = require("../middlewares/upload");
+
+// Create Duty Slip
+router.post("/", async (req, res) => {
+  try {
+    const newDutySlip = new DutySlip(req.body);
+    await newDutySlip.save();
+    res.status(201).json(newDutySlip);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// Create Duty Slip with File Upload
+// router.post(
+//   "/",
+//   upload.fields([{ name: "startKMPhoto" }, { name: "endKMPhoto" }, { name: "customerSignature" }]),
+//   async (req, res) => {
+//     try {
+//       //   const { driverName, vehicleNumber, dutyDate, startKM, endKM } = req.body;
+
+//       //   const newDutySlip = new DutySlip({
+//       //     driverName,
+//       //     vehicleNumber,
+//       //     dutyDate,
+//       //     startKM,
+//       //     endKM,
+//       //     kmPhoto: req.files["kmPhoto"] ? `/uploads/${req.files["kmPhoto"][0].filename}` : "",
+//       //     driverSignature: req.files["driverSignature"] ? `/uploads/${req.files["driverSignature"][0].filename}` : "",
+//       //   });
+
+//       const {
+//         dutySlipId,
+//         companyId,
+//         companyName,
+//         customerName,
+//         city,
+//         address,
+//         carBooked,
+//         phoneNumber,
+//         dutyType,
+//         driverName,
+//         carNumber,
+//         dateFrom,
+//         dateTo,
+//         tripRoute,
+//         startKM,
+//         endKM,
+//         createdAt,
+//       } = req.body;
+
+//       const newDutySlip = new DutySlip({
+//         dutySlipId,
+//         companyId,
+//         companyName,
+//         customerName,
+//         city,
+//         address,
+//         carBooked,
+//         phoneNumber,
+//         dutyType,
+//         driverName,
+//         carNumber,
+//         dateFrom,
+//         dateTo,
+//         tripRoute,
+//         startKM,
+//         startKMPhoto: req.files["startKMPhoto"]
+//           ? `/uploads/${req.files["startKMPhoto"][0].filename}`
+//           : "",
+//         endKM,
+//         endKMPhoto: req.files["endKMPhoto"]
+//           ? `/uploads/${req.files["endKMPhoto"][0].filename}`
+//           : "",
+//         customerSignature: req.files["driverSignature"]
+//           ? `/uploads/${req.files["driverSignature"][0].filename}`
+//           : "",
+//         createdAt,
+//       });
+
+//       await newDutySlip.save();
+//       res.status(201).json(newDutySlip);
+//     } catch (err) {
+//       res.status(400).json({ error: err.message });
+//     }
+//   }
+// );
+
+// Get All Duty Slips
+router.get("/", async (req, res) => {
+  try {
+    const dutySlips = await DutySlip.find();
+    res.json(dutySlips);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Get a Single Duty Slip
+router.get("/:id", async (req, res) => {
+  try {
+    const dutySlip = await DutySlip.findById(req.params.id);
+    if (!dutySlip) return res.status(404).json({ error: "Not Found" });
+    res.json(dutySlip);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Update Duty Slip
+router.put("/:id", async (req, res) => {
+  try {
+    const updatedDutySlip = await DutySlip.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    res.json(updatedDutySlip);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Delete Duty Slip
+router.delete("/:id", async (req, res) => {
+  try {
+    await DutySlip.findByIdAndDelete(req.params.id);
+    res.json({ message: "Deleted Successfully" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+module.exports = router;
