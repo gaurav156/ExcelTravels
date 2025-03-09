@@ -2,12 +2,9 @@ const mongoose = require("mongoose");
 
 const DutySlipSchema = new mongoose.Schema({
   dutySlipId: { type: String, required: true, unique: true },
-  companyId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Company",
-    required: true,
-  },
+  companyId: { type: String, required: true},
   companyName: { type: String, required: true },
+  driverId: { type: String, required: true},
   customerName: { type: String, required: true },
   city: { type: String },
   address: { type: String },

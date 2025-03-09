@@ -388,7 +388,7 @@ export default {
       this.generateDriverId();
     },
     generateDriverId() {
-      const nextId = `C${String(this.drivers.length + 1).padStart(3, "0")}`;
+      const nextId = `D${String(this.drivers.length + 1).padStart(3, "0")}`;
       this.form.driverId = nextId;
       console.log(this.form.driverId);
     },

@@ -351,12 +351,14 @@ export default {
       },
       companies: [], // List of companies fetched from the database
       drivers: [], // List of drivers fetched from the database
+      dutySlips: [],
       isLoading: false,
     };
   },
   created() {
     this.fetchCompanies();
     this.fetchDrivers();
+    this.fetchDutySlips();
   },
   methods: {
     validateForm() {
@@ -372,6 +374,30 @@ export default {
       if (!this.form.carNumber) errors.carNumber = "Car Number is required.";
       if (!this.form.pickupTime) errors.pickupTime = "Pickup Time is required.";
       return Object.keys(errors).length === 0 ? true : errors;
+    },
+    async fetchDutySlips() {
+      try {
+        const response = await api.get("/dutyslips");
+        this.dutySlips = response.data;
+      } catch (error) {
+        console.error("Error fetching dutySlips:", error);
+        Swal.fire({
+          title: "Error!",
+          text: "Error fetching dutySlips.",
+          icon: "error",
+          confirmButtonColor: "#d33",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "swal2-popup", // Apply custom class
+          },
+        });
+      }
+
+      this.generateDutySlipId();
+    },
+    generateDutySlipId() {
+      const nextId = `DS${String(this.dutySlips.length + 1).padStart(3, "0")}`;
+      this.form.dutySlipId = nextId;
     },
     async fetchCompanies() {
       try {
@@ -405,8 +431,6 @@ export default {
         this.form.driverId = selectedDriver.driverId;
         this.form.phoneNumber = selectedDriver.contact;
       }
-      console.log(this.form.driverId);
-      console.log(this.form.phoneNumber);
     },
     async handleSubmit() {
       // Handle form submission
@@ -423,6 +447,7 @@ export default {
         });
         return;
       }
+
       try {
         const response = await api.post(
           "/dutyslips",
