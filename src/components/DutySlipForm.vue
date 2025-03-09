@@ -71,10 +71,10 @@
               <option value="" disabled>Select Company</option>
               <option
                 v-for="company in companies"
-                :key="company.id"
-                :value="company.name"
+                :key="company.companyId"
+                :value="company.companyName"
               >
-                {{ company.name }}
+                {{ company.companyName }}
               </option>
             </select>
           </div>
@@ -245,6 +245,7 @@
             <select
               id="driverName"
               v-model="form.driverName"
+              @change="fetchDriverDetails"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
               required
             >
@@ -390,11 +391,22 @@ export default {
     },
     fetchCompanyId() {
       const selectedCompany = this.companies.find(
-        (company) => company.name === this.form.companyName
+        (company) => company.companyName === this.form.companyName
       );
       if (selectedCompany) {
-        this.form.companyId = selectedCompany.id;
+        this.form.companyId = selectedCompany.companyId;
       }
+    },
+    fetchDriverDetails() {
+      const selectedDriver = this.drivers.find(
+        (driver) => driver.name === this.form.driverName
+      );
+      if (selectedDriver) {
+        this.form.driverId = selectedDriver.driverId;
+        this.form.phoneNumber = selectedDriver.contact;
+      }
+      console.log(this.form.driverId);
+      console.log(this.form.phoneNumber);
     },
     async handleSubmit() {
       // Handle form submission
