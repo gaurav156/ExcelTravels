@@ -1,37 +1,63 @@
 <template>
-  <div style="background-color: #f5f5dc"
-    class="p-8 rounded-lg shadow-xl border-2 border-maroon max-w-4xl mx-auto transform transition duration-300 hover:shadow-2xl relative">
+  <div
+    style="background-color: #f5f5dc"
+    class="p-8 rounded-lg shadow-xl border-2 border-maroon max-w-4xl mx-auto transform transition duration-300 hover:shadow-2xl relative"
+  >
     <!-- Company Icon -->
     <div
-      class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-white p-2 rounded-full border-2 border-maroon shadow-lg">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-maroon" fill="none" viewBox="0 0 24 24"
-        stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+      class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-white p-2 rounded-full border-2 border-maroon shadow-lg"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-10 w-10 text-maroon"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+        />
       </svg>
     </div>
 
     <!-- Logo and Email Section -->
-    <div class="flex justify-between items-center mb-6">
+    <div
+      class="flex flex-col sm:flex-row justify-center sm:justify-between items-center text-center sm:text-left mb-6"
+    >
+      <img
+        src="@/assets/logo.png"
+        alt="Company Logo"
+        class="w-24 h-12 mb-2 sm:mb-0"
+      />
       <div class="text-m font-semibold text-maroon cursor-pointer">
         {{ email }}
       </div>
-      <img src="@/assets/logo.png" alt="Company Logo" class="w-24 h-12" />
     </div>
+
     <h2 class="text-3xl font-extrabold text-maroon text-center mb-6">
       Add Company Data
     </h2>
 
     <!-- Form -->
-    <form @submit.prevent="handleSubmit" class="bg-white p-6 rounded-lg shadow-md border border-gray-300">
+    <form
+      @submit.prevent="handleSubmit"
+      class="bg-white p-0 sm:p-6 rounded-lg shadow-md border border-gray-300"
+    >
       <!-- Company ID (Auto-populated) -->
       <div class="mb-6">
         <label for="companyId" class="block text-sm font-medium text-maroon">
           Company ID
         </label>
-        <input type="text" id="companyId" v-model="form.companyId"
+        <input
+          type="text"
+          id="companyId"
+          v-model="form.companyId"
           class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-          readonly />
+          readonly
+        />
       </div>
 
       <!-- Company Name -->
@@ -39,9 +65,14 @@
         <label for="companyName" class="block text-sm font-medium text-maroon">
           Company Name
         </label>
-        <input type="text" id="companyName" v-model="form.companyName" placeholder="Enter company name"
+        <input
+          type="text"
+          id="companyName"
+          v-model="form.companyName"
+          placeholder="Enter company name"
           class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-          required />
+          required
+        />
       </div>
 
       <!-- Email ID -->
@@ -49,9 +80,14 @@
         <label for="email" class="block text-sm font-medium text-maroon">
           Email ID
         </label>
-        <input type="email" id="email" v-model="form.email" placeholder="Enter company email"
+        <input
+          type="email"
+          id="email"
+          v-model="form.email"
+          placeholder="Enter company email"
           class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-          required />
+          required
+        />
       </div>
 
       <!-- Address -->
@@ -59,9 +95,14 @@
         <label for="address" class="block text-sm font-medium text-maroon">
           Address
         </label>
-        <textarea id="address" v-model="form.address" placeholder="Enter company address" rows="3"
+        <textarea
+          id="address"
+          v-model="form.address"
+          placeholder="Enter company address"
+          rows="3"
           class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-          required></textarea>
+          required
+        ></textarea>
       </div>
 
       <!-- Contact -->
@@ -69,15 +110,24 @@
         <label for="contact" class="block text-sm font-medium text-maroon">
           Contact Number
         </label>
-        <input type="tel" id="contact" v-model="form.contact" placeholder="Enter 10-digit contact number"
+        <input
+          type="tel"
+          id="contact"
+          v-model="form.contact"
+          placeholder="Enter 10-digit contact number"
           class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-          required pattern="[0-9]{10}" title="Please enter a 10-digit phone number" />
+          required
+          pattern="[0-9]{10}"
+          title="Please enter a 10-digit phone number"
+        />
       </div>
 
       <!-- Submit Button -->
       <div class="mt-6">
-        <button type="submit"
-          class="w-full bg-maroon text-white px-4 py-3 rounded-md text-lg font-semibold shadow-md transition duration-300 hover:bg-maroon-dark hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-maroon focus:ring-offset-2">
+        <button
+          type="submit"
+          class="w-full bg-maroon text-white px-4 py-3 rounded-md text-lg font-semibold shadow-md transition duration-300 hover:bg-maroon-dark hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-maroon focus:ring-offset-2"
+        >
           Submit
         </button>
       </div>
@@ -150,7 +200,10 @@ export default {
       }
 
       try {
-        const response = await axios.post("http://localhost:5000/api/companies", this.form);
+        const response = await axios.post(
+          "http://localhost:5000/api/companies",
+          this.form
+        );
         console.log("Data saved successfully:", response.data);
 
         this.companies.push({ ...this.form });

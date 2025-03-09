@@ -1,22 +1,40 @@
 <template>
-  <div style="background-color: #f5f5dc"
-    class="p-8 rounded-lg shadow-xl border-2 border-maroon max-w-4xl mx-auto transform transition duration-300 hover:shadow-2xl relative hover:border-glow">
+  <div
+    style="background-color: #f5f5dc"
+    class="p-8 rounded-lg shadow-xl border-2 border-maroon max-w-4xl mx-auto transform transition duration-300 hover:shadow-2xl relative hover:border-glow"
+  >
     <!-- Driver Icon -->
     <div
-      class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-white p-2 rounded-full border-2 border-maroon shadow-lg">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-maroon" fill="none" viewBox="0 0 24 24"
-        stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+      class="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-white p-2 rounded-full border-2 border-maroon shadow-lg"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-10 w-10 text-maroon"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+        />
       </svg>
     </div>
 
     <!-- Logo and Email Section -->
-    <div class="flex justify-between items-center mb-6">
+    <div
+      class="flex flex-col sm:flex-row justify-center sm:justify-between items-center text-center sm:text-left mb-6"
+    >
+      <img
+        src="@/assets/logo.png"
+        alt="Company Logo"
+        class="w-24 h-12 mb-2 sm:mb-0"
+      />
       <div class="text-m font-semibold text-maroon cursor-pointer">
         {{ email }}
       </div>
-      <img src="@/assets/logo.png" alt="Company Logo" class="w-24 h-12" />
     </div>
 
     <h2 class="text-3xl font-extrabold text-maroon text-center mb-6">
@@ -24,7 +42,10 @@
     </h2>
 
     <!-- Form -->
-    <form @submit.prevent="handleSubmit" class="bg-white p-6 rounded-lg shadow-md border border-gray-300">
+    <form
+      @submit.prevent="handleSubmit"
+      class="bg-white p-6 rounded-lg shadow-md border border-gray-300"
+    >
       <!-- Personal Details Section -->
       <div class="mb-8">
         <h3 class="text-xl font-semibold text-maroon mb-4">Personal Details</h3>
@@ -34,9 +55,14 @@
             <label for="name" class="block text-sm font-medium text-maroon">
               Full Name
             </label>
-            <input type="text" id="name" v-model="form.name" placeholder="Enter full name"
+            <input
+              type="text"
+              id="name"
+              v-model="form.name"
+              placeholder="Enter full name"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required />
+              required
+            />
           </div>
 
           <!-- Age -->
@@ -44,9 +70,15 @@
             <label for="age" class="block text-sm font-medium text-maroon">
               Age
             </label>
-            <input type="number" id="age" v-model="form.age" placeholder="Enter age"
+            <input
+              type="number"
+              id="age"
+              v-model="form.age"
+              placeholder="Enter age"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required min="18" />
+              required
+              min="18"
+            />
           </div>
 
           <!-- Email -->
@@ -54,9 +86,14 @@
             <label for="email" class="block text-sm font-medium text-maroon">
               Email Address
             </label>
-            <input type="email" id="email" v-model="form.email" placeholder="Enter email address"
+            <input
+              type="email"
+              id="email"
+              v-model="form.email"
+              placeholder="Enter email address"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required />
+              required
+            />
           </div>
 
           <!-- Contact Number -->
@@ -64,9 +101,16 @@
             <label for="contact" class="block text-sm font-medium text-maroon">
               Contact Number
             </label>
-            <input type="tel" id="contact" v-model="form.contact" placeholder="Enter 10-digit contact number"
+            <input
+              type="tel"
+              id="contact"
+              v-model="form.contact"
+              placeholder="Enter 10-digit contact number"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required pattern="[0-9]{10}" title="Please enter a 10-digit phone number" />
+              required
+              pattern="[0-9]{10}"
+              title="Please enter a 10-digit phone number"
+            />
           </div>
         </div>
       </div>
@@ -80,9 +124,14 @@
             <label for="address" class="block text-sm font-medium text-maroon">
               Full Address
             </label>
-            <textarea id="address" v-model="form.address" placeholder="Enter full address" rows="3"
+            <textarea
+              id="address"
+              v-model="form.address"
+              placeholder="Enter full address"
+              rows="3"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required></textarea>
+              required
+            ></textarea>
           </div>
         </div>
       </div>
@@ -95,24 +144,40 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <!-- Emergency Contact Name -->
           <div>
-            <label for="emergencyName" class="block text-sm font-medium text-maroon">
+            <label
+              for="emergencyName"
+              class="block text-sm font-medium text-maroon"
+            >
               Emergency Contact Name
             </label>
-            <input type="text" id="emergencyName" v-model="form.emergencyName"
+            <input
+              type="text"
+              id="emergencyName"
+              v-model="form.emergencyName"
               placeholder="Enter emergency contact name"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required />
+              required
+            />
           </div>
 
           <!-- Emergency Contact Number -->
           <div>
-            <label for="emergencyContact" class="block text-sm font-medium text-maroon">
+            <label
+              for="emergencyContact"
+              class="block text-sm font-medium text-maroon"
+            >
               Emergency Contact Number
             </label>
-            <input type="tel" id="emergencyContact" v-model="form.emergencyContact"
+            <input
+              type="tel"
+              id="emergencyContact"
+              v-model="form.emergencyContact"
               placeholder="Enter 10-digit emergency contact number"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required pattern="[0-9]{10}" title="Please enter a 10-digit phone number" />
+              required
+              pattern="[0-9]{10}"
+              title="Please enter a 10-digit phone number"
+            />
           </div>
         </div>
       </div>
@@ -126,9 +191,14 @@
             <label for="bankName" class="block text-sm font-medium text-maroon">
               Bank Name
             </label>
-            <input type="text" id="bankName" v-model="form.bankName" placeholder="Enter bank name"
+            <input
+              type="text"
+              id="bankName"
+              v-model="form.bankName"
+              placeholder="Enter bank name"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required />
+              required
+            />
           </div>
 
           <!-- IFSC Code -->
@@ -136,29 +206,50 @@
             <label for="ifscCode" class="block text-sm font-medium text-maroon">
               IFSC Code
             </label>
-            <input type="text" id="ifscCode" v-model="form.ifscCode" placeholder="Enter IFSC code"
+            <input
+              type="text"
+              id="ifscCode"
+              v-model="form.ifscCode"
+              placeholder="Enter IFSC code"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required />
+              required
+            />
           </div>
 
           <!-- Branch -->
           <div>
-            <label for="branchName" class="block text-sm font-medium text-maroon">
+            <label
+              for="branchName"
+              class="block text-sm font-medium text-maroon"
+            >
               Branch Name
             </label>
-            <input type="text" id="branchName" v-model="form.branch" placeholder="Enter branch name"
+            <input
+              type="text"
+              id="branchName"
+              v-model="form.branch"
+              placeholder="Enter branch name"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required />
+              required
+            />
           </div>
 
           <!-- Account Number -->
           <div>
-            <label for="accountNumber" class="block text-sm font-medium text-maroon">
+            <label
+              for="accountNumber"
+              class="block text-sm font-medium text-maroon"
+            >
               Account Number
             </label>
-            <input type="text" id="accountNumber" v-model="form.accountNumber" placeholder="Enter account number"
+            <input
+              type="text"
+              id="accountNumber"
+              v-model="form.accountNumber"
+              placeholder="Enter account number"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required />
+              required
+            />
           </div>
         </div>
       </div>
@@ -169,41 +260,71 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <!-- Aadhar Number -->
           <div>
-            <label for="aadharNumber" class="block text-sm font-medium text-maroon">
+            <label
+              for="aadharNumber"
+              class="block text-sm font-medium text-maroon"
+            >
               Aadhar Number
             </label>
-            <input type="text" id="aadharNumber" v-model="form.aadharNumber" placeholder="Enter 12-digit Aadhar number"
+            <input
+              type="text"
+              id="aadharNumber"
+              v-model="form.aadharNumber"
+              placeholder="Enter 12-digit Aadhar number"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required pattern="[0-9]{12}" title="Please enter a 12-digit Aadhar number" />
+              required
+              pattern="[0-9]{12}"
+              title="Please enter a 12-digit Aadhar number"
+            />
           </div>
 
           <!-- PAN Number -->
           <div>
-            <label for="panNumber" class="block text-sm font-medium text-maroon">
+            <label
+              for="panNumber"
+              class="block text-sm font-medium text-maroon"
+            >
               PAN Number
             </label>
-            <input type="text" id="panNumber" @input="capitalizePan" v-model="form.panNumber"
+            <input
+              type="text"
+              id="panNumber"
+              @input="capitalizePan"
+              v-model="form.panNumber"
               placeholder="Enter PAN number (e.g., ABCDE1234F)"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" title="Please enter a valid PAN number (e.g., ABCDE1234F)" />
+              required
+              pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
+              title="Please enter a valid PAN number (e.g., ABCDE1234F)"
+            />
           </div>
 
           <!-- License Number -->
           <div>
-            <label for="licenseNumber" class="block text-sm font-medium text-maroon">
+            <label
+              for="licenseNumber"
+              class="block text-sm font-medium text-maroon"
+            >
               License Number
             </label>
-            <input type="text" id="licenseNumber" v-model="form.licenseNumber" placeholder="Enter license number"
+            <input
+              type="text"
+              id="licenseNumber"
+              v-model="form.licenseNumber"
+              placeholder="Enter license number"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required />
+              required
+            />
           </div>
         </div>
       </div>
 
       <!-- Submit Button -->
       <div class="mt-6">
-        <button type="submit"
-          class="w-full bg-maroon text-white px-4 py-3 rounded-md text-lg font-semibold shadow-md transition duration-300 hover:bg-maroon-dark hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-maroon focus:ring-offset-2">
+        <button
+          type="submit"
+          class="w-full bg-maroon text-white px-4 py-3 rounded-md text-lg font-semibold shadow-md transition duration-300 hover:bg-maroon-dark hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-maroon focus:ring-offset-2"
+        >
           Submit
         </button>
       </div>
@@ -286,7 +407,10 @@ export default {
       }
 
       try {
-        const response = await axios.post("http://localhost:5000/api/drivers", this.form);
+        const response = await axios.post(
+          "http://localhost:5000/api/drivers",
+          this.form
+        );
         console.log("Data saved successfully:", response.data);
 
         // this.companies.push({ ...this.form });

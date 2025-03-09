@@ -222,7 +222,7 @@
 
     <!-- Main Section -->
     <main
-      class="bg-gradient-to-r from-indigo-50 to-purple-50 flex-grow bg-gray-50 py-8 m-14"
+      class="bg-gradient-to-r from-indigo-50 to-purple-50 flex-grow bg-gray-50 py-8 m-0 sm:m-14"
     >
       <div class="container mx-auto p-4">
         <!-- Dynamic Content -->
