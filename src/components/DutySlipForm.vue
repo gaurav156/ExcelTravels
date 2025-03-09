@@ -323,7 +323,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import api from "@/api";
 import Swal from "sweetalert2";
 
 export default {
@@ -374,7 +374,7 @@ export default {
     },
     async fetchCompanies() {
       try {
-        const response = await axios.get("http://localhost:5000/api/companies");
+        const response = await api.get("/companies");
         this.companies = response.data;
       } catch (error) {
         console.error("Error fetching companies:", error);
@@ -382,7 +382,7 @@ export default {
     },
     async fetchDrivers() {
       try {
-        const response = await axios.get("http://localhost:5000/api/drivers");
+        const response = await api.get("/drivers");
         this.drivers = response.data;
       } catch (error) {
         console.error("Error fetching drivers:", error);
@@ -412,8 +412,8 @@ export default {
         return;
       }
       try {
-        const response = await axios.post(
-          "http://localhost:5000/dutyslips",
+        const response = await api.post(
+          "/dutyslips",
           this.form
         );
         console.log("Data saved successfully:", response.data);

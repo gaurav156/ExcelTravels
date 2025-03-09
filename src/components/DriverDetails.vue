@@ -333,7 +333,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import api from "@/api";
 import Swal from "sweetalert2";
 
 export default {
@@ -369,7 +369,7 @@ export default {
   methods: {
     async fetchDrivers() {
       try {
-        const response = await axios.get("http://localhost:5000/api/drivers");
+        const response = await api.get("/drivers");
         this.drivers = response.data;
       } catch (error) {
         console.error("Error fetching drivers:", error);
@@ -459,8 +459,8 @@ export default {
 
       // If no duplicates, submit the form
       try {
-        const response = await axios.post(
-          "http://localhost:5000/api/drivers",
+        const response = await api.post(
+          "/drivers",
           this.form
         );
         console.log("Data saved successfully:", response.data);
