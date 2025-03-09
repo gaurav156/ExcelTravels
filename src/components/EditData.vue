@@ -130,19 +130,21 @@ export default {
       email: "excel.travel@rediffmail.com",
       exportStartDate: null,
       exportEndDate: null,
-      duty: [],
+      duty: [], // Array to store fetched duty slips
     };
   },
   methods: {
     async fetchDutySlips() {
       try {
+        // Fetch duty slips from the backend
         const response = await axios.get("http://localhost:5000/dutyslips", {
           params: {
             startDate: this.exportStartDate,
             endDate: this.exportEndDate,
           },
         });
-        this.duty = response.data;
+        this.duty = response.data; // Store fetched data
+        console.log("Fetched Duty Slips:", this.duty); // Debugging: Log fetched data
       } catch (error) {
         console.error("Error fetching duty slips:", error);
         Swal.fire({
@@ -151,13 +153,18 @@ export default {
           icon: "error",
           confirmButtonColor: "#d33",
           confirmButtonText: "OK",
+          customClass: {
+            popup: "swal2-popup", // Apply custom class
+          },
         });
       }
     },
 
     async exportToExcel() {
+      // Fetch duty slips before exporting
       await this.fetchDutySlips();
 
+      // Check if data is available
       if (this.duty.length === 0) {
         Swal.fire({
           title: "No Data!",
@@ -165,42 +172,62 @@ export default {
           icon: "warning",
           confirmButtonColor: "#3085d6",
           confirmButtonText: "OK",
+          customClass: {
+            popup: "swal2-popup", // Apply custom class
+          },
         });
         return;
       }
 
-      // Convert data to worksheet
-      const worksheet = XLSX.utils.json_to_sheet(this.duty);
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Duty Slips");
+      try {
+        // Convert data to worksheet
+        const worksheet = XLSX.utils.json_to_sheet(this.duty);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Duty Slips");
 
-      // Generate and download the Excel file
-      XLSX.writeFile(workbook, "Duty_Slips.xlsx");
+        // Generate and download the Excel file
+        XLSX.writeFile(workbook, "Duty_Slips.xlsx");
 
-      // Show success message
-      Swal.fire({
-        title: "Success!",
-        text: "Data exported successfully. Check your downloads for the Excel sheet.",
-        icon: "success",
-        confirmButtonColor: "#3085d6",
-        confirmButtonText: "OK",
-      });
+        // Show success message
+        Swal.fire({
+          title: "Success!",
+          text: "Data exported successfully. Check your downloads for the Excel sheet.",
+          icon: "success",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "swal2-popup", // Apply custom class
+          },
+        });
+      } catch (error) {
+        console.error("Error exporting to Excel:", error);
+        Swal.fire({
+          title: "Error!",
+          text: "Failed to export data. Please try again.",
+          icon: "error",
+          confirmButtonColor: "#d33",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "swal2-popup", // Apply custom class
+          },
+        });
+      }
     },
 
-    // viewPayslipData() {
-    //   // Navigate to view data page
-    //   alert("View Data functionality will be implemented here.");
-    // },
+    viewPayslipData() {
+      // Navigate to view data page
+      alert("View Data functionality will be implemented here.");
+    },
 
-    // viewDriverpData() {
-    //   // Navigate to edit data page
-    //   alert("Edit Data functionality will be implemented here.");
-    // },
+    viewDriverData() {
+      // Navigate to edit data page
+      alert("Edit Data functionality will be implemented here.");
+    },
 
-    // viewCompanyData() {
-    //   // Navigate to remove data page
-    //   alert("Remove Data functionality will be implemented here.");
-    // },
+    viewCompanyData() {
+      // Navigate to remove data page
+      alert("Remove Data functionality will be implemented here.");
+    },
   },
 };
 </script>
@@ -215,16 +242,8 @@ export default {
   background-color: #800000;
 }
 
-.bg-maroon-light {
-  background-color: #a52a2a; /* Lighter Maroon */
-}
-
-.hover\:bg-maroon:hover {
-  background-color: #800000; /* Maroon */
-}
-
 .hover\:bg-maroon-dark:hover {
-  background-color: #600000; /* Darker Maroon */
+  background-color: #600000;
 }
 
 .focus\:border-maroon:focus {
@@ -234,5 +253,30 @@ export default {
 .border-maroon {
   border-color: #800000; /* Maroon Solid Border */
   box-shadow: 0 0 10px rgba(128, 0, 0, 0.8); /* Glowing Effect */
+}
+
+/* Custom styles for SweetAlert2 popup */
+.swal2-popup {
+  width: 90%; /* Default width for small screens */
+  max-width: 400px; /* Maximum width for larger screens */
+  font-size: 14px; /* Default font size for small screens */
+}
+
+/* Adjust width and font size for medium screens */
+@media (min-width: 640px) {
+  .swal2-popup {
+    width: 70%;
+    max-width: 500px;
+    font-size: 16px;
+  }
+}
+
+/* Adjust width and font size for large screens */
+@media (min-width: 1024px) {
+  .swal2-popup {
+    width: 50%;
+    max-width: 600px;
+    font-size: 18px;
+  }
 }
 </style>

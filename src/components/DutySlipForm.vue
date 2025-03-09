@@ -1,5 +1,4 @@
 <template>
-  <!-- luxary sedan suv-----local n outstaion -->
   <div
     style="background-color: #f5f5dc"
     class="p-8 rounded-lg shadow-xl border-2 border-maroon max-w-4xl mx-auto transform transition duration-300 hover:shadow-2xl relative hover:border-glow"
@@ -54,25 +53,33 @@
           Company & Customer Details
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- Duty Slip ID -->
+          <!-- Company Name (Searchable Select) -->
           <div>
             <label
-              for="dutySlipId"
+              for="companyName"
               class="block text-sm font-medium text-maroon"
             >
-              Duty Slip ID
+              Company Name
             </label>
-            <input
-              type="text"
-              id="dutySlipId"
-              v-model="form.dutySlipId"
-              placeholder="Enter Duty Slip ID"
+            <select
+              id="companyName"
+              v-model="form.companyName"
+              @change="fetchCompanyId"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
               required
-            />
+            >
+              <option value="" disabled>Select Company</option>
+              <option
+                v-for="company in companies"
+                :key="company.id"
+                :value="company.name"
+              >
+                {{ company.name }}
+              </option>
+            </select>
           </div>
 
-          <!-- Company ID -->
+          <!-- Company ID (Auto-filled and Disabled) -->
           <div>
             <label
               for="companyId"
@@ -84,27 +91,8 @@
               type="text"
               id="companyId"
               v-model="form.companyId"
-              placeholder="Enter Company ID"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required
-            />
-          </div>
-
-          <!-- Company Name -->
-          <div>
-            <label
-              for="companyName"
-              class="block text-sm font-medium text-maroon"
-            >
-              Company Name
-            </label>
-            <input
-              type="text"
-              id="companyName"
-              v-model="form.companyName"
-              placeholder="Enter Company Name"
-              class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required
+              disabled
             />
           </div>
 
@@ -189,9 +177,7 @@
               <option value="" disabled>Select Car Type</option>
               <option value="Sedan">Sedan</option>
               <option value="SUV">SUV</option>
-              <option value="Hatchback">Hatchback</option>
               <option value="Luxury">Luxury</option>
-              <option value="Van">Van</option>
             </select>
           </div>
 
@@ -213,22 +199,24 @@
             />
           </div>
 
-          <!-- Duty Type -->
+          <!-- Pickup Time -->
           <div>
-            <label for="dutyType" class="block text-sm font-medium text-maroon">
-              Duty Type
+            <label
+              for="pickupTime"
+              class="block text-sm font-medium text-maroon"
+            >
+              Pickup Time
             </label>
             <input
-              type="text"
-              id="dutyType"
-              v-model="form.dutyType"
-              placeholder="Enter Duty Type"
+              type="time"
+              id="pickupTime"
+              v-model="form.pickupTime"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
               required
             />
           </div>
 
-          <!-- Trip Route -->
+          <!-- Trip Route (Text Input) -->
           <div>
             <label
               for="tripRoute"
@@ -236,21 +224,17 @@
             >
               Trip Route
             </label>
-            <select
+            <input
+              type="text"
               id="tripRoute"
               v-model="form.tripRoute"
+              placeholder="Enter Trip Route"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
               required
-            >
-              <option value="" disabled>Select Trip Route</option>
-              <option value="Mumbai to Pune">Mumbai to Pune</option>
-              <option value="Mumbai to Delhi">Mumbai to Delhi</option>
-              <option value="Mumbai to Bangalore">Mumbai to Bangalore</option>
-              <option value="Mumbai to Hyderabad">Mumbai to Hyderabad</option>
-            </select>
+            />
           </div>
 
-          <!-- Driver Name -->
+          <!-- Driver Name (Searchable Select) -->
           <div>
             <label
               for="driverName"
@@ -258,14 +242,21 @@
             >
               Driver Name
             </label>
-            <input
-              type="text"
+            <select
               id="driverName"
               v-model="form.driverName"
-              placeholder="Enter Driver Name"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
               required
-            />
+            >
+              <option value="" disabled>Select Driver</option>
+              <option
+                v-for="driver in drivers"
+                :key="driver.id"
+                :value="driver.name"
+              >
+                {{ driver.name }}
+              </option>
+            </select>
           </div>
 
           <!-- Phone Number -->
@@ -341,32 +332,88 @@ export default {
     return {
       email: "excel.travel@rediffmail.com",
       form: {
-        dutySlipId: "",
-        companyId: "",
-        companyName: "",
-        customerName: "",
+        dutySlipId: "", // Rename to DutySlipID if required
+        companyId: "", // Rename to CompanyID if required
+        companyName: "", // Rename to PartyName if required
+        customerName: "", // Rename to CustomerName if required
         city: "",
         address: "",
         carBooked: "",
-        phoneNumber: "",
+        phoneNumber: "", // Rename to phone if required
         dutyType: "",
         driverName: "",
-        carNumber: "",
+        carNumber: "", // Rename to busNo if required
         dateFrom: "",
         dateTo: "",
         tripRoute: "",
+        pickupTime: "", // Rename to time if required
       },
+      companies: [], // List of companies fetched from the database
+      drivers: [], // List of drivers fetched from the database
       isLoading: false,
     };
   },
+  created() {
+    this.fetchCompanies();
+    this.fetchDrivers();
+  },
   methods: {
+    validateForm() {
+      const errors = {};
+      if (!this.form.dutySlipId)
+        errors.dutySlipId = "Duty Slip ID is required.";
+      if (!this.form.companyName)
+        errors.companyName = "Company Name is required.";
+      if (!this.form.customerName)
+        errors.customerName = "Customer Name is required.";
+      if (!this.form.phoneNumber)
+        errors.phoneNumber = "Phone Number is required.";
+      if (!this.form.carNumber) errors.carNumber = "Car Number is required.";
+      if (!this.form.pickupTime) errors.pickupTime = "Pickup Time is required.";
+      return Object.keys(errors).length === 0 ? true : errors;
+    },
+    async fetchCompanies() {
+      try {
+        const response = await axios.get("http://localhost:5000/api/companies");
+        this.companies = response.data;
+      } catch (error) {
+        console.error("Error fetching companies:", error);
+      }
+    },
+    async fetchDrivers() {
+      try {
+        const response = await axios.get("http://localhost:5000/api/drivers");
+        this.drivers = response.data;
+      } catch (error) {
+        console.error("Error fetching drivers:", error);
+      }
+    },
+    fetchCompanyId() {
+      const selectedCompany = this.companies.find(
+        (company) => company.name === this.form.companyName
+      );
+      if (selectedCompany) {
+        this.form.companyId = selectedCompany.id;
+      }
+    },
     async handleSubmit() {
       // Handle form submission
       this.isLoading = true;
-
+      const validation = this.validateForm();
+      if (validation !== true) {
+        console.error("Validation Errors:", validation);
+        Swal.fire({
+          title: "Validation Error",
+          text: "Please fill all required fields.",
+          icon: "error",
+          confirmButtonColor: "#d33",
+          confirmButtonText: "OK",
+        });
+        return;
+      }
       try {
         const response = await axios.post(
-          "http://localhost:5000/api/dutyslips",
+          "http://localhost:5000/dutyslips",
           this.form
         );
         console.log("Data saved successfully:", response.data);
@@ -411,6 +458,7 @@ export default {
         dateFrom: "",
         dateTo: "",
         tripRoute: "",
+        pickupTime: "",
       };
     },
   },

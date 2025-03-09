@@ -25,10 +25,10 @@
 
     <!-- Logo and Email Section -->
     <div class="flex justify-between items-center mb-6">
+      <img src="@/assets/logo.png" alt="Company Logo" class="w-24 h-12" />
       <div class="text-m font-semibold text-maroon cursor-pointer">
         {{ email }}
       </div>
-      <img src="@/assets/logo.png" alt="Company Logo" class="w-24 h-12" />
     </div>
     <h2 class="text-3xl font-extrabold text-maroon text-center mb-6">
       Add Company Data
@@ -165,6 +165,9 @@ export default {
           icon: "error",
           confirmButtonColor: "#d33",
           confirmButtonText: "OK",
+          customClass: {
+            popup: "swal2-popup", // Apply custom class
+          },
         });
       }
 
@@ -177,6 +180,7 @@ export default {
     async handleSubmit() {
       this.isLoading = true;
 
+      // Validate form inputs
       if (!this.validateForm()) {
         Swal.fire({
           title: "Input Error!",
@@ -184,10 +188,71 @@ export default {
           icon: "error",
           confirmButtonColor: "#d33",
           confirmButtonText: "OK",
+          customClass: {
+            popup: "swal2-popup", // Apply custom class
+          },
         });
+        this.isLoading = false;
         return;
       }
 
+      // Check if company name, email, or contact already exists
+      const isCompanyNameExists = this.companies.some(
+        (company) => company.companyName === this.form.companyName
+      );
+      const isEmailExists = this.companies.some(
+        (company) => company.email === this.form.email
+      );
+      const isContactExists = this.companies.some(
+        (company) => company.contact === this.form.contact
+      );
+
+      if (isCompanyNameExists) {
+        Swal.fire({
+          title: "Error!",
+          text: "Company name already exists.",
+          icon: "error",
+          confirmButtonColor: "#d33",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "swal2-popup", // Apply custom class
+          },
+        });
+        this.isLoading = false;
+        return;
+      }
+
+      if (isEmailExists) {
+        Swal.fire({
+          title: "Error!",
+          text: "Email ID already exists.",
+          icon: "error",
+          confirmButtonColor: "#d33",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "swal2-popup", // Apply custom class
+          },
+        });
+        this.isLoading = false;
+        return;
+      }
+
+      if (isContactExists) {
+        Swal.fire({
+          title: "Error!",
+          text: "Contact number already exists.",
+          icon: "error",
+          confirmButtonColor: "#d33",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "swal2-popup", // Apply custom class
+          },
+        });
+        this.isLoading = false;
+        return;
+      }
+
+      // If no duplicates, submit the form
       try {
         const response = await axios.post(
           "http://localhost:5000/api/companies",
@@ -204,6 +269,9 @@ export default {
           icon: "success",
           confirmButtonColor: "#3085d6",
           confirmButtonText: "OK",
+          customClass: {
+            popup: "swal2-popup", // Apply custom class
+          },
         });
 
         this.clearForm();
@@ -216,8 +284,10 @@ export default {
           icon: "error",
           confirmButtonColor: "#d33",
           confirmButtonText: "Try Again",
+          customClass: {
+            popup: "swal2-popup", // Apply custom class
+          },
         });
-        return;
       } finally {
         this.isLoading = false;
       }
@@ -266,5 +336,30 @@ export default {
   /* Maroon Solid Border */
   box-shadow: 0 0 10px rgba(128, 0, 0, 0.8);
   /* Glowing Effect */
+}
+
+/* Custom styles for SweetAlert2 popup */
+.swal2-popup {
+  width: 90%; /* Default width for small screens */
+  max-width: 400px; /* Maximum width for larger screens */
+  font-size: 14px; /* Default font size for small screens */
+}
+
+/* Adjust width and font size for medium screens */
+@media (min-width: 640px) {
+  .swal2-popup {
+    width: 70%;
+    max-width: 500px;
+    font-size: 16px;
+  }
+}
+
+/* Adjust width and font size for large screens */
+@media (min-width: 1024px) {
+  .swal2-popup {
+    width: 50%;
+    max-width: 600px;
+    font-size: 18px;
+  }
 }
 </style>
