@@ -1,9 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomePage from "../components/HomePage.vue"; // Your home page component
-import DutySlipForm from "../components/DutySlipForm.vue"; // DutySlipForm component
-import DriverDetails from "../components/DriverDetails.vue"; // DriverDetails component
-import CompanyDetails from "../components/CompanyDetails.vue"; // CompanyDetails component
-import EditData from "../components/EditData.vue"; // EditData component
+import HomePage from "../components/HomePage.vue";
+import DutySlipForm from "../components/DutySlipForm.vue";
+import DriverDetails from "../components/DriverDetails.vue";
+import CompanyDetails from "../components/CompanyDetails.vue";
+import EditData from "../components/EditData.vue";
+import ViewSlip from "../components/ViewSlip.vue";
+import ViewDriver from "../components/ViewDriver.vue";
+import ViewCompany from "../components/ViewCompany.vue";
 
 const routes = [
   {
@@ -26,6 +29,20 @@ const routes = [
       {
         path: "records",
         component: EditData,
+        children: [
+          {
+            path: "viewslip",
+            component: ViewSlip,
+          },
+          {
+            path: "viewdriver",
+            component: ViewDriver,
+          },
+          {
+            path: "viewcompany",
+            component: ViewCompany,
+          },
+        ],
       },
     ],
   },

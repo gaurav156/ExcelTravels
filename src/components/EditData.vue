@@ -90,31 +90,32 @@
         Data Actions
       </h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- Payslip Button -->
-        <button
-          @click="viewPayslipData"
-          class="bg-maroon text-white px-4 py-3 rounded-md text-lg font-semibold hover:bg-maroon-dark transition duration-300"
+        <router-link
+          to="/records/viewslip"
+          class="bg-maroon text-white px-4 py-3 rounded-md text-lg font-semibold hover:bg-maroon-dark transition duration-300 text-center"
         >
           View Pay-Slips
-        </button>
+        </router-link>
 
-        <!-- Driver Button -->
-        <button
-          @click="viewDriverData"
-          class="bg-maroon text-white px-4 py-3 rounded-md text-lg font-semibold hover:bg-maroon-dark transition duration-300"
+        <!-- View Driver Data -->
+        <router-link
+          to="/records/viewdriver"
+          class="bg-maroon text-white px-4 py-3 rounded-md text-lg font-semibold hover:bg-maroon-dark transition duration-300 text-center"
         >
           View Driver Data
-        </button>
+        </router-link>
 
-        <!-- Company Button -->
-        <button
-          @click="viewCompanyData"
-          class="bg-maroon text-white px-4 py-3 rounded-md text-lg font-semibold hover:bg-red-700 transition duration-300"
+        <!-- View Company Data -->
+        <router-link
+          to="/records/viewcompany"
+          class="bg-maroon text-white px-4 py-3 rounded-md text-lg font-semibold hover:bg-maroon-dark transition duration-300 text-center"
         >
           View Company Data
-        </button>
+        </router-link>
       </div>
     </div>
+    <!-- Nested View -->
+    <router-view />
   </div>
 </template>
 
@@ -214,20 +215,15 @@ export default {
       }
     },
 
-    viewPayslipData() {
-      // Navigate to view data page
-      alert("View Data functionality will be implemented here.");
-    },
-
-    viewDriverData() {
-      // Navigate to edit data page
-      alert("Edit Data functionality will be implemented here.");
-    },
-
-    viewCompanyData() {
-      // Navigate to remove data page
-      alert("Remove Data functionality will be implemented here.");
-    },
+    // viewPayslipData() {
+    //   this.$router.push("/viewslip"); // Navigate to ViewSlip page
+    // },
+    // viewDriverData() {
+    //   this.$router.push("/viewdriver"); // Navigate to ViewDriver page
+    // },
+    // viewCompanyData() {
+    //   this.$router.push("/viewcompany"); // Navigate to ViewCompany page
+    // },
   },
 };
 </script>
