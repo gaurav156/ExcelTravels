@@ -418,6 +418,15 @@ export default {
         errors.phoneNumber = "Phone Number is required.";
       if (!this.form.carNumber) errors.carNumber = "Car Number is required.";
       if (!this.form.pickupTime) errors.pickupTime = "Pickup Time is required.";
+      // New validation: Ensure dateTo is not smaller than dateFrom
+      if (this.form.dateFrom && this.form.dateTo) {
+        const dateFrom = new Date(this.form.dateFrom);
+        const dateTo = new Date(this.form.dateTo);
+
+        if (dateTo < dateFrom) {
+          errors.dateTo = "End date cannot be earlier than the start date.";
+        }
+      }
       return Object.keys(errors).length === 0 ? true : errors;
     },
     async fetchDutySlips() {
@@ -482,16 +491,27 @@ export default {
     async handleSubmit() {
       // Handle form submission
       this.isLoading = true;
+
+      // Validate the form
       const validation = this.validateForm();
       if (validation !== true) {
         console.error("Validation Errors:", validation);
+
+        // Display validation errors to the user
+        let errorMessage = "Please fix the following errors:\n";
+        for (const [field, message] of Object.entries(validation)) {
+          errorMessage += `- ${field}: ${message}\n`;
+        }
+
         Swal.fire({
           title: "Validation Error",
-          text: "Please fill all required fields.",
+          text: errorMessage,
           icon: "error",
           confirmButtonColor: "#d33",
           confirmButtonText: "OK",
         });
+
+        this.isLoading = false;
         return;
       }
 
@@ -522,7 +542,6 @@ export default {
           confirmButtonColor: "#d33",
           confirmButtonText: "Try Again",
         });
-        return;
       } finally {
         this.isLoading = false;
       }
