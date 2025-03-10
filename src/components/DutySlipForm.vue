@@ -38,9 +38,23 @@
     </div>
 
     <!-- Title -->
-    <h2 class="text-3xl font-extrabold text-maroon text-center mb-6">
+    <h2 class="text-3xl font-extrabold text-maroon text-center mb-4">
       DUTY SLIP
     </h2>
+
+    <!-- ID Box Centered and Smaller -->
+    <div class="flex flex-col items-center mb-4">
+      <label for="dutySlipId" class="text-sm font-medium text-maroon mb-1">
+        Duty Slip ID
+      </label>
+      <input
+        type="text"
+        id="dutySlipId"
+        v-model="form.dutySlipId"
+        class="w-32 text-center focus:ring-[#800000] focus:outline-none px-2 py-1 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+        disabled
+      />
+    </div>
 
     <!-- Form -->
     <form
@@ -65,7 +79,7 @@
               id="companyName"
               v-model="form.companyName"
               @change="fetchCompanyId"
-              class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+              class="custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
               required
             >
               <option value="" disabled>Select Company</option>
@@ -122,7 +136,7 @@
             <select
               id="city"
               v-model="form.city"
-              class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+              class="custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
               required
             >
               <option value="" disabled>Select City</option>
@@ -171,7 +185,7 @@
             <select
               id="carBooked"
               v-model="form.carBooked"
-              class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+              class="custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
               required
             >
               <option value="" disabled>Select Car Type</option>
@@ -216,22 +230,21 @@
             />
           </div>
 
-          <!-- Trip Route (Text Input) -->
+          <!-- Duty Type -->
           <div>
-            <label
-              for="tripRoute"
-              class="block text-sm font-medium text-maroon"
-            >
-              Trip Route
+            <label for="dutyType" class="block text-sm font-medium text-maroon">
+              Duty Type
             </label>
-            <input
-              type="text"
-              id="tripRoute"
-              v-model="form.tripRoute"
-              placeholder="Enter Trip Route"
-              class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+            <select
+              id="dutyType"
+              v-model="form.dutyType"
+              class="custom-select custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
               required
-            />
+            >
+              <option value="" disabled>Select Duty Type</option>
+              <option value="local">Local</option>
+              <option value="Outstation">Outstation</option>
+            </select>
           </div>
 
           <!-- Driver Name (Searchable Select) -->
@@ -246,7 +259,7 @@
               id="driverName"
               v-model="form.driverName"
               @change="fetchDriverDetails"
-              class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+              class="custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
               required
             >
               <option value="" disabled>Select Driver</option>
@@ -258,6 +271,20 @@
                 {{ driver.name }}
               </option>
             </select>
+          </div>
+
+          <!-- Driver ID -->
+          <div>
+            <label for="driverId" class="block text-sm font-medium text-maroon">
+              Driver ID
+            </label>
+            <input
+              type="text"
+              id="driverId"
+              v-model="form.driverId"
+              class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+              disabled
+            />
           </div>
 
           <!-- Phone Number -->
@@ -277,6 +304,24 @@
               required
               pattern="[0-9]{10}"
               title="Please enter a 10-digit phone number"
+            />
+          </div>
+
+          <!-- Trip Route (Text Input) -->
+          <div>
+            <label
+              for="tripRoute"
+              class="block text-sm font-medium text-maroon"
+            >
+              Trip Route
+            </label>
+            <input
+              type="text"
+              id="tripRoute"
+              v-model="form.tripRoute"
+              placeholder="Enter Trip Route"
+              class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+              required
             />
           </div>
 
@@ -449,10 +494,7 @@ export default {
       }
 
       try {
-        const response = await api.post(
-          "/dutyslips",
-          this.form
-        );
+        const response = await api.post("/dutyslips", this.form);
         console.log("Data saved successfully:", response.data);
 
         Swal.fire({
@@ -465,6 +507,7 @@ export default {
 
         // Reset form after successful submission
         this.clearForm();
+        this.generateDutySlipId(); // Regenerate the Duty Slip ID after clearing the form
       } catch (error) {
         console.error("Error submitting form:", error);
         Swal.fire({
@@ -481,7 +524,6 @@ export default {
     },
     clearForm() {
       this.form = {
-        dutySlipId: "",
         companyId: "",
         companyName: "",
         customerName: "",
@@ -525,5 +567,14 @@ export default {
   /* Maroon Solid Border */
   box-shadow: 0 0 10px rgba(128, 0, 0, 0.8);
   /* Glowing Effect */
+}
+
+.custom-select {
+  appearance: none; /* Remove default arrow */
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23800000'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center; /* Position the arrow */
+  background-size: 1.25rem; /* Size of the arrow */
+  padding-right: 2.5rem; /* Add padding to avoid text overlap */
 }
 </style>
