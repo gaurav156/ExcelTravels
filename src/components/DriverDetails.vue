@@ -440,6 +440,13 @@ export default {
       ) {
         errors.push("Account number already exists.");
       }
+      if (
+        this.drivers.some(
+          (driver) => driver.licenseNumber === this.form.licenseNumber
+        )
+      ) {
+        errors.push("License number already exists.");
+      }
 
       // If there are errors, show them in a single alert box
       if (errors.length > 0) {
@@ -459,10 +466,7 @@ export default {
 
       // If no duplicates, submit the form
       try {
-        const response = await api.post(
-          "/drivers",
-          this.form
-        );
+        const response = await api.post("/drivers", this.form);
         console.log("Data saved successfully:", response.data);
 
         this.drivers.push({ ...this.form });
