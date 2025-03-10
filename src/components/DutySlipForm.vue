@@ -75,22 +75,16 @@
             >
               Company Name
             </label>
-            <select
+            <VueSelect
               id="companyName"
               v-model="form.companyName"
-              @change="fetchCompanyId"
-              class="custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+              :options="companies.map((company) => company.companyName)"
+              @update:modelValue="fetchCompanyId"
+              label="companyName"
+              placeholder="Select Company"
+              class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
               required
-            >
-              <option value="" disabled>Select Company</option>
-              <option
-                v-for="company in companies"
-                :key="company.companyId"
-                :value="company.companyName"
-              >
-                {{ company.companyName }}
-              </option>
-            </select>
+            ></VueSelect>
           </div>
 
           <!-- Company ID (Auto-filled and Disabled) -->
@@ -255,22 +249,16 @@
             >
               Driver Name
             </label>
-            <select
+            <VueSelect
               id="driverName"
               v-model="form.driverName"
-              @change="fetchDriverDetails"
-              class="custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+              :options="drivers.map((driver) => driver.name)"
+              @update:modelValue="fetchDriverDetails"
+              label="name"
+              placeholder="Select Driver"
+              class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
               required
-            >
-              <option value="" disabled>Select Driver</option>
-              <option
-                v-for="driver in drivers"
-                :key="driver.id"
-                :value="driver.name"
-              >
-                {{ driver.name }}
-              </option>
-            </select>
+            ></VueSelect>
           </div>
 
           <!-- Driver ID -->
@@ -371,9 +359,14 @@
 <script>
 import api from "@/api";
 import Swal from "sweetalert2";
+import VueSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
 
 export default {
   name: "DutySlipForm",
+  components: {
+    VueSelect,
+  },
   data() {
     return {
       email: "excel.travel@rediffmail.com",
@@ -477,6 +470,8 @@ export default {
       );
       if (selectedCompany) {
         this.form.companyId = selectedCompany.companyId;
+      } else {
+        this.form.companyId = ""; // Reset if no company is found
       }
     },
     fetchDriverDetails() {
@@ -600,5 +595,38 @@ export default {
   background-position: right 0.75rem center; /* Position the arrow */
   background-size: 1.25rem; /* Size of the arrow */
   padding-right: 2.5rem; /* Add padding to avoid text overlap */
+}
+
+/* Custom styles for vue-select */
+/* Custom styles for vue-select */
+::v-deep .vs__dropdown-toggle {
+  border: 1px solid #ccc !important;
+  border-radius: 4px !important;
+}
+
+::v-deep .vs__open-indicator {
+  cursor: pointer !important;
+}
+
+::v-deep .vs__selected {
+  color: #800000 !important;
+}
+
+::v-deep .vs__search {
+  color: #800000 !important;
+}
+
+::v-deep .vs__dropdown-menu {
+  background-color: #fff !important;
+  border: 1px solid #ccc !important;
+}
+
+::v-deep .vs__dropdown-option {
+  color: #800000 !important;
+}
+
+::v-deep .vs__dropdown-option--highlight {
+  background-color: #800000 !important;
+  color: #fff !important;
 }
 </style>
