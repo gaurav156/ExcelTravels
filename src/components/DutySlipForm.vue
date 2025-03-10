@@ -441,7 +441,9 @@ export default {
       this.generateDutySlipId();
     },
     generateDutySlipId() {
+      console.log("Current dutySlips length:", this.dutySlips.length);
       const nextId = `DS${String(this.dutySlips.length + 1).padStart(3, "0")}`;
+      console.log("Generated nextId:", nextId);
       this.form.dutySlipId = nextId;
     },
     async fetchCompanies() {
@@ -496,6 +498,9 @@ export default {
       try {
         const response = await api.post("/dutyslips", this.form);
         console.log("Data saved successfully:", response.data);
+
+        // Add the new duty slip to the dutySlips array
+        this.dutySlips.push(response.data);
 
         Swal.fire({
           title: "Success!",
