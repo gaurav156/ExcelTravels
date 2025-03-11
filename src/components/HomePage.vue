@@ -1,16 +1,12 @@
 <template>
   <div class="min-h-screen bg-beige flex flex-col">
     <!-- Header -->
-    <header class="bg-beige text-white py-4 relative">
+    <header class="bg-beige text-white pt-4 pb-8 relative">
       <div
         class="container mx-auto flex justify-center relative"
         style="background-color: rgb(249, 245, 255)"
       >
-        <img
-          src="@/assets/logo.png"
-          alt="Travel Tours Logo"
-          class="w-80 h-40"
-        />
+        <img src="@/assets/logo.png" alt="Travel Tours Logo" class="h-40" />
       </div>
 
       <!-- Car Animation -->

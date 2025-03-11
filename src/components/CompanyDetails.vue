@@ -25,7 +25,7 @@
 
     <!-- Logo and Email Section -->
     <div class="flex justify-between items-center mb-6">
-      <img src="@/assets/logo.png" alt="Company Logo" class="w-24 h-12" />
+      <img src="@/assets/logo.png" alt="Company Logo" class="h-12" />
       <div class="text-m font-semibold text-maroon cursor-pointer">
         {{ email }}
       </div>
@@ -254,10 +254,7 @@ export default {
 
       // If no duplicates, submit the form
       try {
-        const response = await api.post(
-          "/companies",
-          this.form
-        );
+        const response = await api.post("/companies", this.form);
         console.log("Data saved successfully:", response.data);
 
         this.companies.push({ ...this.form });

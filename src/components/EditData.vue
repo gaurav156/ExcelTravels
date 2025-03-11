@@ -30,7 +30,7 @@
       <img
         src="@/assets/logo.png"
         alt="Company Logo"
-        class="w-24 h-12 mb-2 sm:mb-0"
+        class="h-12 mb-2 sm:mb-0"
       />
       <div class="text-m font-semibold text-maroon cursor-pointer">
         {{ email }}
