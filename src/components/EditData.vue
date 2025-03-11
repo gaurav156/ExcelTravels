@@ -94,7 +94,7 @@
           to="/records/viewslip"
           class="bg-maroon text-white px-4 py-3 rounded-md text-lg font-semibold hover:bg-maroon-dark transition duration-300 text-center"
         >
-          View Pay-Slips
+          View Duty-Slips
         </router-link>
 
         <!-- View Driver Data -->

@@ -29,20 +29,18 @@ const routes = [
       {
         path: "records",
         component: EditData,
-        children: [
-          {
-            path: "viewslip",
-            component: ViewSlip,
-          },
-          {
-            path: "viewdriver",
-            component: ViewDriver,
-          },
-          {
-            path: "viewcompany",
-            component: ViewCompany,
-          },
-        ],
+      },
+      {
+        path: "records/viewslip",
+        component: ViewSlip,
+      },
+      {
+        path: "records/viewdriver",
+        component: ViewDriver,
+      },
+      {
+        path: "records/viewcompany",
+        component: ViewCompany,
       },
     ],
   },

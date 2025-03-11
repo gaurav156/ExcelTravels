@@ -1,6 +1,6 @@
 <template>
   <div class="p-6">
-    <h2 class="text-2xl font-bold mb-4">View Slip Data</h2>
+    <h2 class="text-2xl font-bold mb-4">View Duty Slip Data</h2>
     <table class="table-auto w-full border-collapse">
       <thead>
         <tr class="bg-maroon text-white">
