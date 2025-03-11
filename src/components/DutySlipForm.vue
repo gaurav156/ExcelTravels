@@ -232,7 +232,7 @@
             <select
               id="dutyType"
               v-model="form.dutyType"
-              class="custom-select custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+              class="custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
               required
             >
               <option value="" disabled>Select Duty Type</option>
@@ -598,34 +598,48 @@ export default {
 }
 
 /* Custom styles for vue-select */
-/* Custom styles for vue-select */
-::v-deep .vs__dropdown-toggle {
+:deep(.vs__dropdown-toggle) {
   border: 1px solid #ccc !important;
   border-radius: 4px !important;
 }
 
-::v-deep .vs__open-indicator {
+:deep(.vs__open-indicator) {
   cursor: pointer !important;
+  color: #800000;
+  font-size: 1.2rem;
+  appearance: none; /* Remove default arrow */
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23800000'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center; /* Position the arrow */
+  background-size: 1.25rem; /* Size of the arrow */
+  padding-right: 2.5rem; /* Add padding to avoid text overlap */
 }
 
-::v-deep .vs__selected {
+/* :deep(.vs--open .vs__open-indicator) {
+  transform: rotate(360deg); 
+} */
+:deep(.vs--open .vs__open-indicator) {
+  transform: none !important;
+}
+
+:deep(.vs__selected) {
   color: #800000 !important;
 }
 
-::v-deep .vs__search {
+:deep(.vs__search) {
   color: #800000 !important;
 }
 
-::v-deep .vs__dropdown-menu {
+:deep(.vs__dropdown-menu) {
   background-color: #fff !important;
   border: 1px solid #ccc !important;
 }
 
-::v-deep .vs__dropdown-option {
+:deep(.vs__dropdown-option) {
   color: #800000 !important;
 }
 
-::v-deep .vs__dropdown-option--highlight {
+:deep(.vs__dropdown-option--highlight) {
   background-color: #800000 !important;
   color: #fff !important;
 }
