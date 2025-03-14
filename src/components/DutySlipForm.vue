@@ -481,6 +481,10 @@ export default {
       if (selectedDriver) {
         this.form.driverId = selectedDriver.driverId;
         this.form.phoneNumber = selectedDriver.contact;
+      } else {
+        // Reset if no driver is found / selected
+        this.form.driverId = "";
+        this.form.phoneNumber = ""; 
       }
     },
     async handleSubmit() {
