@@ -465,6 +465,7 @@ export default {
       }
     },
     fetchCompanyId() {
+      this.fetchCompanies();  // sync companies
       const selectedCompany = this.companies.find(
         (company) => company.companyName === this.form.companyName
       );
@@ -475,6 +476,7 @@ export default {
       }
     },
     fetchDriverDetails() {
+      this.fetchDrivers();  // sync drivers
       const selectedDriver = this.drivers.find(
         (driver) => driver.name === this.form.driverName
       );
@@ -513,6 +515,8 @@ export default {
         this.isLoading = false;
         return;
       }
+
+      this.fetchDutySlips();  // sync duty slips
 
       try {
         const response = await api.post("/dutyslips", this.form);
