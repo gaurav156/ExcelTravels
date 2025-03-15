@@ -1,12 +1,10 @@
 <template>
   <div class="min-h-screen bg-beige flex flex-col">
     <!-- Header -->
-    <header class="bg-beige text-white pt-4 pb-8 relative">
-      <div
-        class="container mx-auto flex justify-center relative"
-        style="background-color: rgb(249, 245, 255)"
-      >
-        <img src="@/assets/logo.png" alt="Travel Tours Logo" class="h-40" />
+    <header class="bg-beige text-white p-4 pb-8 relative">
+      <div class="container mx-auto flex justify-center relative bg-[rgb(249,245,255)]">
+        <img src="@/assets/logo.png" alt="Travel Tours Logo"
+          class="h-24 sm:h-32 md:h-40 lg:h-48 transition-all duration-300" />
       </div>
 
       <!-- Car Animation -->
@@ -21,194 +19,85 @@
         <!-- Menu for Small Screens -->
         <div class="md:hidden flex justify-center gap-4">
           <!-- Create New Dutyslip -->
-          <router-link
-            to="/dutyslip"
-            class="btn-option"
-            :class="{ active: $route.path === '/dutyslip' }"
-            title="New Dutyslip"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
+          <router-link to="/dutyslip" class="btn-option" :class="{ active: $route.path === '/dutyslip' }"
+            title="New Dutyslip">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             <span class="text-sm">Dutyslip</span>
           </router-link>
 
           <!-- Add New Driver -->
-          <router-link
-            to="/driver"
-            class="btn-option"
-            :class="{ active: $route.path === '/driver' }"
-            title="Driver"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-              />
+          <router-link to="/driver" class="btn-option" :class="{ active: $route.path === '/driver' }" title="Driver">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
             <span class="text-sm">Driver</span>
           </router-link>
 
           <!-- Add New Company -->
-          <router-link
-            to="/company"
-            class="btn-option"
-            :class="{ active: $route.path === '/company' }"
-            title="Company"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-              />
+          <router-link to="/company" class="btn-option" :class="{ active: $route.path === '/company' }" title="Company">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
             </svg>
             <span class="text-sm">Company</span>
           </router-link>
 
           <!-- View/Edit Records -->
-          <router-link
-            to="/records"
-            class="btn-option"
-            :class="{ active: $route.path === '/records' }"
-            title="Records"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
+          <router-link to="/records" class="btn-option" :class="{ active: $route.path === '/records' }" title="Records">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
             <span class="text-sm">Records</span>
           </router-link>
         </div>
 
         <!-- Menu for Larger Screens -->
-        <div
-          class="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-center"
-        >
+        <div class="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
           <!-- Create New Dutyslip -->
-          <router-link
-            to="/dutyslip"
-            class="btn-option"
-            :class="{ active: $route.path === '/dutyslip' }"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-10 w-10 mb-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
+          <router-link to="/dutyslip" class="btn-option" :class="{ active: $route.path === '/dutyslip' }">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mb-2" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             <span class="text-lg font-semibold">Create New Dutyslip</span>
           </router-link>
 
           <!-- Add New Driver -->
-          <router-link
-            to="/driver"
-            class="btn-option"
-            :class="{ active: $route.path === '/driver' }"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-10 w-10 mb-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-              />
+          <router-link to="/driver" class="btn-option" :class="{ active: $route.path === '/driver' }">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mb-2" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
             <span class="text-lg font-semibold">Add New Driver</span>
           </router-link>
 
           <!-- Add New Company -->
-          <router-link
-            to="/company"
-            class="btn-option"
-            :class="{ active: $route.path === '/company' }"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-10 w-10 mb-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-              />
+          <router-link to="/company" class="btn-option" :class="{ active: $route.path === '/company' }">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mb-2" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
             </svg>
             <span class="text-lg font-semibold">Add New Company</span>
           </router-link>
 
           <!-- View/Edit Records -->
-          <router-link
-            to="/records"
-            class="btn-option"
-            :class="{ active: $route.path === '/records' }"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-10 w-10 mb-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
+          <router-link to="/records" class="btn-option" :class="{ active: $route.path === '/records' }">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mb-2" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
             <span class="text-lg font-semibold">View/Edit Records</span>
           </router-link>
@@ -217,14 +106,21 @@
     </div>
 
     <!-- Main Section -->
-    <main
-      class="bg-gradient-to-r from-indigo-50 to-purple-50 flex-grow bg-gray-50 py-8 m-0 sm:m-14"
-    >
+    <main class="bg-gradient-to-r from-indigo-50 to-purple-50 flex-grow bg-gray-50 py-8 m-0 sm:m-14">
       <div class="container mx-auto p-4">
         <!-- Dynamic Content -->
         <router-view></router-view>
       </div>
     </main>
+
+    <!-- Scroll to Top Button -->
+    <button v-if="showScrollToTop" @click="scrollToTop"
+      class="fixed bottom-24 right-6 p-3 bg-maroon text-white rounded-full shadow-lg hover:bg-maroon-700 transition-all duration-300 border border-solid"
+      title="Scroll to Top">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+      </svg>
+    </button>
 
     <!-- Footer -->
     <footer class="bg-maroon text-white py-4">
@@ -234,10 +130,7 @@
         </p>
         <p class="text-sm">
           Email:
-          <a
-            href="mailto:excel.travel@rediffmail.com"
-            class="underline hover:text-gray-300 transition"
-          >
+          <a href="mailto:excel.travel@rediffmail.com" class="underline hover:text-gray-300 transition">
             excel.travel@rediffmail.com
           </a>
         </p>
@@ -249,6 +142,32 @@
 <script>
 export default {
   name: "HomePage",
+  data() {
+    return {
+      showScrollToTop: false, // Controls visibility of the scroll-to-top button
+    };
+  },
+  mounted() {
+    // Add scroll event listener to show/hide the button
+    window.addEventListener("scroll", this.handleScroll);
+  },
+  beforeUnmount() {
+    // Remove scroll event listener when the component is destroyed
+    window.removeEventListener("scroll", this.handleScroll);
+  },
+  methods: {
+    // Scroll to the top of the page
+    scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth", // Smooth scroll animation
+      });
+    },
+    // Handle scroll event to show/hide the button
+    handleScroll() {
+      this.showScrollToTop = window.scrollY > 200; // Show button after scrolling 200px
+    },
+  },
 };
 </script>
 
@@ -306,14 +225,15 @@ export default {
 .car {
   position: absolute;
   bottom: 0;
-  left: -120px; /* Start offscreen */
+  left: 0; /* Start offscreen */
   width: 120px; /* Adjust car size */
   height: 62px;
+  /* overflow: hidden; */
 }
 
 /* Car Animation */
 .car-animation {
-  animation: drive 20s linear infinite;
+  animation: drive 15s linear infinite;
 }
 
 /* Keyframes for smooth back-and-forth movement */
@@ -322,15 +242,24 @@ export default {
     transform: translateX(-120px); /* Start offscreen on the left */
   }
   50% {
-    transform: translateX(
-      calc(100vw + 120px)
-    ); /* Move offscreen on the right */
+    transform: translateX(calc(100vw - 20px)); /* Move to the right edge */
   }
   51% {
-    transform: translateX(calc(100vw + 120px)) scaleX(-1); /* Flip horizontally */
+    transform: translateX(calc(100vw - 20px)) scaleX(-1); /* Flip horizontally */
   }
   100% {
     transform: translateX(-120px) scaleX(-1); /* Move back to the left */
+  }
+}
+
+/* Adjust animation speed for smaller screens */
+@media (max-width: 768px) {
+  .car {
+    width: 100px; /* Adjust car size */
+    height: 48px;
+  }
+  .car-animation {
+    animation-duration: 8s; /* Faster speed for mobile */
   }
 }
 </style>

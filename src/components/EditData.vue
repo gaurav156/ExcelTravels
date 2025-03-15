@@ -25,7 +25,7 @@
 
     <!-- Logo and Email Section -->
     <div
-      class="flex flex-col sm:flex-row justify-center sm:justify-between items-center text-center sm:text-left mb-6"
+      class="flex flex-col sm:flex-row justify-center sm:justify-between items-center text-center sm:text-left mt-4 mb-6"
     >
       <img
         src="@/assets/logo.png"

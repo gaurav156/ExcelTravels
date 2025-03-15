@@ -24,8 +24,14 @@
     </div>
 
     <!-- Logo and Email Section -->
-    <div class="flex justify-between items-center mb-6">
-      <img src="@/assets/logo.png" alt="Company Logo" class="h-12" />
+    <div
+      class="flex flex-col sm:flex-row justify-center sm:justify-between items-center text-center sm:text-left mt-4 mb-6"
+    >
+      <img
+        src="@/assets/logo.png"
+        alt="Company Logo"
+        class="h-12 mb-2 sm:mb-0"
+      />
       <div class="text-m font-semibold text-maroon cursor-pointer">
         {{ email }}
       </div>
