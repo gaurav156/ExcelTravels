@@ -1,6 +1,256 @@
 <template>
-  <div class="p-6">
-    <h2 class="text-2xl font-bold">View Company Data</h2>
-    <p>Details about the company will be displayed here.</p>
+  <div class="p-6 pt-0">
+    <!-- Centered Heading with Maroon Color -->
+    <h2 class="text-2xl mb-6 text-center text-maroon font-extrabold">
+      View Company Data
+    </h2>
+
+    <!-- Filter Section - Right-Aligned -->
+    <div class="flex flex-col sm:flex-row gap-4 mb-6 justify-end">
+      <!-- Filter by Company Name with Clear (✖) Icon -->
+      <div class="flex items-center relative">
+        <label for="nameFilter" class="mr-2 font-medium text-maroon">
+          Filter by Name:
+        </label>
+        <input
+          id="nameFilter"
+          v-model="nameFilter"
+          type="text"
+          placeholder="Search by Company Name"
+          class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+        />
+        <!-- Cross (✖) Icon to Clear Input -->
+        <svg
+          v-if="nameFilter"
+          @click="nameFilter = ''"
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5 text-gray-500 absolute right-3 cursor-pointer hover:text-red-600"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10 9.293l4.95-4.95a1 1 0 011.415 1.414L11.414 10l4.95 4.95a1 1 0 01-1.415 1.415L10 11.414l-4.95 4.95a1 1 0 01-1.415-1.415l4.95-4.95-4.95-4.95A1 1 0 015.05 4.343L10 9.293z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <table class="table-auto w-full border-collapse">
+      <thead>
+        <tr class="bg-maroon text-white">
+          <th class="border p-2">Company ID</th>
+          <th class="border p-2">Company Name</th>
+          <th class="border p-2">Email</th>
+          <th class="border p-2">Contact</th>
+          <th class="border p-2">Address</th>
+          <th class="border p-2">Details</th>
+          <th class="border p-2">Edit</th>
+          <th class="border p-2">Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="company in filteredData"
+          :key="company.companyId"
+          class="hover:bg-gray-100 transition-all"
+        >
+          <td class="border p-2 text-center font-bold">
+            {{ company.companyId }}
+          </td>
+          <td class="border p-2 font-bold">{{ company.companyName }}</td>
+          <td class="border p-2 font-bold">{{ company.email }}</td>
+          <td class="border p-2 font-bold">{{ company.contact }}</td>
+          <td class="border p-2 font-bold">{{ company.address }}</td>
+          <td class="border p-2 text-center">
+            <!-- Details Icon -->
+            <svg
+              @click="viewCompany(company.companyId)"
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 text-blue-500 hover:text-blue-700 cursor-pointer mx-auto"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </td>
+          <td class="border p-2 text-center">
+            <!-- Edit Icon -->
+            <svg
+              @click="editCompany(company.companyId)"
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 text-green-500 hover:text-green-700 cursor-pointer mx-auto"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M11 4h2m1 16H10m-5 0a2 2 0 002 2h10a2 2 0 002-2m-1-16a2 2 0 00-2-2H7a2 2 0 00-2 2m13.5 5.5L16 8l-5 5v3h3l5.5-5.5z"
+              />
+            </svg>
+          </td>
+          <td class="border p-2 text-center">
+            <!-- Delete Icon -->
+            <svg
+              @click="deleteCompany(company.companyId)"
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 text-red-500 hover:text-red-700 cursor-pointer mx-auto"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 19a2 2 0 002 2h8a2 2 0 002-2V7H6v12zm9-11V5a1 1 0 00-1-1H10a1 1 0 00-1 1v3m-4 0h14"
+              />
+            </svg>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="flex justify-center mt-4">
+      <button
+        v-for="page in totalPages"
+        :key="page"
+        @click="currentPage = page"
+        class="pagination-btn"
+        :class="{ 'bg-maroon text-white': currentPage === page }"
+      >
+        {{ page }}
+      </button>
+    </div>
   </div>
 </template>
+
+<script>
+import api from "@/api";
+
+export default {
+  name: "CompanyList",
+  data() {
+    return {
+      companies: [], // All companies fetched from the API
+      currentPage: 1,
+      itemsPerPage: 15, // 15 records per page
+      nameFilter: "", // Filter by company name
+    };
+  },
+  computed: {
+    // Filtered data based on date and name filters
+    filteredData() {
+      let data = this.companies;
+
+      // Filter by company name
+      if (this.nameFilter) {
+        const searchTerm = this.nameFilter.toLowerCase();
+        data = data.filter((company) =>
+          company.companyName.toLowerCase().includes(searchTerm)
+        );
+      }
+
+      // Paginate the filtered data
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      return data.slice(start, start + this.itemsPerPage);
+    },
+    // Total pages for pagination
+    totalPages() {
+      return Math.ceil(this.companies.length / this.itemsPerPage);
+    },
+  },
+  created() {
+    this.fetchCompanies();
+  },
+  methods: {
+    // Fetch companies from the API
+    async fetchCompanies() {
+      try {
+        const response = await api.get("/companies");
+        this.companies = response.data;
+      } catch (error) {
+        console.error("Error fetching companies:", error);
+      }
+    },
+    // View company details
+    viewCompany(id) {
+      console.log("View company:", id);
+      // Implement view logic here
+    },
+    // Edit company
+    editCompany(id) {
+      console.log("Edit company:", id);
+      // Implement edit logic here
+    },
+    // Delete company
+    deleteCompany(id) {
+      console.log("Delete company:", id);
+      // Implement delete logic here
+    },
+  },
+};
+</script>
+
+<style scoped>
+/* Maroon background for header */
+.bg-maroon {
+  background-color: maroon;
+}
+
+/* Glowing maroon edges */
+td,
+th {
+  border: 2px solid maroon;
+  box-shadow: 0 0 5px maroon;
+}
+
+/* White text for header */
+thead th {
+  color: white;
+}
+
+/* Center align icons */
+td svg {
+  display: block;
+  margin: auto;
+}
+
+/* Pagination buttons */
+.pagination-btn {
+  border: 2px solid maroon;
+  padding: 6px 12px;
+  margin: 3px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: bold;
+  background-color: white;
+  color: black;
+}
+
+.pagination-btn:hover {
+  background-color: maroon;
+  color: white;
+}
+.text-maroon {
+  color: #800000;
+}
+
+/* Maroon border with subtle glow */
+.border-maroon {
+  border-color: #800000;
+  box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
+}
+</style>
