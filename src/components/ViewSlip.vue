@@ -72,11 +72,11 @@
       <thead>
         <tr class="bg-maroon text-white">
           <th class="border p-2">Slip ID</th>
-          <th class="border p-2">Company Name</th>
+          <th class="border p-2 hidden md:table-cell">Company Name</th>
           <th class="border p-2">Customer Name</th>
-          <th class="border p-2">City</th>
-          <th class="border p-2">Date</th>
-          <th class="border p-2">Trip Route</th>
+          <th class="border p-2 hidden md:table-cell">City</th>
+          <th class="border p-2 hidden sm:table-cell">Date</th>
+          <th class="border p-2 hidden sm:table-cell">Trip Route</th>
           <th class="border p-2">View</th>
           <th class="border p-2">Edit</th>
           <th class="border p-2">Delete</th>
@@ -91,11 +91,21 @@
           <td class="border p-2 text-center font-bold">
             {{ slip.dutySlipId }}
           </td>
-          <td class="border p-2 font-bold">{{ slip.companyName }}</td>
-          <td class="border p-2 font-bold">{{ slip.customerName }}</td>
-          <td class="border p-2 font-bold">{{ slip.city }}</td>
-          <td class="border p-2 font-bold">{{ formatDate(slip.createdAt) }}</td>
-          <td class="border p-2 font-bold">{{ slip.tripRoute }}</td>
+          <td class="border p-2 font-bold hidden md:table-cell">
+            {{ slip.companyName }}
+          </td>
+          <td class="border p-2 font-bold">
+            {{ slip.customerName }}
+          </td>
+          <td class="border p-2 font-bold hidden md:table-cell">
+            {{ slip.city }}
+          </td>
+          <td class="border p-2 font-bold hidden sm:table-cell">
+            {{ formatDate(slip.createdAt) }}
+          </td>
+          <td class="border p-2 font-bold hidden sm:table-cell">
+            {{ slip.tripRoute }}
+          </td>
           <td class="border p-2 text-center">
             <!-- Details Icon -->
             <svg
@@ -394,5 +404,13 @@ td svg {
   outline: none;
   border-color: #800000 !important;
   box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
+}
+
+/* Responsive Table Styles */
+@media (max-width: 768px) {
+  th.hidden,
+  td.hidden {
+    display: none;
+  }
 }
 </style>
