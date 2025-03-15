@@ -17,7 +17,7 @@ mongoose
   .catch((err) => console.error("❌ MongoDB Connection Error:", err));
 
 const db = mongoose.connection;
-db.once("open", () => console.log("MongoDB Connected"));
+db.once("open", () => console.log("MongoDB connection status: open"));
 
 // Import Routes
 const dutySlipRoutes = require("./routes/dutySlipRoutes");
