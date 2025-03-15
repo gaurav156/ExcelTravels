@@ -134,4 +134,32 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+// Fetch duty slips based on date range
+router.get("/", async (req, res) => {
+  try {
+    let { dateFrom, dateTo } = req.query;
+
+    // Ensure valid date range
+    let start = dateFrom ? new Date(dateFrom) : new Date("1900-01-01");
+    let end = dateTo ? new Date(dateTo) : new Date();
+
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+      return res
+        .status(400)
+        .json({ error: "Invalid date format. Use YYYY-MM-DD." });
+    }
+
+    const dutySlips = await DutySlip.find({
+      DutySlipDate: {
+        $gte: start.toISOString().split("T")[0],
+        $lte: end.toISOString().split("T")[0],
+      },
+    });
+
+    res.status(200).json(dutySlips);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;

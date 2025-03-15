@@ -120,8 +120,8 @@
 </template>
 
 <script>
-import axios from "axios";
-import XLSX from "xlsx";
+import api from "@/api";
+import * as XLSX from "xlsx";
 import Swal from "sweetalert2";
 
 export default {
@@ -138,10 +138,10 @@ export default {
     async fetchDutySlips() {
       try {
         // Fetch duty slips from the backend
-        const response = await axios.get("http://localhost:5000/dutyslips", {
+        const response = await api.get("/dutyslips", {
           params: {
-            startDate: this.exportStartDate,
-            endDate: this.exportEndDate,
+            dateFrom: this.exportStartDate,
+            dateTo: this.exportEndDate,
           },
         });
         this.duty = response.data; // Store fetched data
