@@ -156,6 +156,7 @@
 
 <script>
 import api from "@/api";
+import Swal from "sweetalert2";
 
 export default {
   name: "DutySlipList",
@@ -223,9 +224,59 @@ export default {
       // Implement edit logic here
     },
     // Delete slip
-    deleteSlip(id) {
-      console.log("Delete slip:", id);
-      // Implement delete logic here
+    async deleteSlip(dutySlipId) {
+      // Show confirmation dialog
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+        customClass: {
+          popup: "swal2-popup", // Apply custom class
+        },
+      });
+
+      // If user confirms deletion
+      if (result.isConfirmed) {
+        try {
+          // Call API to delete the company
+          await api.delete(`/dutyslips/${dutySlipId}`);
+
+          // Remove the company from the local list
+          this.dutySlips = this.dutySlips.filter(
+            (dutySlip) => dutySlip.dutySlipId !== dutySlipId
+          );
+
+          // Show success message
+          Swal.fire({
+            title: "Deleted!",
+            text: "The duty slip has been deleted.",
+            icon: "success",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "OK",
+            customClass: {
+              popup: "swal2-popup", // Apply custom class
+            },
+          });
+        } catch (error) {
+          console.error("Error deleting duty slip:", error);
+
+          // Show error message
+          Swal.fire({
+            title: "Error!",
+            text: "Failed to delete the duty slip. Please try again.",
+            icon: "error",
+            confirmButtonColor: "#d33",
+            confirmButtonText: "OK",
+            customClass: {
+              popup: "swal2-popup", // Apply custom class
+            },
+          });
+        }
+      }
     },
   },
 };

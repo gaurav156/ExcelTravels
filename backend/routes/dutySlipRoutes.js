@@ -181,10 +181,19 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Delete Duty Slip
-router.delete("/:id", async (req, res) => {
+// Delete DutySlip
+router.delete("/:dutySlipId", async (req, res) => {
   try {
-    await DutySlip.findByIdAndDelete(req.params.id);
+    const { dutySlipId } = req.params;
+
+    // Find and delete the company by companyId
+    const deletedDutySlip = await DutySlip.findOneAndDelete({ dutySlipId });
+
+    // Check if the company was found and deleted
+    if (!deletedDutySlip) {
+      return res.status(404).json({ error: "DutySlip not found" });
+    }
+
     res.json({ message: "Deleted Successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });

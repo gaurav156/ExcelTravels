@@ -106,9 +106,18 @@ router.put("/:id", async (req, res) => {
 });
 
 // Delete Driver
-router.delete("/:id", async (req, res) => {
+router.delete("/:driverId", async (req, res) => {
   try {
-    await Driver.findByIdAndDelete(req.params.id);
+    const { driverId } = req.params;
+
+    // Find and delete the company by driverId
+    const deletedDriver = await Driver.findOneAndDelete({ driverId });
+
+    // Check if the company was found and deleted
+    if (!deletedDriver) {
+      return res.status(404).json({ error: "Driver not found" });
+    }
+
     res.json({ message: "Deleted Successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
