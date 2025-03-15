@@ -187,17 +187,17 @@ export default {
       }
     },
     // View company details
-    viewCompany(id) {
-      console.log("View company:", id);
+    viewCompany(companyId) {
+      console.log("View company:", companyId);
       // Implement view logic here
     },
     // Edit company
-    editCompany(id) {
-      console.log("Edit company:", id);
+    editCompany(companyId) {
+      console.log("Edit company:", companyId);
       // Implement edit logic here
     },
     // Delete company
-    async deleteCompany(id) {
+    async deleteCompany(companyId) {
       // Show confirmation dialog
       const result = await Swal.fire({
         title: "Are you sure?",
@@ -216,11 +216,11 @@ export default {
       if (result.isConfirmed) {
         try {
           // Call API to delete the company
-          await api.delete(`/companies/${id}`);
+          await api.delete(`/companies/${companyId}`);
 
           // Remove the company from the local list
           this.companies = this.companies.filter(
-            (company) => company.companyId !== id
+            (company) => company.companyId !== companyId
           );
 
           // Show success message

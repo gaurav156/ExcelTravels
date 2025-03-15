@@ -49,9 +49,18 @@ router.put("/:id", async (req, res) => {
 });
 
 // Delete Company
-router.delete("/:id", async (req, res) => {
+router.delete("/:companyId", async (req, res) => {
   try {
-    await Company.findByIdAndDelete(req.params.id);
+    const { companyId } = req.params;
+
+    // Find and delete the company by companyId
+    const deletedCompany = await Company.findOneAndDelete({ companyId });
+
+    // Check if the company was found and deleted
+    if (!deletedCompany) {
+      return res.status(404).json({ error: "Company not found" });
+    }
+
     res.json({ message: "Deleted Successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
