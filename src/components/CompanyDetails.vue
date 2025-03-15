@@ -179,9 +179,9 @@ export default {
 
       this.generateCompanyId();
     },
-    generateCompanyId() {
-      const nextId = `C${String(this.companies.length + 1).padStart(3, "0")}`;
-      this.form.companyId = nextId;
+    async generateCompanyId() {
+      const response = await api.get("/companies/generate-company-id");
+      this.form.companyId = response.data.companyId;
     },
     async handleSubmit() {
       this.isLoading = true;

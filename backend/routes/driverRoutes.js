@@ -23,6 +23,63 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Generate a unique driverId
+router.get("/generate-driver-id", async (req, res) => {
+  try {
+    const driverId = await generateDriverId();
+    res.json({ driverId });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Helper function to generate a unique driverId
+async function generateDriverId() {
+  try {
+    // Find the highest driverId in the database
+    const lastDriver = await Driver.findOne().sort({ driverId: -1 });
+
+    let nextIdNumber = 1; // Default starting number
+
+    if (lastDriver && lastDriver.driverId) {
+      // Extract the numeric part of the last driverId and increment it
+      const lastIdNumber = parseInt(lastDriver.driverId.replace("D", ""), 10);
+      nextIdNumber = lastIdNumber + 1;
+    }
+
+    // Generate the next driverId
+    let nextId = `D${String(nextIdNumber).padStart(3, "0")}`;
+
+    // Check if the generated ID already exists
+    const existingDriver = await Driver.findOne({ driverId: nextId });
+
+    // If the ID exists, increment and check again
+    if (existingDriver) {
+      return await generateUniqueDriverId(nextIdNumber); // Recursively find a unique ID
+    }
+
+    return nextId; // Return the unique ID
+  } catch (err) {
+    console.error("Error generating driverId:", err.message);
+    throw err;
+  }
+}
+
+// Helper function to recursively find a unique ID
+async function generateUniqueDriverId(startingNumber) {
+  let nextIdNumber = startingNumber + 1; // Increment the number
+  let nextId = `D${String(nextIdNumber).padStart(3, "0")}`;
+
+  // Check if the new ID exists
+  const existingDriver = await Company.findOne({ driverId: nextId });
+
+  if (existingDriver) {
+    return await generateUniqueDriverId(nextIdNumber); // Recursively check again
+  }
+
+  return nextId; // Return the unique ID
+}
+
 // Get a Single Driver
 router.get("/:id", async (req, res) => {
   try {

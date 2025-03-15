@@ -465,11 +465,10 @@ export default {
 
       this.generateDutySlipId();
     },
-    generateDutySlipId() {
-      console.log("Current dutySlips length:", this.dutySlips.length);
-      const nextId = `DS${String(this.dutySlips.length + 1).padStart(3, "0")}`;
-      console.log("Generated nextId:", nextId);
-      this.form.dutySlipId = nextId;
+    async generateDutySlipId() {
+      const response = await api.get("/dutyslips/generate-dutyslip-id");
+      this.form.dutySlipId = response.data.dutySlipId;
+      console.log("Generated dutySlipId:", this.form.dutySlipId);
     },
     async fetchCompanies() {
       try {

@@ -99,6 +99,63 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Generate a unique dutySlipId
+router.get("/generate-dutyslip-id", async (req, res) => {
+  try {
+    const dutySlipId = await generateDutySlipId();
+    res.json({ dutySlipId });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Helper function to generate a unique dutySlipId
+async function generateDutySlipId() {
+  try {
+    // Find the highest dutySlipId in the database
+    const lastDutySlip = await DutySlip.findOne().sort({ dutySlipId: -1 });
+
+    let nextIdNumber = 1; // Default starting number
+
+    if (lastDutySlip && lastDutySlip.dutySlipId) {
+      // Extract the numeric part of the last dutySlipId and increment it
+      const lastIdNumber = parseInt(lastDutySlip.dutySlipId.replace("DS", ""), 10);
+      nextIdNumber = lastIdNumber + 1;
+    }
+
+    // Generate the next dutySlipId
+    let nextId = `DS${String(nextIdNumber).padStart(3, "0")}`;
+
+    // Check if the generated ID already exists
+    const existingDutySlip = await DutySlip.findOne({ dutySlipId: nextId });
+
+    // If the ID exists, increment and check again
+    if (existingDutySlip) {
+      return await generateUniqueDutySlipId(nextIdNumber); // Recursively find a unique ID
+    }
+
+    return nextId; // Return the unique ID
+  } catch (err) {
+    console.error("Error generating dutySlipId:", err.message);
+    throw err;
+  }
+}
+
+// Helper function to recursively find a unique ID
+async function generateUniqueDutySlipId(startingNumber) {
+  let nextIdNumber = startingNumber + 1; // Increment the number
+  let nextId = `C${String(nextIdNumber).padStart(3, "0")}`;
+
+  // Check if the new ID exists
+  const existingDutySlip = await DutySlip.findOne({ dutySlipId: nextId });
+
+  if (existingDutySlip) {
+    return await generateUniqueDutySlipId(nextIdNumber); // Recursively check again
+  }
+
+  return nextId; // Return the unique ID
+}
+
 // Get a Single Duty Slip
 router.get("/:id", async (req, res) => {
   try {

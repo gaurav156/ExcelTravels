@@ -387,10 +387,10 @@ export default {
 
       this.generateDriverId();
     },
-    generateDriverId() {
-      const nextId = `D${String(this.drivers.length + 1).padStart(3, "0")}`;
-      this.form.driverId = nextId;
-      console.log(this.form.driverId);
+    async generateDriverId() {
+      const response = await api.get("/drivers/generate-driver-id");
+      this.form.driverId = response.data.driverId;
+      console.log("Generated driverId:", this.form.driverId);
     },
     async handleSubmit() {
       this.isLoading = true;
