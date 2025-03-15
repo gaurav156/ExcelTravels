@@ -7,19 +7,34 @@
 
     <!-- Filter Section - Right-Aligned -->
     <div class="flex flex-col sm:flex-row gap-4 mb-6 justify-end">
-      <!-- Filter by Date -->
-      <div class="flex items-center">
-        <label for="dateFilter" class="mr-2 font-medium text-maroon">
-          Filter by Date:
-        </label>
-        <select
-          id="dateFilter"
-          v-model="dateFilter"
-          class="p-2 border border-maroon rounded-md focus:ring-maroon focus:border-maroon custom-select"
-        >
-          <option value="newest">Newest First</option>
-          <option value="oldest">Oldest First</option>
-        </select>
+      <!-- Custom Dropdown for Date Filter -->
+      <div class="flex items-center relative">
+        <label class="mr-2 font-medium text-maroon">Filter by Date:</label>
+        <div class="relative">
+          <button
+            @click="toggleDateDropdown"
+            class="p-2 border border-maroon rounded-md focus:ring-maroon focus:border-maroon custom-select"
+          >
+            {{ dateFilter === "newest" ? "Newest First" : "Oldest First" }}
+          </button>
+          <div
+            v-if="isDateDropdownOpen"
+            class="absolute mt-1 w-full bg-white border border-maroon rounded-md shadow-lg z-10"
+          >
+            <div
+              @click="selectDateFilter('newest')"
+              class="p-2 hover:bg-[#800000] hover:text-white cursor-pointer"
+            >
+              Newest First
+            </div>
+            <div
+              @click="selectDateFilter('oldest')"
+              class="p-2 hover:bg-[#800000] hover:text-white cursor-pointer"
+            >
+              Oldest First
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Filter by Customer/Company Name with Clear (✖) Icon -->
@@ -32,7 +47,7 @@
           v-model="nameFilter"
           type="text"
           placeholder="Search by Customer/Company"
-          class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+          class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-[maroon] rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
         />
         <!-- Cross (✖) Icon to Clear Input -->
         <svg
@@ -69,7 +84,7 @@
       </thead>
       <tbody>
         <tr
-          v-for="slip in filteredData"
+          v-for="slip in paginatedData"
           :key="slip.dutySlipId"
           class="hover:bg-gray-100 transition-all"
         >
@@ -79,12 +94,12 @@
           <td class="border p-2 font-bold">{{ slip.companyName }}</td>
           <td class="border p-2 font-bold">{{ slip.customerName }}</td>
           <td class="border p-2 font-bold">{{ slip.city }}</td>
-          <td class="border p-2 font-bold">{{ slip.dateFrom }}</td>
+          <td class="border p-2 font-bold">{{ formatDate(slip.createdAt) }}</td>
           <td class="border p-2 font-bold">{{ slip.tripRoute }}</td>
           <td class="border p-2 text-center">
             <!-- Details Icon -->
             <svg
-              @click="viewCompany(company.companyId)"
+              @click="viewSlip(slip.dutySlipId)"
               xmlns="http://www.w3.org/2000/svg"
               class="h-6 w-6 text-blue-500 hover:text-blue-700 cursor-pointer mx-auto"
               fill="none"
@@ -167,6 +182,7 @@ export default {
       itemsPerPage: 15, // 15 records per page
       dateFilter: "newest", // Default filter: newest first
       nameFilter: "", // Filter by customer/company name
+      isDateDropdownOpen: false, // Control the visibility of the date dropdown
     };
   },
   computed: {
@@ -186,18 +202,21 @@ export default {
 
       // Filter by date
       if (this.dateFilter === "newest") {
-        data.sort((a, b) => new Date(b.date) - new Date(a.date)); // Newest first
+        data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // Newest first
       } else {
-        data.sort((a, b) => new Date(a.date) - new Date(b.date)); // Oldest first
+        data.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)); // Oldest first
       }
 
-      // Paginate the filtered data
+      return data;
+    },
+    // Paginated data based on current page
+    paginatedData() {
       const start = (this.currentPage - 1) * this.itemsPerPage;
-      return data.slice(start, start + this.itemsPerPage);
+      return this.filteredData.slice(start, start + this.itemsPerPage);
     },
     // Total pages for pagination
     totalPages() {
-      return Math.ceil(this.dutySlips.length / this.itemsPerPage);
+      return Math.ceil(this.filteredData.length / this.itemsPerPage);
     },
   },
   created() {
@@ -278,6 +297,28 @@ export default {
         }
       }
     },
+    // Toggle the date dropdown
+    toggleDateDropdown() {
+      this.isDateDropdownOpen = !this.isDateDropdownOpen;
+    },
+    // Select a date filter option
+    selectDateFilter(option) {
+      this.dateFilter = option;
+      this.isDateDropdownOpen = false;
+    },
+    // Format date and time
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      return new Intl.DateTimeFormat("en-US", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true,
+      }).format(date);
+    },
   },
 };
 </script>
@@ -334,16 +375,24 @@ td svg {
 
 /* Custom select dropdown */
 .custom-select {
-  appearance: none;
+  border: 1px solid #800000 !important;
+  border-radius: 4px !important;
+  padding: 8px;
+  appearance: none; /* Removes default styles */
+  -webkit-appearance: none; /* Safari */
+  -moz-appearance: none; /* Firefox */
+  background-color: white;
+  color: #800000 !important;
+  cursor: pointer;
+  padding-right: 2.5rem;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23800000'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   background-size: 1.25rem;
-  padding-right: 2.5rem;
 }
-
-select option:hover {
-  background-color: #800000;
-  color: white;
+.custom-select:focus {
+  outline: none;
+  border-color: #800000 !important;
+  box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
 }
 </style>

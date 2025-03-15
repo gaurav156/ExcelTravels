@@ -298,10 +298,4 @@ td svg {
 .text-maroon {
   color: #800000;
 }
-
-/* Maroon border with subtle glow */
-.border-maroon {
-  border-color: #800000;
-  box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
-}
 </style>
