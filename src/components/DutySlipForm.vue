@@ -78,8 +78,9 @@
             <VueSelect
               id="companyName"
               v-model="form.companyName"
-              :options="companies.map((company) => company.companyName)"
-              @update:modelValue="fetchCompanyId"
+              :options="filteredCompanies"
+              @search="updateSearchQuery"
+              @update:modelValue="handleCompanySelection"
               label="companyName"
               placeholder="Select Company"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
@@ -252,8 +253,9 @@
             <VueSelect
               id="driverName"
               v-model="form.driverName"
-              :options="drivers.map((driver) => driver.name)"
-              @update:modelValue="fetchDriverDetails"
+              :options="filteredDrivers"
+              @search="updateDriverSearchQuery"
+              @update:modelValue="handleDriverSelection"
               label="name"
               placeholder="Select Driver"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
@@ -391,12 +393,33 @@ export default {
       drivers: [], // List of drivers fetched from the database
       dutySlips: [],
       isLoading: false,
+      searchQuery: "",
+      driverSearchQuery: "",
     };
   },
   created() {
     this.fetchCompanies();
     this.fetchDrivers();
     this.fetchDutySlips();
+  },
+  computed: {
+    filteredCompanies() {
+      // First, filter the full list of companies based on user input
+      const filtered = this.companies.filter((company) =>
+        company.companyName.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+
+      // Then, limit the number of displayed options to 5
+      return filtered.slice(0, 5);
+    },
+    // Filter drivers based on search query
+    filteredDrivers() {
+      return this.drivers
+        .filter((driver) =>
+          driver.name.toLowerCase().includes(this.driverSearchQuery.toLowerCase())
+        )
+        .slice(0, 5); // Limit the number of displayed options
+    },
   },
   methods: {
     validateForm() {
@@ -456,6 +479,21 @@ export default {
         console.error("Error fetching companies:", error);
       }
     },
+    // Handle company selection
+    handleCompanySelection(selectedCompany) {
+      this.fetchCompanies();  // sync companies
+      if (selectedCompany) {
+        // Update form.companyName with the selected company's name
+        this.form.companyName = selectedCompany.companyName;
+
+        // Update form.companyId with the selected company's ID
+        this.form.companyId = selectedCompany.companyId;
+      } else {
+        // Reset if no company is selected
+        this.form.companyName = "";
+        this.form.companyId = "";
+      }
+    },
     async fetchDrivers() {
       try {
         const response = await api.get("/drivers");
@@ -464,29 +502,28 @@ export default {
         console.error("Error fetching drivers:", error);
       }
     },
-    fetchCompanyId() {
-      this.fetchCompanies();  // sync companies
-      const selectedCompany = this.companies.find(
-        (company) => company.companyName === this.form.companyName
-      );
-      if (selectedCompany) {
-        this.form.companyId = selectedCompany.companyId;
-      } else {
-        this.form.companyId = ""; // Reset if no company is found
-      }
+    updateSearchQuery(query) {
+      this.searchQuery = query; // Dynamically update search input
     },
-    fetchDriverDetails() {
-      this.fetchDrivers();  // sync drivers
-      const selectedDriver = this.drivers.find(
-        (driver) => driver.name === this.form.driverName
-      );
+    // Update driver search query dynamically
+    updateDriverSearchQuery(query) {
+      this.driverSearchQuery = query;
+    },
+
+    // Handle driver selection
+    handleDriverSelection(selectedDriver) {
       if (selectedDriver) {
+        // Update form.driverName with the selected driver's name
+        this.form.driverName = selectedDriver.name;
+
+        // Update form.driverId and form.phoneNumber with the selected driver's details
         this.form.driverId = selectedDriver.driverId;
         this.form.phoneNumber = selectedDriver.contact;
       } else {
-        // Reset if no driver is found / selected
+        // Reset if no driver is selected
+        this.form.driverName = "";
         this.form.driverId = "";
-        this.form.phoneNumber = ""; 
+        this.form.phoneNumber = "";
       }
     },
     async handleSubmit() {
