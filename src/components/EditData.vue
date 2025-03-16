@@ -135,6 +135,10 @@ export default {
     };
   },
   methods: {
+    clearDateFields() {
+      this.exportStartDate = null;
+      this.exportEndDate = null;
+    },
     async fetchDutySlips() {
       try {
         // Fetch duty slips from the backend
@@ -200,6 +204,7 @@ export default {
             popup: "swal2-popup", // Apply custom class
           },
         });
+        this.clearDateFields();
       } catch (error) {
         console.error("Error exporting to Excel:", error);
         Swal.fire({
