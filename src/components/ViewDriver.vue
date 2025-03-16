@@ -236,6 +236,11 @@ export default {
             (driver) => driver.driverId !== driverId
           );
 
+          // Check if the current page is empty after deletion
+          if (this.paginatedData.length === 0 && this.currentPage > 1) {
+            this.currentPage -= 1; // Move to the previous page
+          }
+
           // Show success message
           Swal.fire({
             title: "Deleted!",
