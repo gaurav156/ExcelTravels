@@ -2,7 +2,7 @@
   <div class="p-6 pt-0">
     <!-- Centered Heading with Maroon Color -->
     <h2 class="text-2xl mb-6 text-center text-maroon font-extrabold">
-      View Duty Slip Data
+      Duty Slip Data
     </h2>
 
     <!-- Filter Section - Right-Aligned -->
@@ -47,7 +47,7 @@
           v-model="nameFilter"
           type="text"
           placeholder="Search by Customer/Company"
-          class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-[maroon] rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+          class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border bg-gray-50 focus:ring-maroon focus:border-maroon outline-none border-[#800000] !important shadow-[0_0_5px_rgba(128,0,0,0.5)]"
         />
         <!-- Cross (✖) Icon to Clear Input -->
         <svg

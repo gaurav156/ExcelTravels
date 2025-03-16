@@ -2,7 +2,7 @@
   <div class="p-6 pt-0">
     <!-- Centered Heading with Maroon Color -->
     <h2 class="text-2xl mb-6 text-center text-maroon font-extrabold">
-      View Company Data
+      Company Data
     </h2>
 
     <!-- Filter Section - Right-Aligned -->
@@ -17,7 +17,7 @@
           v-model="nameFilter"
           type="text"
           placeholder="Search by Company Name"
-          class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+          class="custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
         />
         <!-- Cross (✖) Icon to Clear Input -->
         <svg
@@ -43,9 +43,9 @@
         <tr class="bg-maroon text-white">
           <th class="border p-2">Company ID</th>
           <th class="border p-2">Company Name</th>
-          <th class="border p-2">Email</th>
-          <th class="border p-2">Contact</th>
-          <th class="border p-2">Address</th>
+          <th class="border p-2 hidden sm:table-cell">Email</th>
+          <th class="border p-2 hidden md:table-cell">Contact</th>
+          <th class="border p-2 hidden lg:table-cell">Address</th>
           <th class="border p-2">Details</th>
           <th class="border p-2">Edit</th>
           <th class="border p-2">Delete</th>
@@ -53,7 +53,7 @@
       </thead>
       <tbody>
         <tr
-          v-for="company in filteredData"
+          v-for="company in paginatedData"
           :key="company.companyId"
           class="hover:bg-gray-100 transition-all"
         >
@@ -61,9 +61,15 @@
             {{ company.companyId }}
           </td>
           <td class="border p-2 font-bold">{{ company.companyName }}</td>
-          <td class="border p-2 font-bold">{{ company.email }}</td>
-          <td class="border p-2 font-bold">{{ company.contact }}</td>
-          <td class="border p-2 font-bold">{{ company.address }}</td>
+          <td class="border p-2 font-bold hidden sm:table-cell">
+            {{ company.email }}
+          </td>
+          <td class="border p-2 font-bold hidden md:table-cell">
+            {{ company.contact }}
+          </td>
+          <td class="border p-2 font-bold hidden lg:table-cell">
+            {{ company.address }}
+          </td>
           <td class="border p-2 text-center">
             <!-- Details Icon -->
             <svg
@@ -152,7 +158,7 @@ export default {
     };
   },
   computed: {
-    // Filtered data based on date and name filters
+    // Filtered data based on name filter
     filteredData() {
       let data = this.companies;
 
@@ -164,13 +170,16 @@ export default {
         );
       }
 
-      // Paginate the filtered data
+      return data;
+    },
+    // Paginated data based on current page
+    paginatedData() {
       const start = (this.currentPage - 1) * this.itemsPerPage;
-      return data.slice(start, start + this.itemsPerPage);
+      return this.filteredData.slice(start, start + this.itemsPerPage);
     },
     // Total pages for pagination
     totalPages() {
-      return Math.ceil(this.companies.length / this.itemsPerPage);
+      return Math.ceil(this.filteredData.length / this.itemsPerPage);
     },
   },
   created() {
@@ -297,5 +306,19 @@ td svg {
 }
 .text-maroon {
   color: #800000;
+}
+
+/* Responsive Table Styles */
+@media (max-width: 768px) {
+  th.hidden,
+  td.hidden {
+    display: none;
+  }
+}
+
+.custom-select {
+  outline: none;
+  border-color: #800000 !important;
+  box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
 }
 </style>

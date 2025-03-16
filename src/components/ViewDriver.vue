@@ -2,7 +2,7 @@
   <div class="p-6 pt-0">
     <!-- Centered Heading with Maroon Color -->
     <h2 class="text-2xl mb-6 text-center text-maroon font-extrabold">
-      View Driver Data
+      Driver Data
     </h2>
 
     <!-- Filter Section - Right-Aligned -->
@@ -17,7 +17,7 @@
           v-model="nameFilter"
           type="text"
           placeholder="Search by Driver Name"
-          class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+          class="custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
         />
         <!-- Cross (✖) Icon to Clear Input -->
         <svg
@@ -43,10 +43,10 @@
         <tr class="bg-maroon text-white">
           <th class="border p-2">Driver ID</th>
           <th class="border p-2">Name</th>
-          <th class="border p-2">Age</th>
-          <th class="border p-2">Contact</th>
-          <th class="border p-2">Email</th>
-          <th class="border p-2">License Number</th>
+          <th class="border p-2 hidden sm:table-cell">Age</th>
+          <th class="border p-2 hidden md:table-cell">Contact</th>
+          <th class="border p-2 hidden lg:table-cell">Email</th>
+          <th class="border p-2 hidden lg:table-cell">License Number</th>
           <th class="border p-2">View</th>
           <th class="border p-2">Edit</th>
           <th class="border p-2">Delete</th>
@@ -54,7 +54,7 @@
       </thead>
       <tbody>
         <tr
-          v-for="driver in filteredData"
+          v-for="driver in paginatedData"
           :key="driver.driverId"
           class="hover:bg-gray-100 transition-all"
         >
@@ -62,14 +62,22 @@
             {{ driver.driverId }}
           </td>
           <td class="border p-2 font-bold">{{ driver.name }}</td>
-          <td class="border p-2 font-bold">{{ driver.age }}</td>
-          <td class="border p-2 font-bold">{{ driver.contact }}</td>
-          <td class="border p-2 font-bold">{{ driver.email }}</td>
-          <td class="border p-2 font-bold">{{ driver.licenseNumber }}</td>
+          <td class="border p-2 font-bold hidden sm:table-cell">
+            {{ driver.age }}
+          </td>
+          <td class="border p-2 font-bold hidden md:table-cell">
+            {{ driver.contact }}
+          </td>
+          <td class="border p-2 font-bold hidden lg:table-cell">
+            {{ driver.email }}
+          </td>
+          <td class="border p-2 font-bold hidden lg:table-cell">
+            {{ driver.licenseNumber }}
+          </td>
           <td class="border p-2 text-center">
             <!-- Details Icon -->
             <svg
-              @click="viewCompany(company.companyId)"
+              @click="viewDriver(driver.driverId)"
               xmlns="http://www.w3.org/2000/svg"
               class="h-6 w-6 text-blue-500 hover:text-blue-700 cursor-pointer mx-auto"
               fill="none"
@@ -150,12 +158,11 @@ export default {
       drivers: [], // All drivers fetched from the API
       currentPage: 1,
       itemsPerPage: 15, // 15 records per page
-      dateFilter: "newest", // Default filter: newest first
       nameFilter: "", // Filter by driver name
     };
   },
   computed: {
-    // Filtered data based on date and name filters
+    // Filtered data based on name filter
     filteredData() {
       let data = this.drivers;
 
@@ -167,13 +174,16 @@ export default {
         );
       }
 
-      // Paginate the filtered data
+      return data;
+    },
+    // Paginated data based on current page
+    paginatedData() {
       const start = (this.currentPage - 1) * this.itemsPerPage;
-      return data.slice(start, start + this.itemsPerPage);
+      return this.filteredData.slice(start, start + this.itemsPerPage);
     },
     // Total pages for pagination
     totalPages() {
-      return Math.ceil(this.drivers.length / this.itemsPerPage);
+      return Math.ceil(this.filteredData.length / this.itemsPerPage);
     },
   },
   created() {
@@ -218,10 +228,10 @@ export default {
       // If user confirms deletion
       if (result.isConfirmed) {
         try {
-          // Call API to delete the company
+          // Call API to delete the driver
           await api.delete(`/drivers/${driverId}`);
 
-          // Remove the company from the local list
+          // Remove the driver from the local list
           this.drivers = this.drivers.filter(
             (driver) => driver.driverId !== driverId
           );
@@ -305,6 +315,20 @@ td svg {
 /* Maroon border with subtle glow */
 .border-maroon {
   border-color: #800000;
+  box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
+}
+
+/* Responsive Table Styles */
+@media (max-width: 640px) {
+  th.hidden,
+  td.hidden {
+    display: none;
+  }
+}
+
+.custom-select {
+  outline: none;
+  border-color: #800000 !important;
   box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
 }
 </style>
