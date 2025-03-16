@@ -38,7 +38,7 @@
     </div>
 
     <h2 class="text-3xl font-extrabold text-maroon text-center mb-6">
-      New Driver Data
+      New Driver
     </h2>
 
     <!-- Form -->

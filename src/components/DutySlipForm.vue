@@ -39,7 +39,7 @@
 
     <!-- Title -->
     <h2 class="text-3xl font-extrabold text-maroon text-center mb-4">
-      DUTY SLIP
+      New Duty Slip
     </h2>
 
     <!-- ID Box Centered and Smaller -->
@@ -406,7 +406,9 @@ export default {
     filteredCompanies() {
       // First, filter the full list of companies based on user input
       const filtered = this.companies.filter((company) =>
-        company.companyName.toLowerCase().includes(this.searchQuery.toLowerCase())
+        company.companyName
+          .toLowerCase()
+          .includes(this.searchQuery.toLowerCase())
       );
 
       // Then, limit the number of displayed options to 5
@@ -416,7 +418,9 @@ export default {
     filteredDrivers() {
       return this.drivers
         .filter((driver) =>
-          driver.name.toLowerCase().includes(this.driverSearchQuery.toLowerCase())
+          driver.name
+            .toLowerCase()
+            .includes(this.driverSearchQuery.toLowerCase())
         )
         .slice(0, 5); // Limit the number of displayed options
     },
@@ -480,7 +484,7 @@ export default {
     },
     // Handle company selection
     handleCompanySelection(selectedCompany) {
-      this.fetchCompanies();  // sync companies
+      this.fetchCompanies(); // sync companies
       if (selectedCompany) {
         // Update form.companyName with the selected company's name
         this.form.companyName = selectedCompany.companyName;
@@ -511,7 +515,7 @@ export default {
 
     // Handle driver selection
     handleDriverSelection(selectedDriver) {
-      this.fetchDrivers();  // sync drivers
+      this.fetchDrivers(); // sync drivers
       if (selectedDriver) {
         // Update form.driverName with the selected driver's name
         this.form.driverName = selectedDriver.name;
@@ -553,7 +557,7 @@ export default {
         return;
       }
 
-      this.fetchDutySlips();  // sync duty slips
+      this.fetchDutySlips(); // sync duty slips
 
       try {
         const response = await api.post("/dutyslips", this.form);

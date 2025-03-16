@@ -39,7 +39,7 @@
 
     <!-- Title -->
     <h2 class="text-3xl font-extrabold text-maroon text-center mb-6">
-      Edit Data
+      Export and View Data
     </h2>
 
     <!-- Export Section -->

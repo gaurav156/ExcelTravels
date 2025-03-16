@@ -37,7 +37,7 @@
       </div>
     </div>
     <h2 class="text-3xl font-extrabold text-maroon text-center mb-6">
-      Add Company Data
+      New Company
     </h2>
 
     <!-- Form -->
