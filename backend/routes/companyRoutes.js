@@ -81,9 +81,11 @@ async function generateUniqueCompanyId(startingNumber) {
 }
 
 // Get a Single Company
-router.get("/:id", async (req, res) => {
+router.get("/:companyId", async (req, res) => {
   try {
-    const company = await Company.findById(req.params.id);
+    const { companyId } = req.params;
+    const company = await Company.findOne({ companyId });
+    
     if (!company) return res.status(404).json({ error: "Not Found" });
     res.json(company);
   } catch (err) {
@@ -92,10 +94,11 @@ router.get("/:id", async (req, res) => {
 });
 
 // Update Company
-router.put("/:id", async (req, res) => {
+router.put("/:companyId", async (req, res) => {
   try {
-    const updatedCompany = await Company.findByIdAndUpdate(
-      req.params.id,
+    const { companyId } = req.params;
+    const updatedCompany = await Company.findOneAndUpdate(
+      { companyId },
       req.body,
       { new: true }
     );
