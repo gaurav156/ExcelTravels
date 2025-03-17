@@ -2,12 +2,12 @@
   <div class="p-6 pt-0">
     <!-- Centered Heading with Maroon Color -->
     <h2 class="text-2xl mb-6 text-center text-maroon font-extrabold">
-      Driver Data
+      Company Data
     </h2>
 
     <!-- Filter Section - Right-Aligned -->
     <div class="flex flex-col sm:flex-row gap-4 mb-6 justify-end">
-      <!-- Filter by Driver Name with Clear (✖) Icon -->
+      <!-- Filter by Company Name with Clear (✖) Icon -->
       <div class="flex items-center relative">
         <label for="nameFilter" class="mr-2 font-medium text-maroon">
           Filter by Name:
@@ -16,7 +16,7 @@
           id="nameFilter"
           v-model="nameFilter"
           type="text"
-          placeholder="Search by Driver Name"
+          placeholder="Search by Company Name"
           class="custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
         />
         <!-- Cross (✖) Icon to Clear Input -->
@@ -41,43 +41,39 @@
     <table class="table-auto w-full border-collapse">
       <thead>
         <tr class="bg-maroon text-white">
-          <th class="border p-2">Driver ID</th>
-          <th class="border p-2">Name</th>
-          <th class="border p-2 hidden sm:table-cell">Age</th>
+          <th class="border p-2">Company ID</th>
+          <th class="border p-2">Company Name</th>
+          <th class="border p-2 hidden sm:table-cell">Email</th>
           <th class="border p-2 hidden md:table-cell">Contact</th>
-          <th class="border p-2 hidden lg:table-cell">Email</th>
-          <th class="border p-2 hidden lg:table-cell">License Number</th>
-          <th class="border p-2">View</th>
+          <th class="border p-2 hidden lg:table-cell">Address</th>
+          <th class="border p-2">Details</th>
           <th class="border p-2">Edit</th>
           <th class="border p-2">Delete</th>
         </tr>
       </thead>
       <tbody>
         <tr
-          v-for="driver in paginatedData"
-          :key="driver.driverId"
+          v-for="company in paginatedData"
+          :key="company.companyId"
           class="hover:bg-gray-100 transition-all"
         >
           <td class="border p-2 text-center font-bold">
-            {{ driver.driverId }}
+            {{ company.companyId }}
           </td>
-          <td class="border p-2 font-bold">{{ driver.name }}</td>
+          <td class="border p-2 font-bold">{{ company.companyName }}</td>
           <td class="border p-2 font-bold hidden sm:table-cell">
-            {{ driver.age }}
+            {{ company.email }}
           </td>
           <td class="border p-2 font-bold hidden md:table-cell">
-            {{ driver.contact }}
+            {{ company.contact }}
           </td>
           <td class="border p-2 font-bold hidden lg:table-cell">
-            {{ driver.email }}
-          </td>
-          <td class="border p-2 font-bold hidden lg:table-cell">
-            {{ driver.licenseNumber }}
+            {{ company.address }}
           </td>
           <td class="border p-2 text-center">
             <!-- Details Icon -->
             <svg
-              @click="viewDriver(driver.driverId)"
+              @click="viewCompany(company.companyId)"
               xmlns="http://www.w3.org/2000/svg"
               class="h-6 w-6 text-blue-500 hover:text-blue-700 cursor-pointer mx-auto"
               fill="none"
@@ -95,7 +91,7 @@
           <td class="border p-2 text-center">
             <!-- Edit Icon -->
             <svg
-              @click="editDriver(driver.driverId)"
+              @click="editCompany(company.companyId)"
               xmlns="http://www.w3.org/2000/svg"
               class="h-6 w-6 text-green-500 hover:text-green-700 cursor-pointer mx-auto"
               fill="none"
@@ -113,7 +109,7 @@
           <td class="border p-2 text-center">
             <!-- Delete Icon -->
             <svg
-              @click="deleteDriver(driver.driverId)"
+              @click="deleteCompany(company.companyId)"
               xmlns="http://www.w3.org/2000/svg"
               class="h-6 w-6 text-red-500 hover:text-red-700 cursor-pointer mx-auto"
               fill="none"
@@ -148,29 +144,29 @@
 </template>
 
 <script>
-import api from "@/api";
+import api from "@/utils/api";
 import Swal from "sweetalert2";
 
 export default {
-  name: "DriverList",
+  name: "CompanyList",
   data() {
     return {
-      drivers: [], // All drivers fetched from the API
+      companies: [], // All companies fetched from the API
       currentPage: 1,
       itemsPerPage: 15, // 15 records per page
-      nameFilter: "", // Filter by driver name
+      nameFilter: "", // Filter by company name
     };
   },
   computed: {
     // Filtered data based on name filter
     filteredData() {
-      let data = this.drivers;
+      let data = this.companies;
 
-      // Filter by driver name
+      // Filter by company name
       if (this.nameFilter) {
         const searchTerm = this.nameFilter.toLowerCase();
-        data = data.filter((driver) =>
-          driver.name.toLowerCase().includes(searchTerm)
+        data = data.filter((company) =>
+          company.companyName.toLowerCase().includes(searchTerm)
         );
       }
 
@@ -187,30 +183,30 @@ export default {
     },
   },
   created() {
-    this.fetchDrivers();
+    this.fetchCompanies();
   },
   methods: {
-    // Fetch drivers from the API
-    async fetchDrivers() {
+    // Fetch companies from the API
+    async fetchCompanies() {
       try {
-        const response = await api.get("/drivers");
-        this.drivers = response.data;
+        const response = await api.get("/companies");
+        this.companies = response.data;
       } catch (error) {
-        console.error("Error fetching drivers:", error);
+        console.error("Error fetching companies:", error);
       }
     },
-    // View driver details
-    viewDriver(id) {
-      console.log("View driver:", id);
+    // View company details
+    viewCompany(companyId) {
+      console.log("View company:", companyId);
       // Implement view logic here
     },
-    // Edit driver
-    editDriver(id) {
-      console.log("Edit driver:", id);
+    // Edit company
+    editCompany(companyId) {
+      console.log("Edit company:", companyId);
       // Implement edit logic here
     },
-    // Delete driver
-    async deleteDriver(driverId) {
+    // Delete company
+    async deleteCompany(companyId) {
       // Show confirmation dialog
       const result = await Swal.fire({
         title: "Are you sure?",
@@ -228,12 +224,12 @@ export default {
       // If user confirms deletion
       if (result.isConfirmed) {
         try {
-          // Call API to delete the driver
-          await api.delete(`/drivers/${driverId}`);
+          // Call API to delete the company
+          await api.delete(`/companies/${companyId}`);
 
-          // Remove the driver from the local list
-          this.drivers = this.drivers.filter(
-            (driver) => driver.driverId !== driverId
+          // Remove the company from the local list
+          this.companies = this.companies.filter(
+            (company) => company.companyId !== companyId
           );
 
           // Check if the current page is empty after deletion
@@ -244,7 +240,7 @@ export default {
           // Show success message
           Swal.fire({
             title: "Deleted!",
-            text: "The driver has been deleted.",
+            text: "The company has been deleted.",
             icon: "success",
             confirmButtonColor: "#3085d6",
             confirmButtonText: "OK",
@@ -253,12 +249,12 @@ export default {
             },
           });
         } catch (error) {
-          console.error("Error deleting driver:", error);
+          console.error("Error deleting company:", error);
 
           // Show error message
           Swal.fire({
             title: "Error!",
-            text: "Failed to delete the driver. Please try again.",
+            text: "Failed to delete the company. Please try again.",
             icon: "error",
             confirmButtonColor: "#d33",
             confirmButtonText: "OK",
@@ -317,14 +313,8 @@ td svg {
   color: #800000;
 }
 
-/* Maroon border with subtle glow */
-.border-maroon {
-  border-color: #800000;
-  box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
-}
-
 /* Responsive Table Styles */
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   th.hidden,
   td.hidden {
     display: none;

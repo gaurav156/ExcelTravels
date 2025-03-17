@@ -2,12 +2,42 @@
   <div class="p-6 pt-0">
     <!-- Centered Heading with Maroon Color -->
     <h2 class="text-2xl mb-6 text-center text-maroon font-extrabold">
-      Company Data
+      Duty Slip Data
     </h2>
 
     <!-- Filter Section - Right-Aligned -->
     <div class="flex flex-col sm:flex-row gap-4 mb-6 justify-end">
-      <!-- Filter by Company Name with Clear (✖) Icon -->
+      <!-- Custom Dropdown for Date Filter -->
+      <div class="flex items-center relative">
+        <label class="mr-2 font-medium text-maroon">Filter by Date:</label>
+        <div class="relative">
+          <button
+            @click="toggleDateDropdown"
+            class="p-2 border border-maroon rounded-md focus:ring-maroon focus:border-maroon custom-select"
+          >
+            {{ dateFilter === "newest" ? "Newest First" : "Oldest First" }}
+          </button>
+          <div
+            v-if="isDateDropdownOpen"
+            class="absolute mt-1 w-full bg-white border border-maroon rounded-md shadow-lg z-10"
+          >
+            <div
+              @click="selectDateFilter('newest')"
+              class="p-2 hover:bg-[#800000] hover:text-white cursor-pointer"
+            >
+              Newest First
+            </div>
+            <div
+              @click="selectDateFilter('oldest')"
+              class="p-2 hover:bg-[#800000] hover:text-white cursor-pointer"
+            >
+              Oldest First
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter by Customer/Company Name with Clear (✖) Icon -->
       <div class="flex items-center relative">
         <label for="nameFilter" class="mr-2 font-medium text-maroon">
           Filter by Name:
@@ -16,8 +46,8 @@
           id="nameFilter"
           v-model="nameFilter"
           type="text"
-          placeholder="Search by Company Name"
-          class="custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+          placeholder="Search by Customer/Company"
+          class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border bg-gray-50 focus:ring-maroon focus:border-maroon outline-none border-[#800000] !important shadow-[0_0_5px_rgba(128,0,0,0.5)]"
         />
         <!-- Cross (✖) Icon to Clear Input -->
         <svg
@@ -41,39 +71,45 @@
     <table class="table-auto w-full border-collapse">
       <thead>
         <tr class="bg-maroon text-white">
-          <th class="border p-2">Company ID</th>
-          <th class="border p-2">Company Name</th>
-          <th class="border p-2 hidden sm:table-cell">Email</th>
-          <th class="border p-2 hidden md:table-cell">Contact</th>
-          <th class="border p-2 hidden lg:table-cell">Address</th>
-          <th class="border p-2">Details</th>
+          <th class="border p-2">Slip ID</th>
+          <th class="border p-2 hidden md:table-cell">Company Name</th>
+          <th class="border p-2">Customer Name</th>
+          <th class="border p-2 hidden md:table-cell">City</th>
+          <th class="border p-2 hidden sm:table-cell">Date</th>
+          <th class="border p-2 hidden sm:table-cell">Trip Route</th>
+          <th class="border p-2">View</th>
           <th class="border p-2">Edit</th>
           <th class="border p-2">Delete</th>
         </tr>
       </thead>
       <tbody>
         <tr
-          v-for="company in paginatedData"
-          :key="company.companyId"
+          v-for="slip in paginatedData"
+          :key="slip.dutySlipId"
           class="hover:bg-gray-100 transition-all"
         >
           <td class="border p-2 text-center font-bold">
-            {{ company.companyId }}
-          </td>
-          <td class="border p-2 font-bold">{{ company.companyName }}</td>
-          <td class="border p-2 font-bold hidden sm:table-cell">
-            {{ company.email }}
+            {{ slip.dutySlipId }}
           </td>
           <td class="border p-2 font-bold hidden md:table-cell">
-            {{ company.contact }}
+            {{ slip.companyName }}
           </td>
-          <td class="border p-2 font-bold hidden lg:table-cell">
-            {{ company.address }}
+          <td class="border p-2 font-bold">
+            {{ slip.customerName }}
+          </td>
+          <td class="border p-2 font-bold hidden md:table-cell">
+            {{ slip.city }}
+          </td>
+          <td class="border p-2 font-bold hidden sm:table-cell">
+            {{ formatDate(slip.createdAt) }}
+          </td>
+          <td class="border p-2 font-bold hidden sm:table-cell">
+            {{ slip.tripRoute }}
           </td>
           <td class="border p-2 text-center">
             <!-- Details Icon -->
             <svg
-              @click="viewCompany(company.companyId)"
+              @click="viewSlip(slip.dutySlipId)"
               xmlns="http://www.w3.org/2000/svg"
               class="h-6 w-6 text-blue-500 hover:text-blue-700 cursor-pointer mx-auto"
               fill="none"
@@ -91,7 +127,7 @@
           <td class="border p-2 text-center">
             <!-- Edit Icon -->
             <svg
-              @click="editCompany(company.companyId)"
+              @click="editSlip(slip.dutySlipId)"
               xmlns="http://www.w3.org/2000/svg"
               class="h-6 w-6 text-green-500 hover:text-green-700 cursor-pointer mx-auto"
               fill="none"
@@ -109,7 +145,7 @@
           <td class="border p-2 text-center">
             <!-- Delete Icon -->
             <svg
-              @click="deleteCompany(company.companyId)"
+              @click="deleteSlip(slip.dutySlipId)"
               xmlns="http://www.w3.org/2000/svg"
               class="h-6 w-6 text-red-500 hover:text-red-700 cursor-pointer mx-auto"
               fill="none"
@@ -144,30 +180,41 @@
 </template>
 
 <script>
-import api from "@/api";
+import api from "@/utils/api";
 import Swal from "sweetalert2";
 
 export default {
-  name: "CompanyList",
+  name: "DutySlipList",
   data() {
     return {
-      companies: [], // All companies fetched from the API
+      dutySlips: [], // All duty slips fetched from the API
       currentPage: 1,
       itemsPerPage: 15, // 15 records per page
-      nameFilter: "", // Filter by company name
+      dateFilter: "newest", // Default filter: newest first
+      nameFilter: "", // Filter by customer/company name
+      isDateDropdownOpen: false, // Control the visibility of the date dropdown
     };
   },
   computed: {
-    // Filtered data based on name filter
+    // Filtered data based on date and name filters
     filteredData() {
-      let data = this.companies;
+      let data = this.dutySlips;
 
-      // Filter by company name
+      // Filter by customer/company name
       if (this.nameFilter) {
         const searchTerm = this.nameFilter.toLowerCase();
-        data = data.filter((company) =>
-          company.companyName.toLowerCase().includes(searchTerm)
+        data = data.filter(
+          (slip) =>
+            slip.customerName.toLowerCase().includes(searchTerm) ||
+            slip.companyName.toLowerCase().includes(searchTerm)
         );
+      }
+
+      // Filter by date
+      if (this.dateFilter === "newest") {
+        data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // Newest first
+      } else {
+        data.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)); // Oldest first
       }
 
       return data;
@@ -183,30 +230,30 @@ export default {
     },
   },
   created() {
-    this.fetchCompanies();
+    this.fetchDutySlips();
   },
   methods: {
-    // Fetch companies from the API
-    async fetchCompanies() {
+    // Fetch duty slips from the API
+    async fetchDutySlips() {
       try {
-        const response = await api.get("/companies");
-        this.companies = response.data;
+        const response = await api.get("/dutyslips");
+        this.dutySlips = response.data;
       } catch (error) {
-        console.error("Error fetching companies:", error);
+        console.error("Error fetching duty slips:", error);
       }
     },
-    // View company details
-    viewCompany(companyId) {
-      console.log("View company:", companyId);
+    // View slip details
+    viewSlip(id) {
+      console.log("View slip:", id);
       // Implement view logic here
     },
-    // Edit company
-    editCompany(companyId) {
-      console.log("Edit company:", companyId);
+    // Edit slip
+    editSlip(id) {
+      console.log("Edit slip:", id);
       // Implement edit logic here
     },
-    // Delete company
-    async deleteCompany(companyId) {
+    // Delete slip
+    async deleteSlip(dutySlipId) {
       // Show confirmation dialog
       const result = await Swal.fire({
         title: "Are you sure?",
@@ -225,11 +272,11 @@ export default {
       if (result.isConfirmed) {
         try {
           // Call API to delete the company
-          await api.delete(`/companies/${companyId}`);
+          await api.delete(`/dutyslips/${dutySlipId}`);
 
           // Remove the company from the local list
-          this.companies = this.companies.filter(
-            (company) => company.companyId !== companyId
+          this.dutySlips = this.dutySlips.filter(
+            (dutySlip) => dutySlip.dutySlipId !== dutySlipId
           );
 
           // Check if the current page is empty after deletion
@@ -240,7 +287,7 @@ export default {
           // Show success message
           Swal.fire({
             title: "Deleted!",
-            text: "The company has been deleted.",
+            text: "The duty slip has been deleted.",
             icon: "success",
             confirmButtonColor: "#3085d6",
             confirmButtonText: "OK",
@@ -249,12 +296,12 @@ export default {
             },
           });
         } catch (error) {
-          console.error("Error deleting company:", error);
+          console.error("Error deleting duty slip:", error);
 
           // Show error message
           Swal.fire({
             title: "Error!",
-            text: "Failed to delete the company. Please try again.",
+            text: "Failed to delete the duty slip. Please try again.",
             icon: "error",
             confirmButtonColor: "#d33",
             confirmButtonText: "OK",
@@ -264,6 +311,28 @@ export default {
           });
         }
       }
+    },
+    // Toggle the date dropdown
+    toggleDateDropdown() {
+      this.isDateDropdownOpen = !this.isDateDropdownOpen;
+    },
+    // Select a date filter option
+    selectDateFilter(option) {
+      this.dateFilter = option;
+      this.isDateDropdownOpen = false;
+    },
+    // Format date and time
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      return new Intl.DateTimeFormat("en-US", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true,
+      }).format(date);
     },
   },
 };
@@ -313,17 +382,40 @@ td svg {
   color: #800000;
 }
 
+/* Maroon border with subtle glow */
+.border-maroon {
+  border-color: #800000;
+  box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
+}
+
+/* Custom select dropdown */
+.custom-select {
+  border: 1px solid #800000 !important;
+  border-radius: 4px !important;
+  padding: 8px;
+  appearance: none; /* Removes default styles */
+  -webkit-appearance: none; /* Safari */
+  -moz-appearance: none; /* Firefox */
+  background-color: white;
+  color: #800000 !important;
+  cursor: pointer;
+  padding-right: 2.5rem;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23800000'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.25rem;
+}
+.custom-select:focus {
+  outline: none;
+  border-color: #800000 !important;
+  box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
+}
+
 /* Responsive Table Styles */
 @media (max-width: 768px) {
   th.hidden,
   td.hidden {
     display: none;
   }
-}
-
-.custom-select {
-  outline: none;
-  border-color: #800000 !important;
-  box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
 }
 </style>

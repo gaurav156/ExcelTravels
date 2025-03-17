@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomePage from "../components/HomePage.vue";
-import DutySlipForm from "../components/DutySlipForm.vue";
-import DriverDetails from "../components/DriverDetails.vue";
-import CompanyDetails from "../components/CompanyDetails.vue";
-import EditData from "../components/EditData.vue";
-import ViewSlip from "../components/ViewSlip.vue";
-import ViewDriver from "../components/ViewDriver.vue";
-import ViewCompany from "../components/ViewCompany.vue";
+import HomePage from "../views/HomePage.vue";
+import DutySlipForm from "../components/forms/DutySlipForm.vue";
+import DriverDetails from "../components/forms/DriverDetails.vue";
+import CompanyDetails from "../components/forms/CompanyDetails.vue";
+import EditData from "../views/EditData.vue";
+import ViewSlip from "../views/view/ViewSlip.vue";
+import ViewDriver from "../views/view/ViewDriver.vue";
+import ViewCompany from "../views/view/ViewCompany.vue";
 
 const routes = [
   {

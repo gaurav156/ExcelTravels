@@ -359,7 +359,7 @@
 </template>
 
 <script>
-import api from "@/api";
+import api from "@/utils/api";
 import Swal from "sweetalert2";
 import VueSelect from "vue-select";
 import "vue-select/dist/vue-select.css";

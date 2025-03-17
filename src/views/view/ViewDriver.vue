@@ -2,42 +2,12 @@
   <div class="p-6 pt-0">
     <!-- Centered Heading with Maroon Color -->
     <h2 class="text-2xl mb-6 text-center text-maroon font-extrabold">
-      Duty Slip Data
+      Driver Data
     </h2>
 
     <!-- Filter Section - Right-Aligned -->
     <div class="flex flex-col sm:flex-row gap-4 mb-6 justify-end">
-      <!-- Custom Dropdown for Date Filter -->
-      <div class="flex items-center relative">
-        <label class="mr-2 font-medium text-maroon">Filter by Date:</label>
-        <div class="relative">
-          <button
-            @click="toggleDateDropdown"
-            class="p-2 border border-maroon rounded-md focus:ring-maroon focus:border-maroon custom-select"
-          >
-            {{ dateFilter === "newest" ? "Newest First" : "Oldest First" }}
-          </button>
-          <div
-            v-if="isDateDropdownOpen"
-            class="absolute mt-1 w-full bg-white border border-maroon rounded-md shadow-lg z-10"
-          >
-            <div
-              @click="selectDateFilter('newest')"
-              class="p-2 hover:bg-[#800000] hover:text-white cursor-pointer"
-            >
-              Newest First
-            </div>
-            <div
-              @click="selectDateFilter('oldest')"
-              class="p-2 hover:bg-[#800000] hover:text-white cursor-pointer"
-            >
-              Oldest First
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Filter by Customer/Company Name with Clear (✖) Icon -->
+      <!-- Filter by Driver Name with Clear (✖) Icon -->
       <div class="flex items-center relative">
         <label for="nameFilter" class="mr-2 font-medium text-maroon">
           Filter by Name:
@@ -46,8 +16,8 @@
           id="nameFilter"
           v-model="nameFilter"
           type="text"
-          placeholder="Search by Customer/Company"
-          class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border bg-gray-50 focus:ring-maroon focus:border-maroon outline-none border-[#800000] !important shadow-[0_0_5px_rgba(128,0,0,0.5)]"
+          placeholder="Search by Driver Name"
+          class="custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
         />
         <!-- Cross (✖) Icon to Clear Input -->
         <svg
@@ -71,12 +41,12 @@
     <table class="table-auto w-full border-collapse">
       <thead>
         <tr class="bg-maroon text-white">
-          <th class="border p-2">Slip ID</th>
-          <th class="border p-2 hidden md:table-cell">Company Name</th>
-          <th class="border p-2">Customer Name</th>
-          <th class="border p-2 hidden md:table-cell">City</th>
-          <th class="border p-2 hidden sm:table-cell">Date</th>
-          <th class="border p-2 hidden sm:table-cell">Trip Route</th>
+          <th class="border p-2">Driver ID</th>
+          <th class="border p-2">Name</th>
+          <th class="border p-2 hidden sm:table-cell">Age</th>
+          <th class="border p-2 hidden md:table-cell">Contact</th>
+          <th class="border p-2 hidden lg:table-cell">Email</th>
+          <th class="border p-2 hidden lg:table-cell">License Number</th>
           <th class="border p-2">View</th>
           <th class="border p-2">Edit</th>
           <th class="border p-2">Delete</th>
@@ -84,32 +54,30 @@
       </thead>
       <tbody>
         <tr
-          v-for="slip in paginatedData"
-          :key="slip.dutySlipId"
+          v-for="driver in paginatedData"
+          :key="driver.driverId"
           class="hover:bg-gray-100 transition-all"
         >
           <td class="border p-2 text-center font-bold">
-            {{ slip.dutySlipId }}
+            {{ driver.driverId }}
+          </td>
+          <td class="border p-2 font-bold">{{ driver.name }}</td>
+          <td class="border p-2 font-bold hidden sm:table-cell">
+            {{ driver.age }}
           </td>
           <td class="border p-2 font-bold hidden md:table-cell">
-            {{ slip.companyName }}
+            {{ driver.contact }}
           </td>
-          <td class="border p-2 font-bold">
-            {{ slip.customerName }}
+          <td class="border p-2 font-bold hidden lg:table-cell">
+            {{ driver.email }}
           </td>
-          <td class="border p-2 font-bold hidden md:table-cell">
-            {{ slip.city }}
-          </td>
-          <td class="border p-2 font-bold hidden sm:table-cell">
-            {{ formatDate(slip.createdAt) }}
-          </td>
-          <td class="border p-2 font-bold hidden sm:table-cell">
-            {{ slip.tripRoute }}
+          <td class="border p-2 font-bold hidden lg:table-cell">
+            {{ driver.licenseNumber }}
           </td>
           <td class="border p-2 text-center">
             <!-- Details Icon -->
             <svg
-              @click="viewSlip(slip.dutySlipId)"
+              @click="viewDriver(driver.driverId)"
               xmlns="http://www.w3.org/2000/svg"
               class="h-6 w-6 text-blue-500 hover:text-blue-700 cursor-pointer mx-auto"
               fill="none"
@@ -127,7 +95,7 @@
           <td class="border p-2 text-center">
             <!-- Edit Icon -->
             <svg
-              @click="editSlip(slip.dutySlipId)"
+              @click="editDriver(driver.driverId)"
               xmlns="http://www.w3.org/2000/svg"
               class="h-6 w-6 text-green-500 hover:text-green-700 cursor-pointer mx-auto"
               fill="none"
@@ -145,7 +113,7 @@
           <td class="border p-2 text-center">
             <!-- Delete Icon -->
             <svg
-              @click="deleteSlip(slip.dutySlipId)"
+              @click="deleteDriver(driver.driverId)"
               xmlns="http://www.w3.org/2000/svg"
               class="h-6 w-6 text-red-500 hover:text-red-700 cursor-pointer mx-auto"
               fill="none"
@@ -180,41 +148,30 @@
 </template>
 
 <script>
-import api from "@/api";
+import api from "@/utils/api";
 import Swal from "sweetalert2";
 
 export default {
-  name: "DutySlipList",
+  name: "DriverList",
   data() {
     return {
-      dutySlips: [], // All duty slips fetched from the API
+      drivers: [], // All drivers fetched from the API
       currentPage: 1,
       itemsPerPage: 15, // 15 records per page
-      dateFilter: "newest", // Default filter: newest first
-      nameFilter: "", // Filter by customer/company name
-      isDateDropdownOpen: false, // Control the visibility of the date dropdown
+      nameFilter: "", // Filter by driver name
     };
   },
   computed: {
-    // Filtered data based on date and name filters
+    // Filtered data based on name filter
     filteredData() {
-      let data = this.dutySlips;
+      let data = this.drivers;
 
-      // Filter by customer/company name
+      // Filter by driver name
       if (this.nameFilter) {
         const searchTerm = this.nameFilter.toLowerCase();
-        data = data.filter(
-          (slip) =>
-            slip.customerName.toLowerCase().includes(searchTerm) ||
-            slip.companyName.toLowerCase().includes(searchTerm)
+        data = data.filter((driver) =>
+          driver.name.toLowerCase().includes(searchTerm)
         );
-      }
-
-      // Filter by date
-      if (this.dateFilter === "newest") {
-        data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // Newest first
-      } else {
-        data.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)); // Oldest first
       }
 
       return data;
@@ -230,30 +187,30 @@ export default {
     },
   },
   created() {
-    this.fetchDutySlips();
+    this.fetchDrivers();
   },
   methods: {
-    // Fetch duty slips from the API
-    async fetchDutySlips() {
+    // Fetch drivers from the API
+    async fetchDrivers() {
       try {
-        const response = await api.get("/dutyslips");
-        this.dutySlips = response.data;
+        const response = await api.get("/drivers");
+        this.drivers = response.data;
       } catch (error) {
-        console.error("Error fetching duty slips:", error);
+        console.error("Error fetching drivers:", error);
       }
     },
-    // View slip details
-    viewSlip(id) {
-      console.log("View slip:", id);
+    // View driver details
+    viewDriver(id) {
+      console.log("View driver:", id);
       // Implement view logic here
     },
-    // Edit slip
-    editSlip(id) {
-      console.log("Edit slip:", id);
+    // Edit driver
+    editDriver(id) {
+      console.log("Edit driver:", id);
       // Implement edit logic here
     },
-    // Delete slip
-    async deleteSlip(dutySlipId) {
+    // Delete driver
+    async deleteDriver(driverId) {
       // Show confirmation dialog
       const result = await Swal.fire({
         title: "Are you sure?",
@@ -271,12 +228,12 @@ export default {
       // If user confirms deletion
       if (result.isConfirmed) {
         try {
-          // Call API to delete the company
-          await api.delete(`/dutyslips/${dutySlipId}`);
+          // Call API to delete the driver
+          await api.delete(`/drivers/${driverId}`);
 
-          // Remove the company from the local list
-          this.dutySlips = this.dutySlips.filter(
-            (dutySlip) => dutySlip.dutySlipId !== dutySlipId
+          // Remove the driver from the local list
+          this.drivers = this.drivers.filter(
+            (driver) => driver.driverId !== driverId
           );
 
           // Check if the current page is empty after deletion
@@ -287,7 +244,7 @@ export default {
           // Show success message
           Swal.fire({
             title: "Deleted!",
-            text: "The duty slip has been deleted.",
+            text: "The driver has been deleted.",
             icon: "success",
             confirmButtonColor: "#3085d6",
             confirmButtonText: "OK",
@@ -296,12 +253,12 @@ export default {
             },
           });
         } catch (error) {
-          console.error("Error deleting duty slip:", error);
+          console.error("Error deleting driver:", error);
 
           // Show error message
           Swal.fire({
             title: "Error!",
-            text: "Failed to delete the duty slip. Please try again.",
+            text: "Failed to delete the driver. Please try again.",
             icon: "error",
             confirmButtonColor: "#d33",
             confirmButtonText: "OK",
@@ -311,28 +268,6 @@ export default {
           });
         }
       }
-    },
-    // Toggle the date dropdown
-    toggleDateDropdown() {
-      this.isDateDropdownOpen = !this.isDateDropdownOpen;
-    },
-    // Select a date filter option
-    selectDateFilter(option) {
-      this.dateFilter = option;
-      this.isDateDropdownOpen = false;
-    },
-    // Format date and time
-    formatDate(dateString) {
-      const date = new Date(dateString);
-      return new Intl.DateTimeFormat("en-US", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: true,
-      }).format(date);
     },
   },
 };
@@ -388,34 +323,17 @@ td svg {
   box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
 }
 
-/* Custom select dropdown */
-.custom-select {
-  border: 1px solid #800000 !important;
-  border-radius: 4px !important;
-  padding: 8px;
-  appearance: none; /* Removes default styles */
-  -webkit-appearance: none; /* Safari */
-  -moz-appearance: none; /* Firefox */
-  background-color: white;
-  color: #800000 !important;
-  cursor: pointer;
-  padding-right: 2.5rem;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23800000'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-  background-size: 1.25rem;
-}
-.custom-select:focus {
-  outline: none;
-  border-color: #800000 !important;
-  box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
-}
-
 /* Responsive Table Styles */
-@media (max-width: 768px) {
+@media (max-width: 640px) {
   th.hidden,
   td.hidden {
     display: none;
   }
+}
+
+.custom-select {
+  outline: none;
+  border-color: #800000 !important;
+  box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
 }
 </style>
