@@ -157,9 +157,10 @@ async function generateUniqueDutySlipId(startingNumber) {
 }
 
 // Get a Single Duty Slip
-router.get("/:id", async (req, res) => {
+router.get("/:dutySlipId", async (req, res) => {
   try {
-    const dutySlip = await DutySlip.findById(req.params.id);
+    const { dutySlipId } = req.params;
+    const dutySlip = await DutySlip.findOne({ dutySlipId });
     if (!dutySlip) return res.status(404).json({ error: "Not Found" });
     res.json(dutySlip);
   } catch (err) {
@@ -168,10 +169,11 @@ router.get("/:id", async (req, res) => {
 });
 
 // Update Duty Slip
-router.put("/:id", async (req, res) => {
+router.put("/:dutySlipId", async (req, res) => {
   try {
-    const updatedDutySlip = await DutySlip.findByIdAndUpdate(
-      req.params.id,
+    const { dutySlipId } = req.params;
+    const updatedDutySlip = await DutySlip.findOneAndUpdate(
+      { dutySlipId },
       req.body,
       { new: true }
     );

@@ -144,6 +144,249 @@
         {{ page }}
       </button>
     </div>
+
+    <!-- View/Edit Modal -->
+    <div
+      v-if="isModalOpen"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
+    >
+      <div class="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] flex flex-col">
+        <!-- Modal Header with Close Button -->
+        <div class="flex justify-between items-center p-6 border-b border-gray-200">
+          <h3 class="text-xl font-bold text-maroon">
+            {{ isEditMode ? "Edit Driver" : "View Driver" }}
+          </h3>
+          <!-- Close Button [x] -->
+          <button
+            @click="closeModal"
+            class="text-gray-500 hover:text-gray-700 focus:outline-none"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Scrollable Content -->
+        <div class="overflow-y-auto p-6">
+          <!-- Driver Details -->
+          <div v-if="!isEditMode" class="space-y-4">
+            <p><strong>Driver ID:</strong> {{ selectedDriver.driverId }}</p>
+            <p><strong>Created At:</strong> {{ formatDate(selectedDriver.createdAt) }}</p>
+            <p><strong>Driver Name:</strong> {{ selectedDriver.name }}</p>
+            <p><strong>Age:</strong> {{ selectedDriver.age }}</p>
+            <p><strong>Email:</strong> {{ selectedDriver.email }}</p>
+            <p><strong>Contact:</strong> {{ selectedDriver.contact }}</p>
+            <p><strong>Address:</strong> {{ selectedDriver.address }}</p>
+            <p><strong>Emergency Name:</strong> {{ selectedDriver.emergencyName }}</p>
+            <p><strong>Emergency Contact:</strong> {{ selectedDriver.emergencyContact }}</p>
+            <p><strong>Bank Name:</strong> {{ selectedDriver.bankName }}</p>
+            <p><strong>Branch Name:</strong> {{ selectedDriver.branch }}</p>
+            <p><strong>IFSC Code:</strong> {{ selectedDriver.ifscCode }}</p>
+            <p><strong>Account Number:</strong> {{ selectedDriver.accountNumber }}</p>
+            <p><strong>Aadhar Number:</strong> {{ selectedDriver.aadharNumber }}</p>
+            <p><strong>PAN Number:</strong> {{ selectedDriver.panNumber }}</p>
+            <p><strong>License Number:</strong> {{ selectedDriver.licenseNumber }}</p>
+          </div>
+
+          <!-- Edit Form -->
+          <form v-else @submit.prevent="saveDriver" class="space-y-4">
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Driver ID</label
+                >
+                <input
+                  v-model="selectedDriver.driverId"
+                  type="text"
+                  readonly
+                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-100"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Created At</label
+                >
+                <input
+                  v-model="selectedDriver.createdAt"
+                  type="text"
+                  readonly
+                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-100"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Driver Name</label
+                >
+                <input
+                  v-model="selectedDriver.name"
+                  type="text"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Age</label
+                >
+                <input
+                  v-model="selectedDriver.age"
+                  type="number"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Email</label
+                >
+                <input
+                  v-model="selectedDriver.email"
+                  type="email"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Contact</label
+                >
+                <input
+                  v-model="selectedDriver.contact"
+                  type="tel"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Address</label
+                >
+                <input
+                  v-model="selectedDriver.address"
+                  type="text"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Emergency Name</label
+                >
+                <input
+                  v-model="selectedDriver.emergencyName"
+                  type="text"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Emergency Contact</label
+                >
+                <input
+                  v-model="selectedDriver.emergencyContact"
+                  type="tel"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Bank Name</label
+                >
+                <input
+                  v-model="selectedDriver.bankName"
+                  type="text"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Account Number</label
+                >
+                <input
+                  v-model="selectedDriver.accountNumber"
+                  type="text"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >IFSC Code</label
+                >
+                <input
+                  v-model="selectedDriver.ifscCode"
+                  type="text"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Branch Name</label
+                >
+                <input
+                  v-model="selectedDriver.branch"
+                  type="text"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Aadhar Number</label
+                >
+                <input
+                  v-model="selectedDriver.aadharNumber"
+                  type="text"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >PAN Number</label
+                >
+                <input
+                  v-model="selectedDriver.panNumber"
+                  type="text"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >License Number</label
+                >
+                <input
+                  v-model="selectedDriver.licenseNumber"
+                  type="text"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+            </div>
+
+            <!-- Save and Cancel Buttons -->
+            <div class="mt-6 flex justify-end space-x-4">
+              <button
+                type="button"
+                @click="closeModal"
+                class="px-4 py-2 border border-gray-400 rounded-md hover:bg-gray-100"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="px-4 py-2 bg-maroon text-white rounded-md hover:bg-maroon-700"
+              >
+                Save
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -159,6 +402,9 @@ export default {
       currentPage: 1,
       itemsPerPage: 15, // 15 records per page
       nameFilter: "", // Filter by driver name
+      isModalOpen: false, // Controls modal visibility
+      isEditMode: false, // Toggles between view and edit modes
+      selectedDriver: {}, // Stores the selected driver data
     };
   },
   computed: {
@@ -200,15 +446,57 @@ export default {
       }
     },
     // View driver details
-    viewDriver(id) {
-      console.log("View driver:", id);
-      // Implement view logic here
+    async viewDriver(driverId) {
+      try {
+        const response = await api.get(`/drivers/${driverId}`);
+        this.selectedDriver = response.data;
+        this.isEditMode = false;
+        this.isModalOpen = true;
+      } catch (error) {
+        console.error("Error fetching driver details:", error);
+      }
     },
+    
     // Edit driver
-    editDriver(id) {
-      console.log("Edit driver:", id);
-      // Implement edit logic here
+    async editDriver(driverId) {
+    try {
+        const response = await api.get(`/drivers/${driverId}`);
+        this.selectedDriver = response.data;
+        this.isEditMode = true;
+        this.isModalOpen = true;
+      } catch (error) {
+        console.error("Error fetching driver details:", error);
+      }
     },
+     // Save edited company
+     async saveDriver() {
+       try {
+         await api.put(`/drivers/${this.selectedDriver.driverId}`, this.selectedDriver);
+         this.closeModal();
+         this.fetchDrivers(); // Refresh the list
+         Swal.fire({
+           title: "Success!",
+           text: "Driver details updated successfully.",
+           icon: "success",
+           confirmButtonColor: "#3085d6",
+           confirmButtonText: "OK",
+         });
+       } catch (error) {
+         console.error("Error updating driver:", error);
+         Swal.fire({
+           title: "Error!",
+           text: "Failed to update driver details.",
+           icon: "error",
+           confirmButtonColor: "#d33",
+           confirmButtonText: "OK",
+         });
+       }
+     },
+     // Close modal
+     closeModal() {
+       this.isModalOpen = false;
+       this.selectedDriver = {};
+     },
     // Delete driver
     async deleteDriver(driverId) {
       // Show confirmation dialog
@@ -268,6 +556,19 @@ export default {
           });
         }
       }
+    },
+    // Format date and time
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      return new Intl.DateTimeFormat("en-US", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true,
+      }).format(date);
     },
   },
 };

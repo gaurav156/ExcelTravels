@@ -81,9 +81,10 @@ async function generateUniqueDriverId(startingNumber) {
 }
 
 // Get a Single Driver
-router.get("/:id", async (req, res) => {
+router.get("/:driverId", async (req, res) => {
   try {
-    const driver = await Driver.findById(req.params.id);
+    const { driverId } = req.params;
+    const driver = await Driver.findOne({ driverId });
     if (!driver) return res.status(404).json({ error: "Not Found" });
     res.json(driver);
   } catch (err) {
@@ -92,10 +93,11 @@ router.get("/:id", async (req, res) => {
 });
 
 // Update Driver
-router.put("/:id", async (req, res) => {
+router.put("/:driverId", async (req, res) => {
   try {
-    const updatedDriver = await Driver.findByIdAndUpdate(
-      req.params.id,
+    const { driverId } = req.params;
+    const updatedDriver = await Driver.findOneAndUpdate(
+      { driverId },
       req.body,
       { new: true }
     );

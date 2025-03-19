@@ -146,9 +146,9 @@
       v-if="isModalOpen"
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
     >
-      <div class="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6">
+      <div class="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] flex flex-col">
         <!-- Modal Header with Close Button -->
-        <div class="flex justify-between items-center mb-4">
+        <div class="flex justify-between items-center p-6 border-b border-gray-200">
           <h3 class="text-xl font-bold text-maroon">
             {{ isEditMode ? "Edit Company" : "View Company" }}
           </h3>
@@ -174,77 +174,103 @@
           </button>
         </div>
 
-        <!-- Company Details -->
-        <div v-if="!isEditMode">
-          <p><strong>Company ID:</strong> {{ selectedCompany.companyId }}</p>
-          <p><strong>Company Name:</strong> {{ selectedCompany.companyName }}</p>
-          <p><strong>Email:</strong> {{ selectedCompany.email }}</p>
-          <p><strong>Contact:</strong> {{ selectedCompany.contact }}</p>
-          <p><strong>Address:</strong> {{ selectedCompany.address }}</p>
+        <!-- Scrollable Content -->
+        <div class="overflow-y-auto p-6">
+          <!-- Company Details -->
+          <div v-if="!isEditMode" class="space-y-4">
+            <p><strong>Company ID:</strong> {{ selectedCompany.companyId }}</p>
+            <p><strong>Created At:</strong> {{ formatDate(selectedCompany.createdAt) }}</p>
+            <p><strong>Company Name:</strong> {{ selectedCompany.companyName }}</p>
+            <p><strong>Email:</strong> {{ selectedCompany.email }}</p>
+            <p><strong>Contact:</strong> {{ selectedCompany.contact }}</p>
+            <p><strong>Address:</strong> {{ selectedCompany.address }}</p>
+          </div>
+
+          <!-- Edit Form -->
+          <form v-else @submit.prevent="saveCompany" class="space-y-4">
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Company ID</label
+                >
+                <input
+                  v-model="selectedCompany.companyId"
+                  type="text"
+                  readonly
+                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-100"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Created At</label
+                >
+                <input
+                  v-model="selectedCompany.createdAt"
+                  type="text"
+                  readonly
+                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-100"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Company Name</label
+                >
+                <input
+                  v-model="selectedCompany.companyName"
+                  type="text"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Email</label
+                >
+                <input
+                  v-model="selectedCompany.email"
+                  type="email"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Contact</label
+                >
+                <input
+                  v-model="selectedCompany.contact"
+                  type="text"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Address</label
+                >
+                <input
+                  v-model="selectedCompany.address"
+                  type="text"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+            </div>
+
+            <!-- Save and Cancel Buttons -->
+            <div class="mt-6 flex justify-end space-x-4">
+              <button
+                type="button"
+                @click="closeModal"
+                class="px-4 py-2 border border-gray-400 rounded-md hover:bg-gray-100"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="px-4 py-2 bg-maroon text-white rounded-md hover:bg-maroon-700"
+              >
+                Save
+              </button>
+            </div>
+          </form>
         </div>
-
-        <!-- Edit Form -->
-        <form v-else @submit.prevent="saveCompany">
-          <div class="space-y-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Company Name</label
-              >
-              <input
-                v-model="selectedCompany.companyName"
-                type="text"
-                class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Email</label
-              >
-              <input
-                v-model="selectedCompany.email"
-                type="email"
-                class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Contact</label
-              >
-              <input
-                v-model="selectedCompany.contact"
-                type="text"
-                class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Address</label
-              >
-              <input
-                v-model="selectedCompany.address"
-                type="text"
-                class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
-              />
-            </div>
-          </div>
-
-          <!-- Save and Cancel Buttons -->
-          <div class="mt-6 flex justify-end space-x-4">
-            <button
-              type="button"
-              @click="closeModal"
-              class="px-4 py-2 border border-gray-400 rounded-md hover:bg-gray-100"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              class="px-4 py-2 bg-maroon text-white rounded-md hover:bg-maroon-700"
-            >
-              Save
-            </button>
-          </div>
-        </form>
       </div>
     </div>
   </div>
@@ -415,6 +441,19 @@ export default {
           });
         }
       }
+    },
+    // Format date and time
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      return new Intl.DateTimeFormat("en-US", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true,
+      }).format(date);
     },
   },
 };
