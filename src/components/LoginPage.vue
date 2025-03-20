@@ -330,7 +330,7 @@ export default {
           confirmButtonColor: "#3085d6",
           confirmButtonText: "OK",
         });
-        this.$router.push("/dashboard");
+        this.$router.push("/dutyslip");
       } else {
         Swal.fire({
           title: "Error!",
