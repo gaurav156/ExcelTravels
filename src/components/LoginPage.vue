@@ -74,7 +74,7 @@
       </div>
 
       <!-- Forgot Password -->
-      <div class="mb-6 text-right">
+      <div class="mb-3 text-right">
         <a
           href="#"
           class="text-sm text-maroon hover:underline"
@@ -182,6 +182,45 @@
       </div>
     </div>
 
+    <!-- OTP Modal for Change Password -->
+    <div
+      v-if="isOTPForChangePasswordModalVisible"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+    >
+      <div
+        class="bg-white p-6 rounded-lg shadow-md border border-gray-300 w-96"
+      >
+        <h3 class="text-xl font-bold text-maroon mb-4">Enter OTP</h3>
+        <p class="text-sm text-gray-600 mb-4">
+          An OTP has been sent to your email (phatakjanita@gmail.com).
+        </p>
+        <div class="flex justify-between mb-4">
+          <input
+            v-for="i in 6"
+            :key="i"
+            type="text"
+            v-model="otp[i - 1]"
+            maxlength="1"
+            class="w-12 h-12 text-center border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+          />
+        </div>
+        <div class="flex justify-end">
+          <button
+            @click="verifyOTPForChangePassword"
+            class="bg-maroon text-white px-4 py-2 rounded-md text-sm font-semibold shadow-md transition duration-300 hover:bg-maroon-dark hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-maroon focus:ring-offset-2"
+          >
+            Verify OTP
+          </button>
+          <button
+            @click="hideOTPForChangePasswordModal"
+            class="ml-2 bg-gray-500 text-white px-4 py-2 rounded-md text-sm font-semibold shadow-md transition duration-300 hover:bg-gray-600 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Change Password Modal -->
     <div
       v-if="isChangePasswordModalVisible"
@@ -259,6 +298,7 @@ export default {
       otp: Array(6).fill(""),
       isForgotPasswordModalVisible: false,
       isOTPModalVisible: false,
+      isOTPForChangePasswordModalVisible: false, // New property
       isChangePasswordModalVisible: false,
       newPassword: "",
       confirmPassword: "",
@@ -308,7 +348,9 @@ export default {
       this.isForgotPasswordModalVisible = false;
     },
     showChangePasswordModal() {
-      this.isChangePasswordModalVisible = true;
+      // Show OTP modal first
+      this.isOTPForChangePasswordModalVisible = true;
+      this.sendOTPForChangePassword(); // Send OTP to phatakjanita@gmail.com
     },
     hideChangePasswordModal() {
       this.isChangePasswordModalVisible = false;
@@ -318,6 +360,19 @@ export default {
         await this.sendOTP(this.forgotPasswordEmail);
         this.hideForgotPasswordModal();
         this.isOTPModalVisible = true;
+      } catch (error) {
+        Swal.fire({
+          title: "Error!",
+          text: "Failed to send OTP. Please try again.",
+          icon: "error",
+          confirmButtonColor: "#d33",
+          confirmButtonText: "OK",
+        });
+      }
+    },
+    async sendOTPForChangePassword() {
+      try {
+        await this.sendOTP("phatakjanita@gmail.com"); // Send OTP to specific email
       } catch (error) {
         Swal.fire({
           title: "Error!",
@@ -353,8 +408,37 @@ export default {
         });
       }
     },
+    async verifyOTPForChangePassword() {
+      const enteredOTP = this.otp.join("");
+      try {
+        await this.verifyOTP({
+          email: "phatakjanita@gmail.com",
+          otp: enteredOTP,
+        });
+        Swal.fire({
+          title: "Success!",
+          text: "OTP verified successfully.",
+          icon: "success",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "OK",
+        });
+        this.hideOTPForChangePasswordModal();
+        this.isChangePasswordModalVisible = true; // Show Change Password modal after OTP verification
+      } catch (error) {
+        Swal.fire({
+          title: "Error!",
+          text: "Invalid OTP. Please try again.",
+          icon: "error",
+          confirmButtonColor: "#d33",
+          confirmButtonText: "OK",
+        });
+      }
+    },
     hideOTPModal() {
       this.isOTPModalVisible = false;
+    },
+    hideOTPForChangePasswordModal() {
+      this.isOTPForChangePasswordModalVisible = false;
     },
     async changePassword() {
       if (this.newPassword !== this.confirmPassword) {
