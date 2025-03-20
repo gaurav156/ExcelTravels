@@ -182,9 +182,13 @@
       v-if="isModalOpen"
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
     >
-      <div class="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] flex flex-col">
+      <div
+        class="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] flex flex-col"
+      >
         <!-- Modal Header with Close Button -->
-        <div class="flex justify-between items-center p-6 border-b border-gray-200">
+        <div
+          class="flex justify-between items-center p-6 border-b border-gray-200"
+        >
           <h3 class="text-xl font-bold text-maroon">
             {{ isEditMode ? "Edit Duty Slip" : "View Duty Slip" }}
           </h3>
@@ -215,10 +219,15 @@
           <!-- Duty Slip Details -->
           <div v-if="!isEditMode" class="space-y-4">
             <p><strong>Duty Slip ID:</strong> {{ selectedSlip.dutySlipId }}</p>
-            <p><strong>Created At:</strong> {{ formatDate(selectedSlip.createdAt) }}</p>
+            <p>
+              <strong>Created At:</strong>
+              {{ formatDate(selectedSlip.createdAt) }}
+            </p>
             <p><strong>Company ID:</strong> {{ selectedSlip.companyId }}</p>
             <p><strong>Company Name:</strong> {{ selectedSlip.companyName }}</p>
-            <p><strong>Customer Name:</strong> {{ selectedSlip.customerName }}</p>
+            <p>
+              <strong>Customer Name:</strong> {{ selectedSlip.customerName }}
+            </p>
             <p><strong>City:</strong> {{ selectedSlip.city }}</p>
             <p><strong>Address:</strong> {{ selectedSlip.address }}</p>
             <p><strong>Car Booked:</strong> {{ selectedSlip.carBooked }}</p>
@@ -228,8 +237,13 @@
             <p><strong>Driver Name:</strong> {{ selectedSlip.driverName }}</p>
             <p><strong>Car Number:</strong> {{ selectedSlip.carNumber }}</p>
             <p><strong>Trip Route:</strong> {{ selectedSlip.tripRoute }}</p>
-            <p><strong>Date From:</strong> {{ formatDate(selectedSlip.dateFrom) }}</p>
-            <p><strong>Date To:</strong> {{ formatDate(selectedSlip.dateTo) }}</p>
+            <p>
+              <strong>Date From:</strong>
+              {{ formatDate(selectedSlip.dateFrom) }}
+            </p>
+            <p>
+              <strong>Date To:</strong> {{ formatDate(selectedSlip.dateTo) }}
+            </p>
             <p><strong>Start KM:</strong> {{ selectedSlip.startKM }}</p>
             <!-- Start KM Photo -->
             <p><strong>Start KM Photo:</strong></p>
@@ -271,7 +285,9 @@
           <form v-else @submit.prevent="saveSlip" class="space-y-4">
             <!-- Read-Only Fields -->
             <div>
-              <label class="block text-sm font-medium text-gray-700">Duty Slip ID</label>
+              <label class="block text-sm font-medium text-gray-700"
+                >Duty Slip ID</label
+              >
               <input
                 v-model="selectedSlip.dutySlipId"
                 type="text"
@@ -280,7 +296,9 @@
               />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700">Created At</label>
+              <label class="block text-sm font-medium text-gray-700"
+                >Created At</label
+              >
               <input
                 v-model="selectedSlip.createdAt"
                 type="text"
@@ -292,17 +310,21 @@
             <!-- Editable Fields -->
             <!-- Company ID (Auto-filled and Disabled) -->
             <div>
-              <label class="block text-sm font-medium text-gray-700">Company ID</label>
+              <label class="block text-sm font-medium text-gray-700"
+                >Company ID</label
+              >
               <input
                 v-model="selectedSlip.companyId"
                 type="text"
                 class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-100 focus:ring-maroon focus:border-maroon"
                 disabled
               />
-            </div> 
+            </div>
             <!-- Company Name (Searchable Dropdown) -->
             <div>
-              <label class="block text-sm font-medium text-gray-700">Company Name</label>
+              <label class="block text-sm font-medium text-gray-700"
+                >Company Name</label
+              >
               <VueSelect
                 v-model="selectedSlip.companyName"
                 :options="filteredCompanies"
@@ -315,7 +337,9 @@
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700">Customer Name</label>
+              <label class="block text-sm font-medium text-gray-700"
+                >Customer Name</label
+              >
               <input
                 v-model="selectedSlip.customerName"
                 type="text"
@@ -323,7 +347,9 @@
               />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700">City</label>
+              <label class="block text-sm font-medium text-gray-700"
+                >City</label
+              >
               <select
                 v-model="selectedSlip.city"
                 class="custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
@@ -342,7 +368,9 @@
               </select>
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700">Address</label>
+              <label class="block text-sm font-medium text-gray-700"
+                >Address</label
+              >
               <input
                 v-model="selectedSlip.address"
                 type="text"
@@ -350,7 +378,9 @@
               />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700">Car Booked</label>
+              <label class="block text-sm font-medium text-gray-700"
+                >Car Booked</label
+              >
               <select
                 v-model="selectedSlip.carBooked"
                 class="custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
@@ -362,7 +392,9 @@
               </select>
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700">Phone Number</label>
+              <label class="block text-sm font-medium text-gray-700"
+                >Phone Number</label
+              >
               <input
                 v-model="selectedSlip.phoneNumber"
                 type="tel"
@@ -373,7 +405,9 @@
               />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700">Duty Type</label>
+              <label class="block text-sm font-medium text-gray-700"
+                >Duty Type</label
+              >
               <select
                 v-model="selectedSlip.dutyType"
                 class="custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
@@ -384,7 +418,9 @@
               </select>
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700">Driver ID</label>
+              <label class="block text-sm font-medium text-gray-700"
+                >Driver ID</label
+              >
               <input
                 v-model="selectedSlip.driverId"
                 type="text"
@@ -392,7 +428,9 @@
               />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700">Driver Name</label>
+              <label class="block text-sm font-medium text-gray-700"
+                >Driver Name</label
+              >
               <VueSelect
                 v-model="selectedSlip.driverName"
                 :options="filteredDrivers"
@@ -404,7 +442,9 @@
               ></VueSelect>
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700">Car Number</label>
+              <label class="block text-sm font-medium text-gray-700"
+                >Car Number</label
+              >
               <input
                 v-model="selectedSlip.carNumber"
                 type="text"
@@ -413,7 +453,9 @@
               />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700">Trip Route</label>
+              <label class="block text-sm font-medium text-gray-700"
+                >Trip Route</label
+              >
               <input
                 v-model="selectedSlip.tripRoute"
                 type="text"
@@ -423,7 +465,9 @@
             </div>
             <!-- Date From -->
             <div>
-              <label class="block text-sm font-medium text-gray-700">Date From</label>
+              <label class="block text-sm font-medium text-gray-700"
+                >Date From</label
+              >
               <input
                 v-model="formattedDateFrom"
                 type="date"
@@ -433,7 +477,9 @@
 
             <!-- Date To -->
             <div>
-              <label class="block text-sm font-medium text-gray-700">Date To</label>
+              <label class="block text-sm font-medium text-gray-700"
+                >Date To</label
+              >
               <input
                 v-model="formattedDateTo"
                 type="date"
@@ -441,7 +487,9 @@
               />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700">Start KM</label>
+              <label class="block text-sm font-medium text-gray-700"
+                >Start KM</label
+              >
               <input
                 v-model="selectedSlip.startKM"
                 type="text"
@@ -451,7 +499,9 @@
             </div>
             <!-- Start KM Photo -->
             <div>
-              <label class="block text-sm font-medium text-gray-700">Start KM Photo:</label>
+              <label class="block text-sm font-medium text-gray-700"
+                >Start KM Photo:</label
+              >
               <img
                 v-if="selectedSlip.startKMPhoto"
                 :src="selectedSlip.startKMPhoto"
@@ -462,7 +512,9 @@
               <p v-else class="text-gray-500">No image available</p>
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700">End KM</label>
+              <label class="block text-sm font-medium text-gray-700"
+                >End KM</label
+              >
               <input
                 v-model="selectedSlip.endKM"
                 type="text"
@@ -472,7 +524,9 @@
             </div>
             <!-- End KM Photo -->
             <div>
-              <label class="block text-sm font-medium text-gray-700">End KM Photo:</label>
+              <label class="block text-sm font-medium text-gray-700"
+                >End KM Photo:</label
+              >
               <img
                 v-if="selectedSlip.endKMPhoto"
                 :src="selectedSlip.endKMPhoto"
@@ -484,7 +538,9 @@
             </div>
             <!-- Customer Signature -->
             <div>
-              <label class="block text-sm font-medium text-gray-700">Customer Signature:</label>
+              <label class="block text-sm font-medium text-gray-700"
+                >Customer Signature:</label
+              >
               <img
                 v-if="selectedSlip.customerSignature"
                 :src="selectedSlip.customerSignature"
@@ -529,6 +585,12 @@ export default {
   components: {
     VueSelect,
   },
+  props: {
+    isModalOpen: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       dutySlips: [], // All duty slips fetched from the API
@@ -537,7 +599,6 @@ export default {
       dateFilter: "newest", // Default filter: newest first
       nameFilter: "", // Filter by customer/company name
       isDateDropdownOpen: false, // Control the visibility of the date dropdown
-      isModalOpen: false, // Controls modal visibility
       isEditMode: false, // Toggles between view and edit modes
       selectedSlip: {}, // Stores the selected duty slip data
       drivers: [], // List of drivers fetched from the API
@@ -639,7 +700,7 @@ export default {
         const response = await api.get(`/dutyslips/${dutySlipId}`);
         this.selectedSlip = response.data;
         this.isEditMode = false;
-        this.isModalOpen = true;
+        this.$emit("update:isModalOpen", true); // Emit modal state to parent
       } catch (error) {
         console.error("Error fetching duty slip details:", error);
       }
@@ -650,7 +711,7 @@ export default {
         const response = await api.get(`/dutyslips/${dutySlipId}`);
         this.selectedSlip = response.data;
         this.isEditMode = true;
-        this.isModalOpen = true;
+        this.$emit("update:isModalOpen", true); // Emit modal state to parent
       } catch (error) {
         console.error("Error fetching duty slip details:", error);
       }
@@ -658,7 +719,10 @@ export default {
     // Save edited slip
     async saveSlip() {
       try {
-        await api.put(`/dutyslips/${this.selectedSlip.dutySlipId}`, this.selectedSlip);
+        await api.put(
+          `/dutyslips/${this.selectedSlip.dutySlipId}`,
+          this.selectedSlip
+        );
         this.closeModal();
         this.fetchDutySlips(); // Refresh the list
         Swal.fire({
@@ -682,12 +746,13 @@ export default {
     // Handle image loading errors
     handleImageError(field) {
       // Replace the image URL with a placeholder or display the URL as text
-      this.selectedSlip[field] = "Image failed to load: " + this.selectedSlip[field];
+      this.selectedSlip[field] =
+        "Image failed to load: " + this.selectedSlip[field];
     },
     // Close modal
     closeModal() {
-      this.isModalOpen = false;
       this.selectedSlip = {};
+      this.$emit("update:isModalOpen", false); // Emit modal state to parent
     },
     // Delete slip
     async deleteSlip(dutySlipId) {

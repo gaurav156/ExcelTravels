@@ -37,96 +37,99 @@
       </div>
     </div>
 
-    <!-- Table -->
-    <table class="table-auto w-full border-collapse">
-      <thead>
-        <tr class="bg-maroon text-white">
-          <th class="border p-2">Company ID</th>
-          <th class="border p-2">Company Name</th>
-          <th class="border p-2 hidden sm:table-cell">Email</th>
-          <th class="border p-2 hidden md:table-cell">Contact</th>
-          <th class="border p-2 hidden lg:table-cell">Address</th>
-          <th class="border p-2">Details</th>
-          <th class="border p-2">Edit</th>
-          <th class="border p-2">Delete</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="company in paginatedData"
-          :key="company.companyId"
-          class="hover:bg-gray-100 transition-all"
-        >
-          <td class="border p-2 text-center font-bold">
-            {{ company.companyId }}
-          </td>
-          <td class="border p-2 font-bold">{{ company.companyName }}</td>
-          <td class="border p-2 font-bold hidden sm:table-cell">
-            {{ company.email }}
-          </td>
-          <td class="border p-2 font-bold hidden md:table-cell">
-            {{ company.contact }}
-          </td>
-          <td class="border p-2 font-bold hidden lg:table-cell">
-            {{ company.address }}
-          </td>
-          <td class="border p-2 text-center">
-            <!-- Details Icon -->
-            <svg
-              @click="viewCompany(company.companyId)"
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6 text-blue-500 hover:text-blue-700 cursor-pointer mx-auto"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </td>
-          <td class="border p-2 text-center">
-            <!-- Edit Icon -->
-            <svg
-              @click="editCompany(company.companyId)"
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6 text-green-500 hover:text-green-700 cursor-pointer mx-auto"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M11 4h2m1 16H10m-5 0a2 2 0 002 2h10a2 2 0 002-2m-1-16a2 2 0 00-2-2H7a2 2 0 00-2 2m13.5 5.5L16 8l-5 5v3h3l5.5-5.5z"
-              />
-            </svg>
-          </td>
-          <td class="border p-2 text-center">
-            <!-- Delete Icon -->
-            <svg
-              @click="deleteCompany(company.companyId)"
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6 text-red-500 hover:text-red-700 cursor-pointer mx-auto"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 19a2 2 0 002 2h8a2 2 0 002-2V7H6v12zm9-11V5a1 1 0 00-1-1H10a1 1 0 00-1 1v3m-4 0h14"
-              />
-            </svg>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- Scrollable Table -->
+    <div class="overflow-x-auto">
+      <!-- Table -->
+      <table class="table-auto w-full border-collapse">
+        <thead>
+          <tr class="bg-maroon text-white">
+            <th class="border p-2">Company ID</th>
+            <th class="border p-2">Company Name</th>
+            <th class="border p-2 hidden sm:table-cell">Email</th>
+            <th class="border p-2 hidden md:table-cell">Contact</th>
+            <th class="border p-2 hidden lg:table-cell">Address</th>
+            <th class="border p-2">Details</th>
+            <th class="border p-2">Edit</th>
+            <th class="border p-2">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="company in paginatedData"
+            :key="company.companyId"
+            class="hover:bg-gray-100 transition-all"
+          >
+            <td class="border p-2 text-center font-bold">
+              {{ company.companyId }}
+            </td>
+            <td class="border p-2 font-bold">{{ company.companyName }}</td>
+            <td class="border p-2 font-bold hidden sm:table-cell">
+              {{ company.email }}
+            </td>
+            <td class="border p-2 font-bold hidden md:table-cell">
+              {{ company.contact }}
+            </td>
+            <td class="border p-2 font-bold hidden lg:table-cell">
+              {{ company.address }}
+            </td>
+            <td class="border p-2 text-center">
+              <!-- Details Icon -->
+              <svg
+                @click="viewCompany(company.companyId)"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-blue-500 hover:text-blue-700 cursor-pointer mx-auto"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </td>
+            <td class="border p-2 text-center">
+              <!-- Edit Icon -->
+              <svg
+                @click="editCompany(company.companyId)"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-green-500 hover:text-green-700 cursor-pointer mx-auto"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 4h2m1 16H10m-5 0a2 2 0 002 2h10a2 2 0 002-2m-1-16a2 2 0 00-2-2H7a2 2 0 00-2 2m13.5 5.5L16 8l-5 5v3h3l5.5-5.5z"
+                />
+              </svg>
+            </td>
+            <td class="border p-2 text-center">
+              <!-- Delete Icon -->
+              <svg
+                @click="deleteCompany(company.companyId)"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-red-500 hover:text-red-700 cursor-pointer mx-auto"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 19a2 2 0 002 2h8a2 2 0 002-2V7H6v12zm9-11V5a1 1 0 00-1-1H10a1 1 0 00-1 1v3m-4 0h14"
+                />
+              </svg>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <!-- Pagination -->
     <div class="flex justify-center mt-4">
@@ -146,9 +149,13 @@
       v-if="isModalOpen"
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
     >
-      <div class="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] flex flex-col">
+      <div
+        class="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] flex flex-col"
+      >
         <!-- Modal Header with Close Button -->
-        <div class="flex justify-between items-center p-6 border-b border-gray-200">
+        <div
+          class="flex justify-between items-center p-6 border-b border-gray-200"
+        >
           <h3 class="text-xl font-bold text-maroon">
             {{ isEditMode ? "Edit Company" : "View Company" }}
           </h3>
@@ -179,8 +186,13 @@
           <!-- Company Details -->
           <div v-if="!isEditMode" class="space-y-4">
             <p><strong>Company ID:</strong> {{ selectedCompany.companyId }}</p>
-            <p><strong>Created At:</strong> {{ formatDate(selectedCompany.createdAt) }}</p>
-            <p><strong>Company Name:</strong> {{ selectedCompany.companyName }}</p>
+            <p>
+              <strong>Created At:</strong>
+              {{ formatDate(selectedCompany.createdAt) }}
+            </p>
+            <p>
+              <strong>Company Name:</strong> {{ selectedCompany.companyName }}
+            </p>
             <p><strong>Email:</strong> {{ selectedCompany.email }}</p>
             <p><strong>Contact:</strong> {{ selectedCompany.contact }}</p>
             <p><strong>Address:</strong> {{ selectedCompany.address }}</p>
@@ -282,13 +294,18 @@ import Swal from "sweetalert2";
 
 export default {
   name: "CompanyList",
+  props: {
+    isModalOpen: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       companies: [], // All companies fetched from the API
       currentPage: 1,
       itemsPerPage: 15, // 15 records per page
       nameFilter: "", // Filter by company name
-      isModalOpen: false, // Controls modal visibility
       isEditMode: false, // Toggles between view and edit modes
       selectedCompany: {}, // Stores the selected company data
     };
@@ -337,7 +354,7 @@ export default {
         const response = await api.get(`/companies/${companyId}`);
         this.selectedCompany = response.data;
         this.isEditMode = false;
-        this.isModalOpen = true;
+        this.$emit("update:isModalOpen", true); // Emit modal state to parent
       } catch (error) {
         console.error("Error fetching company details:", error);
       }
@@ -348,7 +365,7 @@ export default {
         const response = await api.get(`/companies/${companyId}`);
         this.selectedCompany = response.data;
         this.isEditMode = true;
-        this.isModalOpen = true;
+        this.$emit("update:isModalOpen", true); // Emit modal state to parent
       } catch (error) {
         console.error("Error fetching company details:", error);
       }
@@ -356,7 +373,10 @@ export default {
     // Save edited company
     async saveCompany() {
       try {
-        await api.put(`/companies/${this.selectedCompany.companyId}`, this.selectedCompany);
+        await api.put(
+          `/companies/${this.selectedCompany.companyId}`,
+          this.selectedCompany
+        );
         this.closeModal();
         this.fetchCompanies(); // Refresh the list
         Swal.fire({
@@ -379,8 +399,8 @@ export default {
     },
     // Close modal
     closeModal() {
-      this.isModalOpen = false;
       this.selectedCompany = {};
+      this.$emit("update:isModalOpen", false); // Emit modal state to parent
     },
     // Delete company
     async deleteCompany(companyId) {

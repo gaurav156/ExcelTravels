@@ -150,9 +150,13 @@
       v-if="isModalOpen"
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
     >
-      <div class="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] flex flex-col">
+      <div
+        class="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] flex flex-col"
+      >
         <!-- Modal Header with Close Button -->
-        <div class="flex justify-between items-center p-6 border-b border-gray-200">
+        <div
+          class="flex justify-between items-center p-6 border-b border-gray-200"
+        >
           <h3 class="text-xl font-bold text-maroon">
             {{ isEditMode ? "Edit Driver" : "View Driver" }}
           </h3>
@@ -183,21 +187,38 @@
           <!-- Driver Details -->
           <div v-if="!isEditMode" class="space-y-4">
             <p><strong>Driver ID:</strong> {{ selectedDriver.driverId }}</p>
-            <p><strong>Created At:</strong> {{ formatDate(selectedDriver.createdAt) }}</p>
+            <p>
+              <strong>Created At:</strong>
+              {{ formatDate(selectedDriver.createdAt) }}
+            </p>
             <p><strong>Driver Name:</strong> {{ selectedDriver.name }}</p>
             <p><strong>Age:</strong> {{ selectedDriver.age }}</p>
             <p><strong>Email:</strong> {{ selectedDriver.email }}</p>
             <p><strong>Contact:</strong> {{ selectedDriver.contact }}</p>
             <p><strong>Address:</strong> {{ selectedDriver.address }}</p>
-            <p><strong>Emergency Name:</strong> {{ selectedDriver.emergencyName }}</p>
-            <p><strong>Emergency Contact:</strong> {{ selectedDriver.emergencyContact }}</p>
+            <p>
+              <strong>Emergency Name:</strong>
+              {{ selectedDriver.emergencyName }}
+            </p>
+            <p>
+              <strong>Emergency Contact:</strong>
+              {{ selectedDriver.emergencyContact }}
+            </p>
             <p><strong>Bank Name:</strong> {{ selectedDriver.bankName }}</p>
             <p><strong>Branch Name:</strong> {{ selectedDriver.branch }}</p>
             <p><strong>IFSC Code:</strong> {{ selectedDriver.ifscCode }}</p>
-            <p><strong>Account Number:</strong> {{ selectedDriver.accountNumber }}</p>
-            <p><strong>Aadhar Number:</strong> {{ selectedDriver.aadharNumber }}</p>
+            <p>
+              <strong>Account Number:</strong>
+              {{ selectedDriver.accountNumber }}
+            </p>
+            <p>
+              <strong>Aadhar Number:</strong> {{ selectedDriver.aadharNumber }}
+            </p>
             <p><strong>PAN Number:</strong> {{ selectedDriver.panNumber }}</p>
-            <p><strong>License Number:</strong> {{ selectedDriver.licenseNumber }}</p>
+            <p>
+              <strong>License Number:</strong>
+              {{ selectedDriver.licenseNumber }}
+            </p>
           </div>
 
           <!-- Edit Form -->
@@ -396,13 +417,18 @@ import Swal from "sweetalert2";
 
 export default {
   name: "DriverList",
+  props: {
+    isModalOpen: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       drivers: [], // All drivers fetched from the API
       currentPage: 1,
       itemsPerPage: 15, // 15 records per page
       nameFilter: "", // Filter by driver name
-      isModalOpen: false, // Controls modal visibility
       isEditMode: false, // Toggles between view and edit modes
       selectedDriver: {}, // Stores the selected driver data
     };
@@ -451,52 +477,54 @@ export default {
         const response = await api.get(`/drivers/${driverId}`);
         this.selectedDriver = response.data;
         this.isEditMode = false;
-        this.isModalOpen = true;
+        this.$emit("update:isModalOpen", true); // Emit modal state to parent
       } catch (error) {
         console.error("Error fetching driver details:", error);
       }
     },
-    
     // Edit driver
     async editDriver(driverId) {
-    try {
+      try {
         const response = await api.get(`/drivers/${driverId}`);
         this.selectedDriver = response.data;
         this.isEditMode = true;
-        this.isModalOpen = true;
+        this.$emit("update:isModalOpen", true); // Emit modal state to parent
       } catch (error) {
         console.error("Error fetching driver details:", error);
       }
     },
-     // Save edited company
-     async saveDriver() {
-       try {
-         await api.put(`/drivers/${this.selectedDriver.driverId}`, this.selectedDriver);
-         this.closeModal();
-         this.fetchDrivers(); // Refresh the list
-         Swal.fire({
-           title: "Success!",
-           text: "Driver details updated successfully.",
-           icon: "success",
-           confirmButtonColor: "#3085d6",
-           confirmButtonText: "OK",
-         });
-       } catch (error) {
-         console.error("Error updating driver:", error);
-         Swal.fire({
-           title: "Error!",
-           text: "Failed to update driver details.",
-           icon: "error",
-           confirmButtonColor: "#d33",
-           confirmButtonText: "OK",
-         });
-       }
-     },
-     // Close modal
-     closeModal() {
-       this.isModalOpen = false;
-       this.selectedDriver = {};
-     },
+    // Save edited driver
+    async saveDriver() {
+      try {
+        await api.put(
+          `/drivers/${this.selectedDriver.driverId}`,
+          this.selectedDriver
+        );
+        this.closeModal();
+        this.fetchDrivers(); // Refresh the list
+        Swal.fire({
+          title: "Success!",
+          text: "Driver details updated successfully.",
+          icon: "success",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "OK",
+        });
+      } catch (error) {
+        console.error("Error updating driver:", error);
+        Swal.fire({
+          title: "Error!",
+          text: "Failed to update driver details.",
+          icon: "error",
+          confirmButtonColor: "#d33",
+          confirmButtonText: "OK",
+        });
+      }
+    },
+    // Close modal
+    closeModal() {
+      this.selectedDriver = {};
+      this.$emit("update:isModalOpen", false); // Emit modal state to parent
+    },
     // Delete driver
     async deleteDriver(driverId) {
       // Show confirmation dialog

@@ -225,11 +225,15 @@
     >
       <div class="container mx-auto p-4">
         <!-- Dynamic Content -->
-        <router-view></router-view>
+        <router-view
+          :is-modal-open="isModalOpen"
+          @update:isModalOpen="updateModalState"
+        ></router-view>
+
         <!-- Scroll to Top Button for Larger Screens -->
         <div class="hidden lg:flex justify-end">
           <button
-            v-if="showScrollToTop"
+            v-if="showScrollToTop && !isModalOpen"
             @click="scrollToTop"
             class="mr-14 p-3 bg-maroon text-white rounded-full shadow-lg hover:bg-maroon-700 transition-all duration-300 border border-solid"
             title="Scroll to Top"
@@ -252,10 +256,11 @@
         </div>
       </div>
     </main>
+
     <!-- Scroll to Top Button for Small Screens -->
     <div class="lg:hidden">
       <button
-        v-if="showScrollToTop"
+        v-if="showScrollToTop && !isModalOpen"
         @click="scrollToTop"
         class="fixed bottom-24 right-6 p-3 bg-maroon text-white rounded-full shadow-lg hover:bg-maroon-700 transition-all duration-300 border border-solid"
         title="Scroll to Top"
@@ -276,28 +281,6 @@
         </svg>
       </button>
     </div>
-    <!-- Scroll to Top Button
-    <button
-      v-if="showScrollToTop"
-      @click="scrollToTop"
-      class="fixed bottom-24 right-6 p-3 bg-maroon text-white rounded-full shadow-lg hover:bg-maroon-700 transition-all duration-300 border border-solid"
-      title="Scroll to Top"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M5 10l7-7m0 0l7 7m-7-7v18"
-        />
-      </svg>
-    </button> -->
 
     <!-- Footer -->
     <footer class="bg-maroon text-white py-4">
@@ -325,6 +308,7 @@ export default {
   data() {
     return {
       showScrollToTop: false, // Controls visibility of the scroll-to-top button
+      isModalOpen: false, // Controls modal visibility
     };
   },
   mounted() {
@@ -356,6 +340,10 @@ export default {
       } else {
         this.showScrollToTop = false;
       }
+    },
+    // Update modal state from child component
+    updateModalState(isOpen) {
+      this.isModalOpen = isOpen;
     },
   },
 };
