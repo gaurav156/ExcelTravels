@@ -8,12 +8,18 @@ import ViewSlip from "../views/view/ViewSlip.vue";
 import ViewDriver from "../views/view/ViewDriver.vue";
 import ViewCompany from "../views/view/ViewCompany.vue";
 
+import LoginPage from "../components/LoginPage.vue";
+
 const routes = [
   {
     path: "/",
     component: HomePage,
-    redirect: "/dutyslip",
+    redirect: "/login",
     children: [
+      {
+        path: "login",
+        component: LoginPage,
+      },
       {
         path: "dutyslip",
         component: DutySlipForm,

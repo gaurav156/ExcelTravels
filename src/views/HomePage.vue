@@ -13,13 +13,13 @@
       </div>
 
       <!-- Car Animation -->
-      <div class="car">
+      <div v-if="$route.path !== '/login'" class="car">
         <img src="@/assets/car.png" alt="Car" class="car-animation" />
       </div>
     </header>
 
     <!-- Subheader -->
-    <div class="bg-maroon py-6 mt-4">
+    <div v-if="$route.path !== '/login'" class="bg-maroon py-6 mt-4">
       <div class="container mx-auto px-4">
         <!-- Menu for Small Screens -->
         <div class="md:hidden flex justify-center gap-4">
