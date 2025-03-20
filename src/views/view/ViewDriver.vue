@@ -17,7 +17,7 @@
           v-model="nameFilter"
           type="text"
           placeholder="Search by Driver Name"
-          class="custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+          class="custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon placeholder:text-xs lg:placeholder:text-sm"
         />
         <!-- Cross (✖) Icon to Clear Input -->
         <svg
