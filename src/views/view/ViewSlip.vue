@@ -259,19 +259,19 @@
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
     >
       <div
-        class="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] flex flex-col"
+        class="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden"
       >
         <!-- Modal Header with Close Button -->
         <div
-          class="flex justify-between items-center p-6 border-b border-gray-200"
+          class="flex justify-between items-center p-6 border-b border-gray-200 bg-maroon"
         >
-          <h3 class="text-xl font-bold text-maroon">
+          <h3 class="text-xl font-bold text-white">
             {{ isEditMode ? "Edit Duty Slip" : "View Duty Slip" }}
           </h3>
           <!-- Close Button [x] -->
           <button
             @click="closeModal"
-            class="text-gray-500 hover:text-gray-700 focus:outline-none"
+            class="text-white hover:text-gray-200 focus:outline-none"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -294,337 +294,379 @@
         <div class="overflow-y-auto p-6">
           <!-- Duty Slip Details -->
           <div v-if="!isEditMode" class="space-y-4">
-            <p><strong>Duty Slip ID:</strong> {{ selectedSlip.dutySlipId }}</p>
-            <p>
-              <strong>Created At:</strong>
-              {{ formatDate(selectedSlip.createdAt) }}
-            </p>
-            <p><strong>Company ID:</strong> {{ selectedSlip.companyId }}</p>
-            <p><strong>Company Name:</strong> {{ selectedSlip.companyName }}</p>
-            <p>
-              <strong>Customer Name:</strong> {{ selectedSlip.customerName }}
-            </p>
-            <p><strong>City:</strong> {{ selectedSlip.city }}</p>
-            <p><strong>Address:</strong> {{ selectedSlip.address }}</p>
-            <p><strong>Car Booked:</strong> {{ selectedSlip.carBooked }}</p>
-            <p><strong>Phone Number:</strong> {{ selectedSlip.phoneNumber }}</p>
-            <p><strong>Duty Type:</strong> {{ selectedSlip.dutyType }}</p>
-            <p><strong>Driver ID:</strong> {{ selectedSlip.driverId }}</p>
-            <p><strong>Driver Name:</strong> {{ selectedSlip.driverName }}</p>
-            <p><strong>Car Number:</strong> {{ selectedSlip.carNumber }}</p>
-            <p><strong>Trip Route:</strong> {{ selectedSlip.tripRoute }}</p>
-            <p>
-              <strong>Date From:</strong>
-              {{ formatDate(selectedSlip.dateFrom) }}
-            </p>
-            <p>
-              <strong>Date To:</strong> {{ formatDate(selectedSlip.dateTo) }}
-            </p>
-            <p><strong>Start KM:</strong> {{ selectedSlip.startKM }}</p>
-            <!-- Start KM Photo -->
-            <p><strong>Start KM Photo:</strong></p>
-            <div v-if="selectedSlip.startKMPhoto">
-              <img
-                :src="selectedSlip.startKMPhoto"
-                alt="Start KM Photo"
-                class="w-full"
-                @error="handleImageError('startKMPhoto')"
-              />
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <p class="text-sm font-medium text-gray-700">Duty Slip ID</p>
+                <p class="text-gray-500">
+                  {{ selectedSlip.dutySlipId }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Created At</p>
+                <p class="text-gray-500">
+                  {{ formatDate(selectedSlip.createdAt) }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Company ID</p>
+                <p class="text-gray-500">
+                  {{ selectedSlip.companyId }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Company Name</p>
+                <p class="text-gray-500">
+                  {{ selectedSlip.companyName }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Customer Name</p>
+                <p class="text-gray-500">
+                  {{ selectedSlip.customerName }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">City</p>
+                <p class="text-gray-500">
+                  {{ selectedSlip.city }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Address</p>
+                <p class="text-gray-500">
+                  {{ selectedSlip.address }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Car Booked</p>
+                <p class="text-gray-500">
+                  {{ selectedSlip.carBooked }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Phone Number</p>
+                <p class="text-gray-500">
+                  {{ selectedSlip.phoneNumber }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Duty Type</p>
+                <p class="text-gray-500">
+                  {{ selectedSlip.dutyType }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Driver ID</p>
+                <p class="text-gray-500">
+                  {{ selectedSlip.driverId }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Driver Name</p>
+                <p class="text-gray-500">
+                  {{ selectedSlip.driverName }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Car Number</p>
+                <p class="text-gray-500">
+                  {{ selectedSlip.carNumber }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Trip Route</p>
+                <p class="text-gray-500">
+                  {{ selectedSlip.tripRoute }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Date From</p>
+                <p class="text-gray-500">
+                  {{ formatDate(selectedSlip.dateFrom) }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Date To</p>
+                <p class="text-gray-500">
+                  {{ formatDate(selectedSlip.dateTo) }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Start KM</p>
+                <p class="text-gray-500">
+                  {{ selectedSlip.startKM }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">End KM</p>
+                <p class="text-gray-500">
+                  {{ selectedSlip.endKM }}
+                </p>
+              </div>
             </div>
-            <p v-else class="text-gray-500">No image available</p>
-            <p><strong>End KM:</strong> {{ selectedSlip.endKM }}</p>
-            <!-- End KM Photo -->
-            <p><strong>End KM Photo:</strong></p>
-            <div v-if="selectedSlip.endKMPhoto">
-              <img
-                :src="selectedSlip.endKMPhoto"
-                alt="End KM Photo"
-                class="w-full"
-                @error="handleImageError('endKMPhoto')"
-              />
+
+            <!-- Images Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <!-- Start KM Photo -->
+              <div>
+                <p class="text-sm font-medium text-gray-700">Start KM Photo</p>
+                <img
+                  v-if="selectedSlip.startKMPhoto"
+                  :src="selectedSlip.startKMPhoto"
+                  alt="Start KM Photo"
+                  class="w-full rounded-lg shadow-sm"
+                  @error="handleImageError('startKMPhoto')"
+                />
+                <p v-else class="text-gray-500">No image available</p>
+              </div>
+
+              <!-- End KM Photo -->
+              <div>
+                <p class="text-sm font-medium text-gray-700">End KM Photo</p>
+                <img
+                  v-if="selectedSlip.endKMPhoto"
+                  :src="selectedSlip.endKMPhoto"
+                  alt="End KM Photo"
+                  class="w-full rounded-lg shadow-sm"
+                  @error="handleImageError('endKMPhoto')"
+                />
+                <p v-else class="text-gray-500">No image available</p>
+              </div>
+
+              <!-- Customer Signature -->
+              <div>
+                <p class="text-sm font-medium text-gray-700">
+                  Customer Signature
+                </p>
+                <img
+                  v-if="selectedSlip.customerSignature"
+                  :src="selectedSlip.customerSignature"
+                  alt="Customer Signature"
+                  class="w-full rounded-lg shadow-sm"
+                  @error="handleImageError('customerSignature')"
+                />
+                <p v-else class="text-gray-500">No image available</p>
+              </div>
             </div>
-            <p v-else class="text-gray-500">No image available</p>
-            <!-- Customer Signature -->
-            <p><strong>Customer Signature:</strong></p>
-            <div v-if="selectedSlip.customerSignature">
-              <img
-                :src="selectedSlip.customerSignature"
-                alt="Customer Signature"
-                class="w-full"
-                @error="handleImageError('customerSignature')"
-              />
-            </div>
-            <p v-else class="text-gray-500">No image available</p>
           </div>
 
           <!-- Edit Form -->
           <form v-else @submit.prevent="saveSlip" class="space-y-4">
-            <!-- Read-Only Fields -->
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Duty Slip ID</label
-              >
-              <input
-                v-model="selectedSlip.dutySlipId"
-                type="text"
-                readonly
-                class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-100"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Created At</label
-              >
-              <input
-                v-model="selectedSlip.createdAt"
-                type="text"
-                readonly
-                class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-100"
-              />
-            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Read-Only Fields -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Duty Slip ID</label
+                >
+                <input
+                  v-model="selectedSlip.dutySlipId"
+                  type="text"
+                  readonly
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Created At</label
+                >
+                <input
+                  v-model="selectedSlip.createdAt"
+                  type="text"
+                  readonly
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100"
+                />
+              </div>
 
-            <!-- Editable Fields -->
-            <!-- Company ID (Auto-filled and Disabled) -->
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Company ID</label
-              >
-              <input
-                v-model="selectedSlip.companyId"
-                type="text"
-                class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-100 focus:ring-maroon focus:border-maroon"
-                disabled
-              />
-            </div>
-            <!-- Company Name (Searchable Dropdown) -->
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Company Name</label
-              >
-              <VueSelect
-                v-model="selectedSlip.companyName"
-                :options="filteredCompanies"
-                @search="updateCompanySearchQuery"
-                @update:modelValue="handleCompanySelection"
-                label="companyName"
-                placeholder="Select Company"
-                class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              ></VueSelect>
-            </div>
-
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Customer Name</label
-              >
-              <input
-                v-model="selectedSlip.customerName"
-                type="text"
-                class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >City</label
-              >
-              <select
-                v-model="selectedSlip.city"
-                class="custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              >
-                <option value="" disabled>Select City</option>
-                <option value="Mumbai">Mumbai</option>
-                <option value="Delhi">Delhi</option>
-                <option value="Bangalore">Bangalore</option>
-                <option value="Hyderabad">Hyderabad</option>
-                <option value="Chennai">Chennai</option>
-                <option value="Kolkata">Kolkata</option>
-                <option value="Pune">Pune</option>
-                <option value="Ahmedabad">Ahmedabad</option>
-                <option value="Jaipur">Jaipur</option>
-                <option value="Surat">Surat</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Address</label
-              >
-              <input
-                v-model="selectedSlip.address"
-                type="text"
-                class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Car Booked</label
-              >
-              <select
-                v-model="selectedSlip.carBooked"
-                class="custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              >
-                <option value="" disabled>Select Car Type</option>
-                <option value="Sedan">Sedan</option>
-                <option value="SUV">SUV</option>
-                <option value="Luxury">Luxury</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Phone Number</label
-              >
-              <input
-                v-model="selectedSlip.phoneNumber"
-                type="tel"
-                placeholder="Enter Phone Number"
-                class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
-                pattern="[0-9]{10}"
-                title="Please enter a 10-digit phone number"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Duty Type</label
-              >
-              <select
-                v-model="selectedSlip.dutyType"
-                class="custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              >
-                <option value="" disabled>Select Duty Type</option>
-                <option value="local">Local</option>
-                <option value="Outstation">Outstation</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Driver ID</label
-              >
-              <input
-                v-model="selectedSlip.driverId"
-                type="text"
-                class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Driver Name</label
-              >
-              <VueSelect
-                v-model="selectedSlip.driverName"
-                :options="filteredDrivers"
-                @search="updateDriverSearchQuery"
-                @update:modelValue="handleDriverSelection"
-                label="name"
-                placeholder="Select Driver"
-                class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              ></VueSelect>
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Car Number</label
-              >
-              <input
-                v-model="selectedSlip.carNumber"
-                type="text"
-                placeholder="Enter Car Number"
-                class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Trip Route</label
-              >
-              <input
-                v-model="selectedSlip.tripRoute"
-                type="text"
-                placeholder="Enter Trip Route"
-                class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
-              />
-            </div>
-            <!-- Date From -->
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Date From</label
-              >
-              <input
-                v-model="formattedDateFrom"
-                type="date"
-                class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              />
-            </div>
-
-            <!-- Date To -->
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Date To</label
-              >
-              <input
-                v-model="formattedDateTo"
-                type="date"
-                class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Start KM</label
-              >
-              <input
-                v-model="selectedSlip.startKM"
-                type="text"
-                readonly
-                class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-100"
-              />
-            </div>
-            <!-- Start KM Photo -->
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Start KM Photo:</label
-              >
-              <img
-                v-if="selectedSlip.startKMPhoto"
-                :src="selectedSlip.startKMPhoto"
-                alt="Start KM Photo"
-                class="w-full"
-                @error="handleImageError('startKMPhoto')"
-              />
-              <p v-else class="text-gray-500">No image available</p>
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >End KM</label
-              >
-              <input
-                v-model="selectedSlip.endKM"
-                type="text"
-                readonly
-                class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-100"
-              />
-            </div>
-            <!-- End KM Photo -->
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >End KM Photo:</label
-              >
-              <img
-                v-if="selectedSlip.endKMPhoto"
-                :src="selectedSlip.endKMPhoto"
-                alt="End KM Photo"
-                class="w-full"
-                @error="handleImageError('endKMPhoto')"
-              />
-              <p v-else class="text-gray-500">No image available</p>
-            </div>
-            <!-- Customer Signature -->
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Customer Signature:</label
-              >
-              <img
-                v-if="selectedSlip.customerSignature"
-                :src="selectedSlip.customerSignature"
-                alt="Customer Signature"
-                class="w-full"
-                @error="handleImageError('customerSignature')"
-              />
-              <p v-else class="text-gray-500">No image available</p>
+              <!-- Editable Fields -->
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Company ID</label
+                >
+                <input
+                  v-model="selectedSlip.companyId"
+                  type="text"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100"
+                  disabled
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Company Name</label
+                >
+                <VueSelect
+                  v-model="selectedSlip.companyName"
+                  :options="filteredCompanies"
+                  @search="updateCompanySearchQuery"
+                  @update:modelValue="handleCompanySelection"
+                  label="companyName"
+                  placeholder="Select Company"
+                  class="mt-1 block w-full"
+                ></VueSelect>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Customer Name</label
+                >
+                <input
+                  v-model="selectedSlip.customerName"
+                  type="text"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >City</label
+                >
+                <select
+                  v-model="selectedSlip.city"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                >
+                  <option value="" disabled>Select City</option>
+                  <option value="Mumbai">Mumbai</option>
+                  <option value="Delhi">Delhi</option>
+                  <option value="Bangalore">Bangalore</option>
+                  <option value="Hyderabad">Hyderabad</option>
+                  <option value="Chennai">Chennai</option>
+                  <option value="Kolkata">Kolkata</option>
+                  <option value="Pune">Pune</option>
+                  <option value="Ahmedabad">Ahmedabad</option>
+                  <option value="Jaipur">Jaipur</option>
+                  <option value="Surat">Surat</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Address</label
+                >
+                <input
+                  v-model="selectedSlip.address"
+                  type="text"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Car Booked</label
+                >
+                <select
+                  v-model="selectedSlip.carBooked"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                >
+                  <option value="" disabled>Select Car Type</option>
+                  <option value="Sedan">Sedan</option>
+                  <option value="SUV">SUV</option>
+                  <option value="Luxury">Luxury</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Phone Number</label
+                >
+                <input
+                  v-model="selectedSlip.phoneNumber"
+                  type="tel"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Duty Type</label
+                >
+                <select
+                  v-model="selectedSlip.dutyType"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                >
+                  <option value="" disabled>Select Duty Type</option>
+                  <option value="local">Local</option>
+                  <option value="Outstation">Outstation</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Driver ID</label
+                >
+                <input
+                  v-model="selectedSlip.driverId"
+                  type="text"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Driver Name</label
+                >
+                <VueSelect
+                  v-model="selectedSlip.driverName"
+                  :options="filteredDrivers"
+                  @search="updateDriverSearchQuery"
+                  @update:modelValue="handleDriverSelection"
+                  label="name"
+                  placeholder="Select Driver"
+                  class="mt-1 block w-full"
+                ></VueSelect>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Car Number</label
+                >
+                <input
+                  v-model="selectedSlip.carNumber"
+                  type="text"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Trip Route</label
+                >
+                <input
+                  v-model="selectedSlip.tripRoute"
+                  type="text"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Date From</label
+                >
+                <input
+                  v-model="formattedDateFrom"
+                  type="date"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Date To</label
+                >
+                <input
+                  v-model="formattedDateTo"
+                  type="date"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >Start KM</label
+                >
+                <input
+                  v-model="selectedSlip.startKM"
+                  type="text"
+                  readonly
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700"
+                  >End KM</label
+                >
+                <input
+                  v-model="selectedSlip.endKM"
+                  type="text"
+                  readonly
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100"
+                />
+              </div>
             </div>
 
             <!-- Save and Cancel Buttons -->
@@ -632,7 +674,7 @@
               <button
                 type="button"
                 @click="closeModal"
-                class="px-4 py-2 border border-gray-400 rounded-md hover:bg-gray-100"
+                class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100"
               >
                 Cancel
               </button>
