@@ -222,19 +222,19 @@
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
     >
       <div
-        class="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] flex flex-col"
+        class="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden"
       >
         <!-- Modal Header with Close Button -->
         <div
-          class="flex justify-between items-center p-6 border-b border-gray-200"
+          class="flex justify-between items-center p-6 border-b border-gray-200 bg-maroon"
         >
-          <h3 class="text-xl font-bold text-maroon">
+          <h3 class="text-xl font-bold text-white">
             {{ isEditMode ? "Edit Company" : "View Company" }}
           </h3>
           <!-- Close Button [x] -->
           <button
             @click="closeModal"
-            class="text-gray-500 hover:text-gray-700 focus:outline-none"
+            class="text-white hover:text-gray-200 focus:outline-none"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -257,82 +257,109 @@
         <div class="overflow-y-auto p-6">
           <!-- Company Details -->
           <div v-if="!isEditMode" class="space-y-4">
-            <p><strong>Company ID:</strong> {{ selectedCompany.companyId }}</p>
-            <p>
-              <strong>Created At:</strong>
-              {{ formatDate(selectedCompany.createdAt) }}
-            </p>
-            <p>
-              <strong>Company Name:</strong> {{ selectedCompany.companyName }}
-            </p>
-            <p><strong>Email:</strong> {{ selectedCompany.email }}</p>
-            <p><strong>Contact:</strong> {{ selectedCompany.contact }}</p>
-            <p><strong>Address:</strong> {{ selectedCompany.address }}</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <p class="text-sm text-gray-500 font-bold">Company ID</p>
+                <p class="font-semibold text-black">
+                  {{ selectedCompany.companyId }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500 font-bold">Created At</p>
+                <p class="font-semibold text-black">
+                  {{ formatDate(selectedCompany.createdAt) }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500 font-bold">Company Name</p>
+                <p class="font-semibold text-black">
+                  {{ selectedCompany.companyName }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500 font-bold">Email</p>
+                <p class="font-semibold text-black">
+                  {{ selectedCompany.email }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500 font-bold">Contact</p>
+                <p class="font-semibold text-black">
+                  {{ selectedCompany.contact }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500 font-bold">Address</p>
+                <p class="font-semibold text-black">
+                  {{ selectedCompany.address }}
+                </p>
+              </div>
+            </div>
           </div>
 
           <!-- Edit Form -->
           <form v-else @submit.prevent="saveCompany" class="space-y-4">
-            <div class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-gray-700"
+                <label class="block text-sm text-gray-500 font-bold"
                   >Company ID</label
                 >
                 <input
                   v-model="selectedCompany.companyId"
                   type="text"
                   readonly
-                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-100"
+                  class="mt-1 block w-full px-4 py-2 border border-maroon rounded-md shadow-sm bg-gray-100"
                 />
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700"
+                <label class="block text-sm text-gray-500 font-bold"
                   >Created At</label
                 >
                 <input
                   v-model="selectedCompany.createdAt"
                   type="text"
                   readonly
-                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-100"
+                  class="mt-1 block w-full px-4 py-2 border border-maroon rounded-md shadow-sm bg-gray-100"
                 />
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700"
+                <label class="block text-sm text-gray-500 font-bold"
                   >Company Name</label
                 >
                 <input
                   v-model="selectedCompany.companyName"
                   type="text"
-                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                  class="mt-1 block w-full px-4 py-2 border border-maroon rounded-md shadow-sm"
                 />
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700"
+                <label class="block text-sm text-gray-500 font-bold"
                   >Email</label
                 >
                 <input
                   v-model="selectedCompany.email"
                   type="email"
-                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                  class="mt-1 block w-full px-4 py-2 border border-maroon rounded-md shadow-sm"
                 />
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700"
+                <label class="block text-sm text-gray-500 font-bold"
                   >Contact</label
                 >
                 <input
                   v-model="selectedCompany.contact"
-                  type="text"
-                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                  type="tel"
+                  class="mt-1 block w-full px-4 py-2 border border-maroon rounded-md shadow-sm"
                 />
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700"
+                <label class="block text-sm text-gray-500 font-bold"
                   >Address</label
                 >
                 <input
                   v-model="selectedCompany.address"
                   type="text"
-                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                  class="mt-1 block w-full px-4 py-2 border border-maroon rounded-md shadow-sm"
                 />
               </div>
             </div>
@@ -342,7 +369,7 @@
               <button
                 type="button"
                 @click="closeModal"
-                class="px-4 py-2 border border-gray-400 rounded-md hover:bg-gray-100"
+                class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100"
               >
                 Cancel
               </button>

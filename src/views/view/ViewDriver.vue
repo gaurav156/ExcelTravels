@@ -227,19 +227,19 @@
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
     >
       <div
-        class="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] flex flex-col"
+        class="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden"
       >
         <!-- Modal Header with Close Button -->
         <div
-          class="flex justify-between items-center p-6 border-b border-gray-200"
+          class="flex justify-between items-center p-6 border-b border-gray-200 bg-maroon"
         >
-          <h3 class="text-xl font-bold text-maroon">
+          <h3 class="text-xl font-bold text-white">
             {{ isEditMode ? "Edit Driver" : "View Driver" }}
           </h3>
           <!-- Close Button [x] -->
           <button
             @click="closeModal"
-            class="text-gray-500 hover:text-gray-700 focus:outline-none"
+            class="text-white hover:text-gray-200 focus:outline-none"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -262,44 +262,103 @@
         <div class="overflow-y-auto p-6">
           <!-- Driver Details -->
           <div v-if="!isEditMode" class="space-y-4">
-            <p><strong>Driver ID:</strong> {{ selectedDriver.driverId }}</p>
-            <p>
-              <strong>Created At:</strong>
-              {{ formatDate(selectedDriver.createdAt) }}
-            </p>
-            <p><strong>Driver Name:</strong> {{ selectedDriver.name }}</p>
-            <p><strong>Age:</strong> {{ selectedDriver.age }}</p>
-            <p><strong>Email:</strong> {{ selectedDriver.email }}</p>
-            <p><strong>Contact:</strong> {{ selectedDriver.contact }}</p>
-            <p><strong>Address:</strong> {{ selectedDriver.address }}</p>
-            <p>
-              <strong>Emergency Name:</strong>
-              {{ selectedDriver.emergencyName }}
-            </p>
-            <p>
-              <strong>Emergency Contact:</strong>
-              {{ selectedDriver.emergencyContact }}
-            </p>
-            <p><strong>Bank Name:</strong> {{ selectedDriver.bankName }}</p>
-            <p><strong>Branch Name:</strong> {{ selectedDriver.branch }}</p>
-            <p><strong>IFSC Code:</strong> {{ selectedDriver.ifscCode }}</p>
-            <p>
-              <strong>Account Number:</strong>
-              {{ selectedDriver.accountNumber }}
-            </p>
-            <p>
-              <strong>Aadhar Number:</strong> {{ selectedDriver.aadharNumber }}
-            </p>
-            <p><strong>PAN Number:</strong> {{ selectedDriver.panNumber }}</p>
-            <p>
-              <strong>License Number:</strong>
-              {{ selectedDriver.licenseNumber }}
-            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <p class="text-sm font-medium text-gray-700">Driver ID</p>
+                <p class="text-gray-500">
+                  {{ selectedDriver.driverId }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Created At</p>
+                <p class="text-gray-500">
+                  {{ formatDate(selectedDriver.createdAt) }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Driver Name</p>
+                <p class="text-gray-500">{{ selectedDriver.name }}</p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Age</p>
+                <p class="text-gray-500">{{ selectedDriver.age }}</p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Email</p>
+                <p class="text-gray-500">{{ selectedDriver.email }}</p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Contact</p>
+                <p class="text-gray-500">
+                  {{ selectedDriver.contact }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Address</p>
+                <p class="text-gray-500">
+                  {{ selectedDriver.address }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Emergency Name</p>
+                <p class="text-gray-500">
+                  {{ selectedDriver.emergencyName }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">
+                  Emergency Contact
+                </p>
+                <p class="text-gray-500">
+                  {{ selectedDriver.emergencyContact }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Bank Name</p>
+                <p class="text-gray-500">
+                  {{ selectedDriver.bankName }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Branch Name</p>
+                <p class="text-gray-500">{{ selectedDriver.branch }}</p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">IFSC Code</p>
+                <p class="text-gray-500">
+                  {{ selectedDriver.ifscCode }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Account Number</p>
+                <p class="text-gray-500">
+                  {{ selectedDriver.accountNumber }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">Aadhar Number</p>
+                <p class="text-gray-500">
+                  {{ selectedDriver.aadharNumber }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">PAN Number</p>
+                <p class="text-gray-500">
+                  {{ selectedDriver.panNumber }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-700">License Number</p>
+                <p class="text-gray-500">
+                  {{ selectedDriver.licenseNumber }}
+                </p>
+              </div>
+            </div>
           </div>
 
           <!-- Edit Form -->
           <form v-else @submit.prevent="saveDriver" class="space-y-4">
-            <div class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label class="block text-sm font-medium text-gray-700"
                   >Driver ID</label
@@ -308,7 +367,7 @@
                   v-model="selectedDriver.driverId"
                   type="text"
                   readonly
-                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-100"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100"
                 />
               </div>
               <div>
@@ -319,7 +378,7 @@
                   v-model="selectedDriver.createdAt"
                   type="text"
                   readonly
-                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-100"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100"
                 />
               </div>
               <div>
@@ -329,7 +388,7 @@
                 <input
                   v-model="selectedDriver.name"
                   type="text"
-                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
@@ -339,7 +398,7 @@
                 <input
                   v-model="selectedDriver.age"
                   type="number"
-                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
@@ -349,7 +408,7 @@
                 <input
                   v-model="selectedDriver.email"
                   type="email"
-                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
@@ -359,7 +418,7 @@
                 <input
                   v-model="selectedDriver.contact"
                   type="tel"
-                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
@@ -369,7 +428,7 @@
                 <input
                   v-model="selectedDriver.address"
                   type="text"
-                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
@@ -379,7 +438,7 @@
                 <input
                   v-model="selectedDriver.emergencyName"
                   type="text"
-                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
@@ -389,7 +448,7 @@
                 <input
                   v-model="selectedDriver.emergencyContact"
                   type="tel"
-                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
@@ -399,7 +458,7 @@
                 <input
                   v-model="selectedDriver.bankName"
                   type="text"
-                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
@@ -409,7 +468,7 @@
                 <input
                   v-model="selectedDriver.accountNumber"
                   type="text"
-                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
@@ -419,7 +478,7 @@
                 <input
                   v-model="selectedDriver.ifscCode"
                   type="text"
-                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
@@ -429,7 +488,7 @@
                 <input
                   v-model="selectedDriver.branch"
                   type="text"
-                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
@@ -439,7 +498,7 @@
                 <input
                   v-model="selectedDriver.aadharNumber"
                   type="text"
-                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
@@ -449,7 +508,7 @@
                 <input
                   v-model="selectedDriver.panNumber"
                   type="text"
-                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
@@ -459,7 +518,7 @@
                 <input
                   v-model="selectedDriver.licenseNumber"
                   type="text"
-                  class="mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
             </div>
@@ -469,7 +528,7 @@
               <button
                 type="button"
                 @click="closeModal"
-                class="px-4 py-2 border border-gray-400 rounded-md hover:bg-gray-100"
+                class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100"
               >
                 Cancel
               </button>
