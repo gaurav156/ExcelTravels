@@ -37,100 +37,176 @@
       </div>
     </div>
 
-    <!-- Table -->
-    <table class="table-auto w-full border-collapse">
-      <thead>
-        <tr class="bg-maroon text-white">
-          <th class="border p-2">Driver ID</th>
-          <th class="border p-2">Name</th>
-          <th class="border p-2 hidden sm:table-cell">Age</th>
-          <th class="border p-2 hidden md:table-cell">Contact</th>
-          <th class="border p-2 hidden lg:table-cell">Email</th>
-          <th class="border p-2 hidden lg:table-cell">License Number</th>
-          <th class="border p-2">View</th>
-          <th class="border p-2">Edit</th>
-          <th class="border p-2">Delete</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="driver in paginatedData"
-          :key="driver.driverId"
-          class="hover:bg-gray-100 transition-all"
-        >
-          <td class="border p-2 text-center font-bold">
-            {{ driver.driverId }}
-          </td>
-          <td class="border p-2 font-bold">{{ driver.name }}</td>
-          <td class="border p-2 font-bold hidden sm:table-cell">
-            {{ driver.age }}
-          </td>
-          <td class="border p-2 font-bold hidden md:table-cell">
-            {{ driver.contact }}
-          </td>
-          <td class="border p-2 font-bold hidden lg:table-cell">
-            {{ driver.email }}
-          </td>
-          <td class="border p-2 font-bold hidden lg:table-cell">
-            {{ driver.licenseNumber }}
-          </td>
-          <td class="border p-2 text-center">
-            <!-- Details Icon -->
-            <svg
-              @click="viewDriver(driver.driverId)"
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6 text-blue-500 hover:text-blue-700 cursor-pointer mx-auto"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </td>
-          <td class="border p-2 text-center">
-            <!-- Edit Icon -->
-            <svg
-              @click="editDriver(driver.driverId)"
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6 text-green-500 hover:text-green-700 cursor-pointer mx-auto"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M11 4h2m1 16H10m-5 0a2 2 0 002 2h10a2 2 0 002-2m-1-16a2 2 0 00-2-2H7a2 2 0 00-2 2m13.5 5.5L16 8l-5 5v3h3l5.5-5.5z"
-              />
-            </svg>
-          </td>
-          <td class="border p-2 text-center">
-            <!-- Delete Icon -->
-            <svg
-              @click="deleteDriver(driver.driverId)"
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6 text-red-500 hover:text-red-700 cursor-pointer mx-auto"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 19a2 2 0 002 2h8a2 2 0 002-2V7H6v12zm9-11V5a1 1 0 00-1-1H10a1 1 0 00-1 1v3m-4 0h14"
-              />
-            </svg>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- Card Layout for Small and Medium Screens -->
+    <div class="sm:block md:block lg:hidden">
+      <div
+        v-for="driver in paginatedData.slice(0, 5)"
+        :key="driver.driverId"
+        class="mb-4 p-4 border-2 rounded-lg shadow-sm hover:shadow-md transition-shadow card-style"
+      >
+        <!-- Driver Details -->
+        <div class="space-y-2">
+          <p><strong>ID:</strong> {{ driver.driverId }}</p>
+          <p><strong>Name:</strong> {{ driver.name }}</p>
+          <p><strong>Age:</strong> {{ driver.age }}</p>
+          <p><strong>Contact:</strong> {{ driver.contact }}</p>
+          <p><strong>Email:</strong> {{ driver.email }}</p>
+          <p><strong>License Number:</strong> {{ driver.licenseNumber }}</p>
+        </div>
+
+        <!-- Action Icons -->
+        <div class="flex justify-end gap-4 mt-4">
+          <!-- Info Icon -->
+          <svg
+            @click="viewDriver(driver.driverId)"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 text-blue-500 hover:text-blue-700 cursor-pointer"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+
+          <!-- Edit Icon -->
+          <svg
+            @click="editDriver(driver.driverId)"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 text-green-500 hover:text-green-700 cursor-pointer"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M11 4h2m1 16H10m-5 0a2 2 0 002 2h10a2 2 0 002-2m-1-16a2 2 0 00-2-2H7a2 2 0 00-2 2m13.5 5.5L16 8l-5 5v3h3l5.5-5.5z"
+            />
+          </svg>
+
+          <!-- Delete Icon -->
+          <svg
+            @click="deleteDriver(driver.driverId)"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 text-red-500 hover:text-red-700 cursor-pointer"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 19a2 2 0 002 2h8a2 2 0 002-2V7H6v12zm9-11V5a1 1 0 00-1-1H10a1 1 0 00-1 1v3m-4 0h14"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Layout for Larger Screens -->
+    <div class="hidden lg:block overflow-x-auto">
+      <!-- Table -->
+      <table class="table-auto w-full border-collapse">
+        <thead>
+          <tr class="bg-maroon text-white">
+            <th class="border p-2">Driver ID</th>
+            <th class="border p-2">Name</th>
+            <th class="border p-2 hidden sm:table-cell">Age</th>
+            <th class="border p-2 hidden md:table-cell">Contact</th>
+            <th class="border p-2 hidden lg:table-cell">Email</th>
+            <th class="border p-2 hidden lg:table-cell">License Number</th>
+            <th class="border p-2">View</th>
+            <th class="border p-2">Edit</th>
+            <th class="border p-2">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="driver in paginatedData"
+            :key="driver.driverId"
+            class="hover:bg-gray-100 transition-all"
+          >
+            <td class="border p-2 text-center font-bold">
+              {{ driver.driverId }}
+            </td>
+            <td class="border p-2 font-bold">{{ driver.name }}</td>
+            <td class="border p-2 font-bold hidden sm:table-cell">
+              {{ driver.age }}
+            </td>
+            <td class="border p-2 font-bold hidden md:table-cell">
+              {{ driver.contact }}
+            </td>
+            <td class="border p-2 font-bold hidden lg:table-cell">
+              {{ driver.email }}
+            </td>
+            <td class="border p-2 font-bold hidden lg:table-cell">
+              {{ driver.licenseNumber }}
+            </td>
+            <td class="border p-2 text-center">
+              <!-- Details Icon -->
+              <svg
+                @click="viewDriver(driver.driverId)"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-blue-500 hover:text-blue-700 cursor-pointer mx-auto"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </td>
+            <td class="border p-2 text-center">
+              <!-- Edit Icon -->
+              <svg
+                @click="editDriver(driver.driverId)"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-green-500 hover:text-green-700 cursor-pointer mx-auto"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 4h2m1 16H10m-5 0a2 2 0 002 2h10a2 2 0 002-2m-1-16a2 2 0 00-2-2H7a2 2 0 00-2 2m13.5 5.5L16 8l-5 5v3h3l5.5-5.5z"
+                />
+              </svg>
+            </td>
+            <td class="border p-2 text-center">
+              <!-- Delete Icon -->
+              <svg
+                @click="deleteDriver(driver.driverId)"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-red-500 hover:text-red-700 cursor-pointer mx-auto"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 19a2 2 0 002 2h8a2 2 0 002-2V7H6v12zm9-11V5a1 1 0 00-1-1H10a1 1 0 00-1 1v3m-4 0h14"
+                />
+              </svg>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <!-- Pagination -->
     <div class="flex justify-center mt-4">
@@ -427,13 +503,21 @@ export default {
     return {
       drivers: [], // All drivers fetched from the API
       currentPage: 1,
-      itemsPerPage: 15, // 15 records per page
       nameFilter: "", // Filter by driver name
       isEditMode: false, // Toggles between view and edit modes
       selectedDriver: {}, // Stores the selected driver data
+      windowWidth: window.innerWidth, // Track window width for responsiveness
     };
   },
   computed: {
+    // Dynamically adjust itemsPerPage based on screen size
+    itemsPerPage() {
+      if (this.windowWidth < 1024) {
+        return 2; // 5 items for small and medium screens
+      } else {
+        return 15; // 15 items for large screens
+      }
+    },
     // Filtered data based on name filter
     filteredData() {
       let data = this.drivers;
@@ -460,6 +544,10 @@ export default {
   },
   created() {
     this.fetchDrivers();
+    window.addEventListener("resize", this.handleResize); // Add resize listener
+  },
+  beforeUnmount() {
+    window.removeEventListener("resize", this.handleResize); // Clean up listener
   },
   methods: {
     // Fetch drivers from the API
@@ -470,6 +558,10 @@ export default {
       } catch (error) {
         console.error("Error fetching drivers:", error);
       }
+    },
+    // Handle window resize to update windowWidth
+    handleResize() {
+      this.windowWidth = window.innerWidth;
     },
     // View driver details
     async viewDriver(driverId) {
@@ -664,5 +756,17 @@ td svg {
   outline: none;
   border-color: #800000 !important;
   box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
+}
+
+/* Card Styling */
+.card-style {
+  background-color: #f5f5dc; /* Background color */
+  border-color: maroon; /* Border color */
+  box-shadow: 0 0 8px maroon; /* Glowing effect */
+}
+
+/* Hover effect for cards */
+.card-style:hover {
+  box-shadow: 0 0 12px maroon; /* Stronger glow on hover */
 }
 </style>

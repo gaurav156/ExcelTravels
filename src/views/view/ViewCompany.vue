@@ -37,8 +37,80 @@
       </div>
     </div>
 
-    <!-- Scrollable Table -->
-    <div class="overflow-x-auto">
+    <!-- Card Layout for Small and Medium Screens -->
+    <div class="sm:block md:block lg:hidden">
+      <div
+        v-for="company in paginatedData"
+        :key="company.companyId"
+        class="mb-4 p-4 border-2 rounded-lg shadow-sm hover:shadow-md transition-shadow card-style"
+      >
+        <!-- Company Details -->
+        <div class="space-y-2">
+          <p><strong>ID:</strong> {{ company.companyId }}</p>
+          <p><strong>Name:</strong> {{ company.companyName }}</p>
+          <p><strong>Email:</strong> {{ company.email }}</p>
+          <p><strong>Contact:</strong> {{ company.contact }}</p>
+          <p><strong>Address:</strong> {{ company.address }}</p>
+        </div>
+
+        <!-- Action Icons -->
+        <div class="flex justify-end gap-4 mt-4">
+          <!-- Info Icon -->
+          <svg
+            @click="viewCompany(company.companyId)"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 text-blue-500 hover:text-blue-700 cursor-pointer"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+
+          <!-- Edit Icon -->
+          <svg
+            @click="editCompany(company.companyId)"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 text-green-500 hover:text-green-700 cursor-pointer"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M11 4h2m1 16H10m-5 0a2 2 0 002 2h10a2 2 0 002-2m-1-16a2 2 0 00-2-2H7a2 2 0 00-2 2m13.5 5.5L16 8l-5 5v3h3l5.5-5.5z"
+            />
+          </svg>
+
+          <!-- Delete Icon -->
+          <svg
+            @click="deleteCompany(company.companyId)"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 text-red-500 hover:text-red-700 cursor-pointer"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 19a2 2 0 002 2h8a2 2 0 002-2V7H6v12zm9-11V5a1 1 0 00-1-1H10a1 1 0 00-1 1v3m-4 0h14"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Layout for Larger Screens -->
+    <div class="hidden lg:block overflow-x-auto">
       <!-- Table -->
       <table class="table-auto w-full border-collapse">
         <thead>
@@ -304,13 +376,21 @@ export default {
     return {
       companies: [], // All companies fetched from the API
       currentPage: 1,
-      itemsPerPage: 15, // 15 records per page
       nameFilter: "", // Filter by company name
       isEditMode: false, // Toggles between view and edit modes
       selectedCompany: {}, // Stores the selected company data
+      windowWidth: window.innerWidth, // Track window width for responsiveness
     };
   },
   computed: {
+    // Dynamically adjust itemsPerPage based on screen size
+    itemsPerPage() {
+      if (this.windowWidth < 1024) {
+        return 5; // 5 items for small and medium screens
+      } else {
+        return 15; // 15 items for large screens
+      }
+    },
     // Filtered data based on name filter
     filteredData() {
       let data = this.companies;
@@ -337,6 +417,10 @@ export default {
   },
   created() {
     this.fetchCompanies();
+    window.addEventListener("resize", this.handleResize); // Add resize listener
+  },
+  beforeUnmount() {
+    window.removeEventListener("resize", this.handleResize); // Clean up listener
   },
   methods: {
     // Fetch companies from the API
@@ -347,6 +431,10 @@ export default {
       } catch (error) {
         console.error("Error fetching companies:", error);
       }
+    },
+    // Handle window resize to update windowWidth
+    handleResize() {
+      this.windowWidth = window.innerWidth;
     },
     // View company details
     async viewCompany(companyId) {
@@ -535,5 +623,16 @@ td svg {
   outline: none;
   border-color: #800000 !important;
   box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
+}
+/* Card Styling */
+.card-style {
+  background-color: #f5f5dc; /* Background color */
+  border-color: maroon; /* Border color */
+  box-shadow: 0 0 8px maroon; /* Glowing effect */
+}
+
+/* Hover effect for cards */
+.card-style:hover {
+  box-shadow: 0 0 12px maroon; /* Stronger glow on hover */
 }
 </style>

@@ -69,102 +69,177 @@
     </div>
 
     <!-- Table -->
-    <table class="table-auto w-full border-collapse">
-      <thead>
-        <tr class="bg-maroon text-white">
-          <th class="border p-2">Slip ID</th>
-          <th class="border p-2 hidden md:table-cell">Company Name</th>
-          <th class="border p-2">Customer Name</th>
-          <th class="border p-2 hidden md:table-cell">City</th>
-          <th class="border p-2 hidden sm:table-cell">Date</th>
-          <th class="border p-2 hidden sm:table-cell">Trip Route</th>
-          <th class="border p-2">View</th>
-          <th class="border p-2">Edit</th>
-          <th class="border p-2">Delete</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="slip in paginatedData"
-          :key="slip.dutySlipId"
-          class="hover:bg-gray-100 transition-all"
-        >
-          <td class="border p-2 text-center font-bold">
-            {{ slip.dutySlipId }}
-          </td>
-          <td class="border p-2 font-bold hidden md:table-cell">
-            {{ slip.companyName }}
-          </td>
-          <td class="border p-2 font-bold">
-            {{ slip.customerName }}
-          </td>
-          <td class="border p-2 font-bold hidden md:table-cell">
-            {{ slip.city }}
-          </td>
-          <td class="border p-2 font-bold hidden sm:table-cell">
-            {{ formatDate(slip.createdAt) }}
-          </td>
-          <td class="border p-2 font-bold hidden sm:table-cell">
-            {{ slip.tripRoute }}
-          </td>
-          <td class="border p-2 text-center">
-            <!-- Details Icon -->
-            <svg
-              @click="viewSlip(slip.dutySlipId)"
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6 text-blue-500 hover:text-blue-700 cursor-pointer mx-auto"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </td>
-          <td class="border p-2 text-center">
-            <!-- Edit Icon -->
-            <svg
-              @click="editSlip(slip.dutySlipId)"
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6 text-green-500 hover:text-green-700 cursor-pointer mx-auto"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M11 4h2m1 16H10m-5 0a2 2 0 002 2h10a2 2 0 002-2m-1-16a2 2 0 00-2-2H7a2 2 0 00-2 2m13.5 5.5L16 8l-5 5v3h3l5.5-5.5z"
-              />
-            </svg>
-          </td>
-          <td class="border p-2 text-center">
-            <!-- Delete Icon -->
-            <svg
-              @click="deleteSlip(slip.dutySlipId)"
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-6 w-6 text-red-500 hover:text-red-700 cursor-pointer mx-auto"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 19a2 2 0 002 2h8a2 2 0 002-2V7H6v12zm9-11V5a1 1 0 00-1-1H10a1 1 0 00-1 1v3m-4 0h14"
-              />
-            </svg>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- Card Layout for Small and Medium Screens -->
+    <div class="sm:block md:block lg:hidden">
+      <div
+        v-for="slip in paginatedData"
+        :key="slip.dutySlipId"
+        class="mb-4 p-4 border-2 rounded-lg shadow-sm hover:shadow-md transition-shadow card-style"
+      >
+        <!-- Duty Slip Details -->
+        <div class="space-y-2">
+          <p><strong>Slip ID:</strong> {{ slip.dutySlipId }}</p>
+          <p><strong>Customer Name:</strong> {{ slip.customerName }}</p>
+          <p><strong>Company Name:</strong> {{ slip.companyName }}</p>
+          <p><strong>City:</strong> {{ slip.city }}</p>
+          <p><strong>Date:</strong> {{ formatDate(slip.createdAt) }}</p>
+          <p><strong>Trip Route:</strong> {{ slip.tripRoute }}</p>
+        </div>
 
+        <!-- Action Icons -->
+        <div class="flex justify-end gap-4 mt-4">
+          <!-- Info Icon -->
+          <svg
+            @click="viewSlip(slip.dutySlipId)"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 text-blue-500 hover:text-blue-700 cursor-pointer"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+
+          <!-- Edit Icon -->
+          <svg
+            @click="editSlip(slip.dutySlipId)"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 text-green-500 hover:text-green-700 cursor-pointer"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M11 4h2m1 16H10m-5 0a2 2 0 002 2h10a2 2 0 002-2m-1-16a2 2 0 00-2-2H7a2 2 0 00-2 2m13.5 5.5L16 8l-5 5v3h3l5.5-5.5z"
+            />
+          </svg>
+
+          <!-- Delete Icon -->
+          <svg
+            @click="deleteSlip(slip.dutySlipId)"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 text-red-500 hover:text-red-700 cursor-pointer"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 19a2 2 0 002 2h8a2 2 0 002-2V7H6v12zm9-11V5a1 1 0 00-1-1H10a1 1 0 00-1 1v3m-4 0h14"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Layout for Larger Screens -->
+    <div class="hidden lg:block overflow-x-auto">
+      <table class="table-auto w-full border-collapse">
+        <thead>
+          <tr class="bg-maroon text-white">
+            <th class="border p-2">Slip ID</th>
+            <th class="border p-2 hidden md:table-cell">Company Name</th>
+            <th class="border p-2">Customer Name</th>
+            <th class="border p-2 hidden md:table-cell">City</th>
+            <th class="border p-2 hidden sm:table-cell">Date</th>
+            <th class="border p-2 hidden sm:table-cell">Trip Route</th>
+            <th class="border p-2">View</th>
+            <th class="border p-2">Edit</th>
+            <th class="border p-2">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="slip in paginatedData"
+            :key="slip.dutySlipId"
+            class="hover:bg-gray-100 transition-all"
+          >
+            <td class="border p-2 text-center font-bold">
+              {{ slip.dutySlipId }}
+            </td>
+            <td class="border p-2 font-bold hidden md:table-cell">
+              {{ slip.companyName }}
+            </td>
+            <td class="border p-2 font-bold">
+              {{ slip.customerName }}
+            </td>
+            <td class="border p-2 font-bold hidden md:table-cell">
+              {{ slip.city }}
+            </td>
+            <td class="border p-2 font-bold hidden sm:table-cell">
+              {{ formatDate(slip.createdAt) }}
+            </td>
+            <td class="border p-2 font-bold hidden sm:table-cell">
+              {{ slip.tripRoute }}
+            </td>
+            <td class="border p-2 text-center">
+              <!-- Details Icon -->
+              <svg
+                @click="viewSlip(slip.dutySlipId)"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-blue-500 hover:text-blue-700 cursor-pointer mx-auto"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </td>
+            <td class="border p-2 text-center">
+              <!-- Edit Icon -->
+              <svg
+                @click="editSlip(slip.dutySlipId)"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-green-500 hover:text-green-700 cursor-pointer mx-auto"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 4h2m1 16H10m-5 0a2 2 0 002 2h10a2 2 0 002-2m-1-16a2 2 0 00-2-2H7a2 2 0 00-2 2m13.5 5.5L16 8l-5 5v3h3l5.5-5.5z"
+                />
+              </svg>
+            </td>
+            <td class="border p-2 text-center">
+              <!-- Delete Icon -->
+              <svg
+                @click="deleteSlip(slip.dutySlipId)"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-red-500 hover:text-red-700 cursor-pointer mx-auto"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 19a2 2 0 002 2h8a2 2 0 002-2V7H6v12zm9-11V5a1 1 0 00-1-1H10a1 1 0 00-1 1v3m-4 0h14"
+                />
+              </svg>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <!-- Pagination -->
     <div class="flex justify-center mt-4">
       <button
@@ -596,7 +671,7 @@ export default {
     return {
       dutySlips: [], // All duty slips fetched from the API
       currentPage: 1,
-      itemsPerPage: 15, // 15 records per page
+      // itemsPerPage: 15,
       dateFilter: "newest", // Default filter: newest first
       nameFilter: "", // Filter by customer/company name
       isDateDropdownOpen: false, // Control the visibility of the date dropdown
@@ -606,9 +681,18 @@ export default {
       driverSearchQuery: "", // Search query for drivers
       companies: [], // List of companies fetched from the API
       companySearchQuery: "", // Search query for companies
+      windowWidth: window.innerWidth, // Track window width for responsiveness
     };
   },
   computed: {
+    // Dynamically adjust itemsPerPage based on screen size
+    itemsPerPage() {
+      if (this.windowWidth < 1024) {
+        return 5; // 5 items for small and medium screens
+      } else {
+        return 15; // 15 items for large screens
+      }
+    },
     // Filtered data based on date and name filters
     filteredData() {
       let data = this.dutySlips;
@@ -621,6 +705,7 @@ export default {
             slip.customerName.toLowerCase().includes(searchTerm) ||
             slip.companyName.toLowerCase().includes(searchTerm)
         );
+        return data;
       }
 
       // Filter by date
@@ -684,6 +769,10 @@ export default {
     this.fetchDutySlips();
     this.fetchDrivers(); // Fetch drivers when the component is created
     this.fetchCompanies(); // Fetch companies when the component is created
+    window.addEventListener("resize", this.handleResize); // Add resize listener
+  },
+  beforeUnmount() {
+    window.removeEventListener("resize", this.handleResize); // Clean up listener
   },
   methods: {
     // Fetch duty slips from the API
@@ -694,6 +783,10 @@ export default {
       } catch (error) {
         console.error("Error fetching duty slips:", error);
       }
+    },
+    // Handle window resize to update windowWidth
+    handleResize() {
+      this.windowWidth = window.innerWidth;
     },
     // View slip details
     async viewSlip(dutySlipId) {
@@ -973,11 +1066,15 @@ td svg {
   box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
 }
 
-/* Responsive Table Styles */
-@media (max-width: 768px) {
-  th.hidden,
-  td.hidden {
-    display: none;
-  }
+/* Card Styling */
+.card-style {
+  background-color: #f5f5dc; /* Background color */
+  border-color: maroon; /* Border color */
+  box-shadow: 0 0 8px maroon; /* Glowing effect */
+}
+
+/* Hover effect for cards */
+.card-style:hover {
+  box-shadow: 0 0 12px maroon; /* Stronger glow on hover */
 }
 </style>
