@@ -100,7 +100,7 @@
               type="text"
               id="companyId"
               v-model="form.companyId"
-              class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+              class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-[#800000] rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
               disabled
             />
           </div>
@@ -265,7 +265,7 @@
               type="text"
               id="driverId"
               v-model="form.driverId"
-              class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+              class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-[#800000] rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
               disabled
             />
           </div>
@@ -672,5 +672,23 @@ export default {
 :deep(.vs__dropdown-option--highlight) {
   background-color: #800000 !important;
   color: #fff !important;
+}
+
+/* Apply border and focus styles to all fields */
+input:not([readonly]):not([disabled]),
+select:not([readonly]):not([disabled]),
+textarea:not([readonly]):not([disabled]) {
+  border: 1px solid #800000 !important;
+  border-radius: 4px !important;
+  padding: 8px;
+  color: black !important;
+}
+
+input:focus:not([readonly]):not([disabled]),
+select:focus:not([readonly]):not([disabled]),
+textarea:focus:not([readonly]):not([disabled]) {
+  outline: none;
+  border-color: #800000 !important;
+  box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
 }
 </style>

@@ -54,7 +54,7 @@
           type="text"
           id="companyId"
           v-model="form.companyId"
-          class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+          class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-[#800000] rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
           readonly
         />
       </div>
@@ -341,28 +341,21 @@ export default {
   /* Glowing Effect */
 }
 
-/* Custom styles for SweetAlert2 popup */
-.swal2-popup {
-  width: 90%; /* Default width for small screens */
-  max-width: 400px; /* Maximum width for larger screens */
-  font-size: 14px; /* Default font size for small screens */
+/* Apply border and focus styles to all fields */
+input:not([readonly]):not([disabled]),
+select:not([readonly]):not([disabled]),
+textarea:not([readonly]):not([disabled]) {
+  border: 1px solid #800000 !important;
+  border-radius: 4px !important;
+  padding: 8px;
+  color: black !important;
 }
 
-/* Adjust width and font size for medium screens */
-@media (min-width: 640px) {
-  .swal2-popup {
-    width: 70%;
-    max-width: 500px;
-    font-size: 16px;
-  }
-}
-
-/* Adjust width and font size for large screens */
-@media (min-width: 1024px) {
-  .swal2-popup {
-    width: 50%;
-    max-width: 600px;
-    font-size: 18px;
-  }
+input:focus:not([readonly]):not([disabled]),
+select:focus:not([readonly]):not([disabled]),
+textarea:focus:not([readonly]):not([disabled]) {
+  outline: none;
+  border-color: #800000 !important;
+  box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
 }
 </style>
