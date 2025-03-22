@@ -631,7 +631,7 @@
                 <input
                   v-model="formattedDateFrom"
                   type="date"
-                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                  class="bg-white mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
@@ -641,7 +641,7 @@
                 <input
                   v-model="formattedDateTo"
                   type="date"
-                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                  class="bg-white mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
@@ -665,7 +665,7 @@
                   type="text"
                   readonly
                   disabled
-                  class="border border-[#800000] mt-1 block w-full px-4 py-2 rounded-md shadow-sm bg-gray-100"
+                  class="mt-1 block w-full px-4 py-2 border border-[#800000] rounded-md shadow-sm bg-gray-100"
                 />
               </div>
             </div>

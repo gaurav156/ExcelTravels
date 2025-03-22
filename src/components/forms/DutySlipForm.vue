@@ -231,7 +231,7 @@
               v-model="form.dutyType"
               :options="['Local', 'Outstation']"
               placeholder="Select Duty Type"
-              class="custom-vue-select"
+              class="custom-vue-select mt-1"
             />
           </div>
 
