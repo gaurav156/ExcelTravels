@@ -7,7 +7,6 @@ import EditData from "../views/EditData.vue";
 import ViewSlip from "../views/view/ViewSlip.vue";
 import ViewDriver from "../views/view/ViewDriver.vue";
 import ViewCompany from "../views/view/ViewCompany.vue";
-
 import LoginPage from "../components/LoginPage.vue";
 
 const routes = [
@@ -55,6 +54,17 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    // Example: Log the route information (optional)
+    console.log(`Navigating from ${from.path} to ${to.path}`);
+
+    // Example: Use savedPosition to restore scroll position when navigating back
+    if (savedPosition) {
+      return savedPosition;
+    } else {
+      return { top: 0 };
+    }
+  },
 });
 
 export default router;

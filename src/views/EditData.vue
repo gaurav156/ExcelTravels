@@ -114,8 +114,6 @@
         </router-link>
       </div>
     </div>
-    <!-- Nested View -->
-    <router-view />
   </div>
 </template>
 
