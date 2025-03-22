@@ -632,7 +632,7 @@ export default {
 
 /* VueSelect Custom Styles */
 :deep(.vs__dropdown-toggle) {
-  border: 1px solid #9ca3af !important; /* Matches Customer Name field */
+  border: 1px solid #800000 !important; /* Maroon border */ /* Matches Customer Name field */
   border-radius: 6px !important;
   background-color: #f9fafb !important; /* Matches input background */
   color: black !important;
@@ -640,6 +640,13 @@ export default {
   padding: 7px 12px;
 }
 
+/* Ensure focus and open state gets the glow effect */
+:deep(.vs__dropdown-toggle:focus-within),
+:deep(.vs__dropdown-toggle.vs--open) {
+  outline: none;
+  border-color: #800000 !important;
+  box-shadow: 0 0 5px rgba(128, 0, 0, 0.5) !important; /* Glow effect */
+}
 /* Dropdown Indicator (Arrow) */
 :deep(.vs__open-indicator) {
   cursor: pointer !important;

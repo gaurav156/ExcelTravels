@@ -1190,4 +1190,12 @@ textarea:focus:not([readonly]):not([disabled]) {
   border-color: #800000 !important;
   box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
 }
+
+/* Ensure focus and open state gets the glow effect */
+:deep(.vs__dropdown-toggle:focus-within),
+:deep(.vs__dropdown-toggle.vs--open) {
+  outline: none;
+  border-color: #800000 !important;
+  box-shadow: 0 0 5px rgba(128, 0, 0, 0.5) !important; /* Glow effect */
+}
 </style>
