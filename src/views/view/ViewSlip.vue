@@ -13,7 +13,7 @@
         <div class="relative">
           <button
             @click="toggleDateDropdown"
-            class="p-2 border border-maroon rounded-md focus:ring-maroon focus:border-maroon custom-select"
+            class="p-2 border border-maroon rounded-md focus:ring-maroon focus:border-maroon custom-fselect"
           >
             {{ dateFilter === "newest" ? "Newest First" : "Oldest First" }}
           </button>
@@ -462,7 +462,8 @@
                   v-model="selectedSlip.dutySlipId"
                   type="text"
                   readonly
-                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100"
+                  disabled
+                  class="mt-1 block w-full px-4 py-2 border border-[#800000] rounded-md shadow-sm bg-gray-100"
                 />
               </div>
               <div>
@@ -473,7 +474,8 @@
                   v-model="selectedSlip.createdAt"
                   type="text"
                   readonly
-                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100"
+                  disabled
+                  class="mt-1 block w-full px-4 py-2 border border-[#800000] rounded-md shadow-sm bg-gray-100"
                 />
               </div>
 
@@ -485,7 +487,8 @@
                 <input
                   v-model="selectedSlip.companyId"
                   type="text"
-                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100"
+                  class="mt-1 block w-full px-4 py-2 border border-[#800000] rounded-md shadow-sm bg-gray-100"
+                  readonly
                   disabled
                 />
               </div>
@@ -500,8 +503,8 @@
                   @update:modelValue="handleCompanySelection"
                   label="companyName"
                   placeholder="Select Company"
-                  class="mt-1 block w-full"
-                ></VueSelect>
+                  class="mt-1 block w-full custom-vue-select"
+                />
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700"
@@ -517,22 +520,23 @@
                 <label class="block text-sm font-medium text-gray-700"
                   >City</label
                 >
-                <select
+                <VueSelect
                   v-model="selectedSlip.city"
-                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
-                >
-                  <option value="" disabled>Select City</option>
-                  <option value="Mumbai">Mumbai</option>
-                  <option value="Delhi">Delhi</option>
-                  <option value="Bangalore">Bangalore</option>
-                  <option value="Hyderabad">Hyderabad</option>
-                  <option value="Chennai">Chennai</option>
-                  <option value="Kolkata">Kolkata</option>
-                  <option value="Pune">Pune</option>
-                  <option value="Ahmedabad">Ahmedabad</option>
-                  <option value="Jaipur">Jaipur</option>
-                  <option value="Surat">Surat</option>
-                </select>
+                  :options="[
+                    'Mumbai',
+                    'Delhi',
+                    'Bangalore',
+                    'Hyderabad',
+                    'Chennai',
+                    'Kolkata',
+                    'Pune',
+                    'Ahmedabad',
+                    'Jaipur',
+                    'Surat',
+                  ]"
+                  placeholder="Select City"
+                  class="mt-1 block w-full custom-vue-select"
+                />
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700"
@@ -548,15 +552,12 @@
                 <label class="block text-sm font-medium text-gray-700"
                   >Car Booked</label
                 >
-                <select
+                <VueSelect
                   v-model="selectedSlip.carBooked"
-                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
-                >
-                  <option value="" disabled>Select Car Type</option>
-                  <option value="Sedan">Sedan</option>
-                  <option value="SUV">SUV</option>
-                  <option value="Luxury">Luxury</option>
-                </select>
+                  :options="['Sedan', 'SUV', 'Luxury']"
+                  placeholder="Select Car Type"
+                  class="mt-1 block w-full custom-vue-select"
+                />
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700"
@@ -572,14 +573,12 @@
                 <label class="block text-sm font-medium text-gray-700"
                   >Duty Type</label
                 >
-                <select
+                <VueSelect
                   v-model="selectedSlip.dutyType"
-                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
-                >
-                  <option value="" disabled>Select Duty Type</option>
-                  <option value="local">Local</option>
-                  <option value="Outstation">Outstation</option>
-                </select>
+                  :options="['Local', 'Outstation']"
+                  placeholder="Select Duty Type"
+                  class="mt-1 block w-full custom-vue-select"
+                />
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700"
@@ -602,8 +601,8 @@
                   @update:modelValue="handleDriverSelection"
                   label="name"
                   placeholder="Select Driver"
-                  class="mt-1 block w-full"
-                ></VueSelect>
+                  class="mt-1 block w-full custom-vue-select"
+                />
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700"
@@ -653,7 +652,8 @@
                   v-model="selectedSlip.startKM"
                   type="text"
                   readonly
-                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100"
+                  disabled
+                  class="mt-1 block w-full px-4 py-2 border border-[#800000] rounded-md shadow-sm bg-gray-100"
                 />
               </div>
               <div>
@@ -664,7 +664,8 @@
                   v-model="selectedSlip.endKM"
                   type="text"
                   readonly
-                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100"
+                  disabled
+                  class="border border-[#800000] mt-1 block w-full px-4 py-2 rounded-md shadow-sm bg-gray-100"
                 />
               </div>
             </div>
@@ -1075,6 +1076,7 @@ td svg {
   background-color: maroon;
   color: white;
 }
+
 .text-maroon {
   color: #800000;
 }
@@ -1086,23 +1088,25 @@ td svg {
 }
 
 /* Custom select dropdown */
-.custom-select {
+.custom-fselect {
+  appearance: none; /* Removes default styles */
   border: 1px solid #800000 !important;
   border-radius: 4px !important;
-  padding: 8px;
-  appearance: none; /* Removes default styles */
   -webkit-appearance: none; /* Safari */
   -moz-appearance: none; /* Firefox */
   background-color: white;
-  color: #800000 !important;
+  color: black !important;
   cursor: pointer;
-  padding-right: 2.5rem;
+  /* Ensure text does not overlap with arrow */
+  padding-right: 2.5rem; /* Increase space for the arrow */
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23800000'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
   background-repeat: no-repeat;
-  background-position: right 0.75rem center;
+  background-position: right 0.75rem center; /* Adjust arrow position */
   background-size: 1.25rem;
 }
-.custom-select:focus {
+
+/* Ensure focus styling is applied correctly */
+.custom-fselect:focus {
   outline: none;
   border-color: #800000 !important;
   box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
@@ -1118,5 +1122,72 @@ td svg {
 /* Hover effect for cards */
 .card-style:hover {
   box-shadow: 0 0 12px maroon; /* Stronger glow on hover */
+}
+/* VueSelect Custom Styles */
+:deep(.vs__dropdown-toggle) {
+  border: 1px solid #800000 !important;
+  border-radius: 4px !important;
+  background-color: white !important;
+  color: black !important;
+  box-shadow: 0 0 5px rgba(128, 0, 0, 0.2);
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+  padding-left: 0.5rem;
+}
+
+:deep(.vs__open-indicator) {
+  appearance: none; /* Removes default styles */
+  -webkit-appearance: none; /* Safari */
+  -moz-appearance: none; /* Firefox */
+  cursor: pointer !important;
+  color: #800000;
+  font-size: 1.2rem;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23800000'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1.25rem;
+  padding-right: 2.5rem;
+}
+
+:deep(.vs__clear) {
+  fill: #800000 !important;
+}
+
+:deep(.vs__dropdown-menu) {
+  background-color: #fff !important;
+  border: 1px solid #ccc !important;
+}
+
+:deep(.vs__dropdown-option) {
+  color: black !important; /* Changed to black */
+}
+
+:deep(.vs__dropdown-option--highlight) {
+  background-color: #800000 !important;
+  color: #fff !important;
+}
+
+:deep(.vs__clear) {
+  color: #800000 !important; /* Maroon color for close icon */
+  font-size: 1.2rem; /* Adjust size if needed */
+}
+
+/* Apply border and focus styles to all fields */
+input:not([readonly]):not([disabled]),
+select:not([readonly]):not([disabled]),
+textarea:not([readonly]):not([disabled]) {
+  border: 1px solid #800000 !important;
+  border-radius: 4px !important;
+  padding: 8px;
+  color: black !important;
+}
+
+input:focus:not([readonly]):not([disabled]),
+select:focus:not([readonly]):not([disabled]),
+textarea:focus:not([readonly]):not([disabled]) {
+  outline: none;
+  border-color: #800000 !important;
+  box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
 }
 </style>

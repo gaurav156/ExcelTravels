@@ -83,7 +83,7 @@
               @update:modelValue="handleCompanySelection"
               label="companyName"
               placeholder="Select Company"
-              class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+              class="rounded-md shadow-sm bg-gray-50 mt-1 block w-full custom-vue-select"
               required
             ></VueSelect>
           </div>
@@ -125,27 +125,27 @@
 
           <!-- City -->
           <div>
-            <label for="city" class="block text-sm font-medium text-maroon">
-              City
-            </label>
-            <select
+            <label for="city" class="block text-sm font-medium text-maroon"
+              >City</label
+            >
+            <VueSelect
               id="city"
               v-model="form.city"
-              class="custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required
-            >
-              <option value="" disabled>Select City</option>
-              <option value="Mumbai">Mumbai</option>
-              <option value="Delhi">Delhi</option>
-              <option value="Bangalore">Bangalore</option>
-              <option value="Hyderabad">Hyderabad</option>
-              <option value="Chennai">Chennai</option>
-              <option value="Kolkata">Kolkata</option>
-              <option value="Pune">Pune</option>
-              <option value="Ahmedabad">Ahmedabad</option>
-              <option value="Jaipur">Jaipur</option>
-              <option value="Surat">Surat</option>
-            </select>
+              :options="[
+                'Mumbai',
+                'Delhi',
+                'Bangalore',
+                'Hyderabad',
+                'Chennai',
+                'Kolkata',
+                'Pune',
+                'Ahmedabad',
+                'Jaipur',
+                'Surat',
+              ]"
+              placeholder="Select City"
+              class="custom-vue-select"
+            />
           </div>
 
           <!-- Address -->
@@ -177,17 +177,13 @@
             >
               Type of Car Booked
             </label>
-            <select
+            <VueSelect
               id="carBooked"
               v-model="form.carBooked"
-              class="custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required
-            >
-              <option value="" disabled>Select Car Type</option>
-              <option value="Sedan">Sedan</option>
-              <option value="SUV">SUV</option>
-              <option value="Luxury">Luxury</option>
-            </select>
+              :options="['Sedan', 'SUV', 'Luxury']"
+              placeholder="Select Car Type"
+              class="custom-vue-select mt-1"
+            />
           </div>
 
           <!-- Car Number -->
@@ -230,16 +226,13 @@
             <label for="dutyType" class="block text-sm font-medium text-maroon">
               Duty Type
             </label>
-            <select
+            <VueSelect
               id="dutyType"
               v-model="form.dutyType"
-              class="custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required
-            >
-              <option value="" disabled>Select Duty Type</option>
-              <option value="local">Local</option>
-              <option value="Outstation">Outstation</option>
-            </select>
+              :options="['Local', 'Outstation']"
+              placeholder="Select Duty Type"
+              class="custom-vue-select"
+            />
           </div>
 
           <!-- Driver Name (Searchable Select) -->
@@ -258,7 +251,7 @@
               @update:modelValue="handleDriverSelection"
               label="name"
               placeholder="Select Driver"
-              class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+              class="rounded-md shadow-sm bg-gray-50 mt-1 block w-full custom-vue-select"
               required
             ></VueSelect>
           </div>
@@ -637,57 +630,45 @@ export default {
   /* Glowing Effect */
 }
 
-.custom-select {
-  appearance: none; /* Remove default arrow */
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23800000'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center; /* Position the arrow */
-  background-size: 1.25rem; /* Size of the arrow */
-  padding-right: 2.5rem; /* Add padding to avoid text overlap */
-}
-
-/* Custom styles for vue-select */
+/* VueSelect Custom Styles */
 :deep(.vs__dropdown-toggle) {
-  border: 1px solid #ccc !important;
-  border-radius: 4px !important;
+  border: 1px solid #9ca3af !important; /* Matches Customer Name field */
+  border-radius: 6px !important;
+  background-color: #f9fafb !important; /* Matches input background */
+  color: black !important;
+  box-shadow: none !important;
+  padding: 7px 12px;
 }
 
+/* Dropdown Indicator (Arrow) */
 :deep(.vs__open-indicator) {
   cursor: pointer !important;
   color: #800000;
   font-size: 1.2rem;
-  appearance: none; /* Remove default arrow */
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23800000'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
   background-repeat: no-repeat;
-  background-position: right 0.75rem center; /* Position the arrow */
-  background-size: 1.25rem; /* Size of the arrow */
-  padding-right: 2.5rem; /* Add padding to avoid text overlap */
+  background-position: right 0.75rem center;
+  background-size: 1.25rem;
+  padding-right: 2.5rem;
 }
 
-/* :deep(.vs--open .vs__open-indicator) {
-  transform: rotate(360deg); 
-} */
-:deep(.vs--open .vs__open-indicator) {
-  transform: none !important;
+/* Clear Button */
+:deep(.vs__clear) {
+  fill: #800000 !important;
 }
 
-:deep(.vs__selected) {
-  color: #800000 !important;
-}
-
-:deep(.vs__search) {
-  color: #800000 !important;
-}
-
+/* Dropdown Menu */
 :deep(.vs__dropdown-menu) {
-  background-color: #fff !important;
-  border: 1px solid #ccc !important;
+  background-color: #f9fafb !important; /* Matches input background */
+  border: 1px solid #9ca3af !important; /* Matches input border */
 }
 
+/* Dropdown Options */
 :deep(.vs__dropdown-option) {
-  color: #800000 !important;
+  color: black !important;
 }
 
+/* Highlighted Option */
 :deep(.vs__dropdown-option--highlight) {
   background-color: #800000 !important;
   color: #fff !important;
