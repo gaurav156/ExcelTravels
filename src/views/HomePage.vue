@@ -303,6 +303,8 @@
 </template>
 
 <script>
+// import { useRoute } from "vue-router";
+
 export default {
   name: "HomePage",
   data() {
@@ -311,35 +313,35 @@ export default {
       isModalOpen: false, // Controls modal visibility
     };
   },
+  watch: {
+    // Watch for route changes
+    $route(to, from) {
+      if (to.fullPath !== from.fullPath) {
+        this.hideScrollButtonInstantly();
+      }
+    },
+  },
   mounted() {
-    // Add scroll event listener to show/hide the button
     window.addEventListener("scroll", this.handleScroll);
   },
   beforeUnmount() {
-    // Remove scroll event listener when the component is destroyed
     window.removeEventListener("scroll", this.handleScroll);
   },
   methods: {
-    // Scroll to the top of the page
-    scrollToTop() {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth", // Smooth scroll animation
+    // Instantly hide the button on page change
+    hideScrollButtonInstantly() {
+      this.showScrollToTop = false;
+      this.$nextTick(() => {
+        setTimeout(this.handleScroll, 200); // Check scroll state after a short delay
       });
     },
-    // Handle scroll event to show/hide the button
+    // Scroll to top smoothly
+    scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+    // Handle scroll event to toggle button visibility
     handleScroll() {
-      const scrollPosition = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight;
-
-      // Show button only if the user is at the bottom of the page
-      if (scrollPosition + windowHeight >= documentHeight - 100) {
-        // 100px threshold
-        this.showScrollToTop = true;
-      } else {
-        this.showScrollToTop = false;
-      }
+      this.showScrollToTop = window.scrollY > window.innerHeight / 2;
     },
     // Update modal state from child component
     updateModalState(isOpen) {
