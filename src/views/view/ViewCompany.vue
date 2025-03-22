@@ -308,7 +308,8 @@
                   v-model="selectedCompany.companyId"
                   type="text"
                   readonly
-                  class="mt-1 block w-full px-4 py-2 border border-maroon rounded-md shadow-sm bg-gray-100"
+                  disabled
+                  class="mt-1 block w-full px-4 py-2 border border-[#800000] rounded-md shadow-sm bg-gray-100"
                 />
               </div>
               <div>
@@ -319,7 +320,8 @@
                   v-model="selectedCompany.createdAt"
                   type="text"
                   readonly
-                  class="mt-1 block w-full px-4 py-2 border border-maroon rounded-md shadow-sm bg-gray-100"
+                  disabled
+                  class="mt-1 block w-full px-4 py-2 border border-[#800000] rounded-md shadow-sm bg-gray-100"
                 />
               </div>
               <div>
@@ -661,5 +663,23 @@ td svg {
 /* Hover effect for cards */
 .card-style:hover {
   box-shadow: 0 0 12px maroon; /* Stronger glow on hover */
+}
+
+/* Apply border and focus styles to all fields */
+input:not([readonly]):not([disabled]),
+select:not([readonly]):not([disabled]),
+textarea:not([readonly]):not([disabled]) {
+  border: 1px solid #800000 !important;
+  border-radius: 4px !important;
+  padding: 8px;
+  color: black !important;
+}
+
+input:focus:not([readonly]):not([disabled]),
+select:focus:not([readonly]):not([disabled]),
+textarea:focus:not([readonly]):not([disabled]) {
+  outline: none;
+  border-color: #800000 !important;
+  box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
 }
 </style>
