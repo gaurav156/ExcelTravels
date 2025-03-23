@@ -46,24 +46,89 @@
     <div
       class="bg-white p-6 rounded-lg shadow-md border border-gray-300 mb-8 mx-auto flex flex-col items-center text-center"
     >
-      <h3 class="text-xl font-semibold text-maroon mb-4">Export Duty Slips</h3>
+      <h3 class="text-xl font-semibold text-[#800000] mb-4">
+        Export Duty Slips
+      </h3>
       <div class="flex flex-col md:flex-row items-center justify-center gap-4">
-        <input
-          type="date"
-          v-model="exportStartDate"
-          class="focus:ring-[#800000] focus:outline-none mt-1 block w-full md:w-40 px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-          placeholder="Start Date"
-        />
-        <span class="text-maroon">to</span>
-        <input
-          type="date"
-          v-model="exportEndDate"
-          class="focus:ring-[#800000] focus:outline-none mt-1 block w-full md:w-40 px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-          placeholder="End Date"
-        />
+        <!-- Start Date -->
+        <!-- Start Date -->
+        <div class="relative w-40">
+          <input
+            type="date"
+            v-model="exportStartDate"
+            class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 pr-10 cursor-pointer placeholder-shown:text-gray-400"
+            data-placeholder="mm/dd/yyyy"
+          />
+          <!-- Custom Calendar Icon -->
+          <svg
+            class="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#800000] pointer-events-none"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M8 2v2M16 2v2M4 6h16M5 10h14M12 14v4m0 0h-2m2 0h2"
+            />
+            <rect
+              x="3"
+              y="4"
+              width="18"
+              height="18"
+              rx="2"
+              ry="2"
+              stroke="currentColor"
+              stroke-width="2"
+              fill="none"
+            />
+          </svg>
+        </div>
+
+        <span class="text-[#800000]">to</span>
+
+        <!-- End Date -->
+        <div class="relative w-40">
+          <input
+            type="date"
+            v-model="exportEndDate"
+            class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 pr-10 cursor-pointer placeholder-shown:text-gray-400"
+            data-placeholder="mm/dd/yyyy"
+          />
+          <!-- Custom Calendar Icon -->
+          <svg
+            class="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#800000] pointer-events-none"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M8 2v2M16 2v2M4 6h16M5 10h14M12 14v4m0 0h-2m2 0h2"
+            />
+            <rect
+              x="3"
+              y="4"
+              width="18"
+              height="18"
+              rx="2"
+              ry="2"
+              stroke="currentColor"
+              stroke-width="2"
+              fill="none"
+            />
+          </svg>
+        </div>
+
+        <!-- Export Button -->
         <button
           @click="exportToExcel"
-          class="bg-maroon text-white px-4 py-2 rounded-md text-lg font-semibold shadow-md transition duration-300 hover:bg-maroon-dark hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-maroon focus:ring-offset-2 w-full md:w-auto flex items-center justify-center gap-2"
+          class="bg-[#800000] text-white px-4 py-2 rounded-md text-lg font-semibold shadow-md transition duration-300 hover:bg-[#600000] hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#800000] focus:ring-offset-2 w-full md:w-auto flex items-center justify-center gap-2"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -254,28 +319,37 @@ export default {
   box-shadow: 0 0 10px rgba(128, 0, 0, 0.8); /* Glowing Effect */
 }
 
-/* Custom styles for SweetAlert2 popup */
-.swal2-popup {
-  width: 90%; /* Default width for small screens */
-  max-width: 400px; /* Maximum width for larger screens */
-  font-size: 14px; /* Default font size for small screens */
+/* Hide default calendar icon but keep functionality */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0; /* Makes it invisible but still clickable */
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
 }
 
-/* Adjust width and font size for medium screens */
-@media (min-width: 640px) {
-  .swal2-popup {
-    width: 70%;
-    max-width: 500px;
-    font-size: 16px;
-  }
+/* Additional fix for Safari (hides dropdown arrow on small screens) */
+input[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
 }
 
-/* Adjust width and font size for large screens */
-@media (min-width: 1024px) {
-  .swal2-popup {
-    width: 50%;
-    max-width: 600px;
-    font-size: 18px;
-  }
+/* Apply border and focus styles to all fields */
+input:not([readonly]):not([disabled]),
+select:not([readonly]):not([disabled]),
+textarea:not([readonly]):not([disabled]) {
+  border: 1px solid #800000 !important;
+  border-radius: 4px !important;
+  padding: 8px;
+  color: black !important;
+}
+
+/* Focus styles */
+input:focus:not([readonly]):not([disabled]),
+select:focus:not([readonly]):not([disabled]),
+textarea:focus:not([readonly]):not([disabled]) {
+  outline: none;
+  border-color: #800000 !important;
+  box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
 }
 </style>

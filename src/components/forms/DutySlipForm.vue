@@ -205,22 +205,46 @@
           </div>
 
           <!-- Pickup Time -->
-          <div>
+          <div class="relative">
             <label
               for="pickupTime"
-              class="block text-sm font-medium text-maroon"
+              class="block text-sm font-medium text-[#800000]"
             >
               Pickup Time
             </label>
-            <input
-              type="time"
-              id="pickupTime"
-              v-model="form.pickupTime"
-              class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required
-            />
+            <div class="relative">
+              <input
+                type="time"
+                id="pickupTime"
+                v-model="form.pickupTime"
+                class="time-input focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 pr-10 cursor-pointer"
+                required
+              />
+              <!-- Custom Clock Icon (Always Visible & Clickable) -->
+              <svg
+                class="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#800000] pointer-events-none"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6v6l4 2"
+                />
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="8"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  fill="none"
+                />
+              </svg>
+            </div>
           </div>
-
           <!-- Duty Type -->
           <div>
             <label for="dutyType" class="block text-sm font-medium text-maroon">
@@ -309,31 +333,93 @@
           </div>
 
           <!-- Date From -->
-          <div>
-            <label for="dateFrom" class="block text-sm font-medium text-maroon">
+          <div class="relative">
+            <label
+              for="dateFrom"
+              class="block text-sm font-medium text-[#800000]"
+            >
               Trip Date From
             </label>
-            <input
-              type="date"
-              id="dateFrom"
-              v-model="form.dateFrom"
-              class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required
-            />
+            <div class="relative">
+              <input
+                type="date"
+                id="dateFrom"
+                v-model="form.dateFrom"
+                class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 pr-10 cursor-pointer"
+                required
+              />
+              <!-- Custom Calendar Icon (Always Visible & Clickable) -->
+              <svg
+                class="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#800000] pointer-events-none"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 2v2M16 2v2M4 6h16M5 10h14M12 14v4m0 0h-2m2 0h2"
+                />
+                <rect
+                  x="3"
+                  y="4"
+                  width="18"
+                  height="18"
+                  rx="2"
+                  ry="2"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  fill="none"
+                />
+              </svg>
+            </div>
           </div>
 
           <!-- Date To -->
-          <div>
-            <label for="dateTo" class="block text-sm font-medium text-maroon">
+          <div class="relative">
+            <label
+              for="dateTo"
+              class="block text-sm font-medium text-[#800000]"
+            >
               Trip Date To
             </label>
-            <input
-              type="date"
-              id="dateTo"
-              v-model="form.dateTo"
-              class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-              required
-            />
+            <div class="relative">
+              <input
+                type="date"
+                id="dateTo"
+                v-model="form.dateTo"
+                class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 pr-10 cursor-pointer"
+                required
+              />
+              <!-- Custom Calendar Icon -->
+              <svg
+                class="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#800000] pointer-events-none"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 2v2M16 2v2M4 6h16M5 10h14M12 14v4m0 0h-2m2 0h2"
+                />
+                <rect
+                  x="3"
+                  y="4"
+                  width="18"
+                  height="18"
+                  rx="2"
+                  ry="2"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  fill="none"
+                />
+              </svg>
+            </div>
           </div>
         </div>
       </div>
@@ -625,28 +711,39 @@ export default {
 
 .border-maroon {
   border-color: #800000;
-  /* Maroon Solid Border */
   box-shadow: 0 0 10px rgba(128, 0, 0, 0.8);
-  /* Glowing Effect */
+}
+
+/* Selection Color */
+::selection {
+  background-color: #800000;
+  color: white;
+}
+
+input::selection,
+textarea::selection {
+  background-color: #800000;
+  color: white;
 }
 
 /* VueSelect Custom Styles */
 :deep(.vs__dropdown-toggle) {
-  border: 1px solid #800000 !important; /* Maroon border */ /* Matches Customer Name field */
+  border: 1px solid #800000 !important;
   border-radius: 6px !important;
-  background-color: #f9fafb !important; /* Matches input background */
+  background-color: #f9fafb !important;
   color: black !important;
   box-shadow: none !important;
   padding: 7px 12px;
 }
 
-/* Ensure focus and open state gets the glow effect */
+/* Focus and Open State */
 :deep(.vs__dropdown-toggle:focus-within),
 :deep(.vs__dropdown-toggle.vs--open) {
   outline: none;
   border-color: #800000 !important;
-  box-shadow: 0 0 5px rgba(128, 0, 0, 0.5) !important; /* Glow effect */
+  box-shadow: 0 0 5px rgba(128, 0, 0, 0.5) !important;
 }
+
 /* Dropdown Indicator (Arrow) */
 :deep(.vs__open-indicator) {
   cursor: pointer !important;
@@ -654,7 +751,7 @@ export default {
   font-size: 1.2rem;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23800000'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
   background-repeat: no-repeat;
-  background-position: right 0.75rem center;
+  background-position: center right;
   background-size: 1.25rem;
   padding-right: 2.5rem;
 }
@@ -666,8 +763,8 @@ export default {
 
 /* Dropdown Menu */
 :deep(.vs__dropdown-menu) {
-  background-color: #f9fafb !important; /* Matches input background */
-  border: 1px solid #9ca3af !important; /* Matches input border */
+  background-color: #f9fafb !important;
+  border: 1px solid #9ca3af !important;
 }
 
 /* Dropdown Options */
@@ -693,9 +790,36 @@ textarea:not([readonly]):not([disabled]) {
 
 input:focus:not([readonly]):not([disabled]),
 select:focus:not([readonly]):not([disabled]),
-textarea:focus:not([readonly]):not([disabled]) {
+fr textarea:focus:not([readonly]):not([disabled]) {
   outline: none;
   border-color: #800000 !important;
   box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  opacity: 0; /* Makes it invisible but still clickable */
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+input[type="time"] {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Hide default calendar icon but keep functionality */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0; /* Makes it invisible but still clickable */
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+/* Additional fix for Safari (hides dropdown arrow on small screens) */
+input[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
 }
 </style>

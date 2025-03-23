@@ -624,26 +624,80 @@
                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
-              <div>
+              <div class="relative">
                 <label class="block text-sm font-medium text-gray-700"
                   >Date From</label
                 >
                 <input
                   v-model="formattedDateFrom"
                   type="date"
-                  class="bg-white mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                  class="bg-white mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon pr-10 cursor-pointer"
                 />
+                <!-- Custom Calendar Icon -->
+                <svg
+                  class="absolute right-3 top-11 transform -translate-y-1/2 h-5 w-5 text-maroon pointer-events-none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 2v2M16 2v2M4 6h16M5 10h14M12 14v4m0 0h-2m2 0h2"
+                  />
+                  <rect
+                    x="3"
+                    y="4"
+                    width="18"
+                    height="18"
+                    rx="2"
+                    ry="2"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    fill="none"
+                  />
+                </svg>
               </div>
-              <div>
+
+              <div class="relative">
                 <label class="block text-sm font-medium text-gray-700"
                   >Date To</label
                 >
                 <input
                   v-model="formattedDateTo"
                   type="date"
-                  class="bg-white mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                  class="bg-white mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon pr-10 cursor-pointer"
                 />
+                <!-- Custom Calendar Icon -->
+                <svg
+                  class="absolute right-3 top-11 transform -translate-y-1/2 h-5 w-5 text-maroon pointer-events-none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 2v2M16 2v2M4 6h16M5 10h14M12 14v4m0 0h-2m2 0h2"
+                  />
+                  <rect
+                    x="3"
+                    y="4"
+                    width="18"
+                    height="18"
+                    rx="2"
+                    ry="2"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    fill="none"
+                  />
+                </svg>
               </div>
+
               <div>
                 <label class="block text-sm font-medium text-gray-700"
                   >Start KM</label
@@ -1197,5 +1251,19 @@ textarea:focus:not([readonly]):not([disabled]) {
   outline: none;
   border-color: #800000 !important;
   box-shadow: 0 0 5px rgba(128, 0, 0, 0.5) !important; /* Glow effect */
+}
+/* Hide default calendar icon but keep functionality */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0; /* Makes it invisible but still clickable */
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+/* Additional fix for Safari (hides dropdown arrow on small screens) */
+input[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
 }
 </style>
