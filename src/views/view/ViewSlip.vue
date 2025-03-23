@@ -1052,27 +1052,32 @@ export default {
   },
   methods: {
     printDutySlip() {
-      // Clone the modal content
       const modalContent = document.querySelector(".modal-content");
+      if (!modalContent) return;
+
+      // Clone modal content for printing
       const printContent = modalContent.cloneNode(true);
 
-      // Remove elements that should not be printed
-      const elementsToRemove = printContent.querySelectorAll(".print-hide");
-      elementsToRemove.forEach((el) => el.remove());
+      // Ensure full content is visible
+      printContent.style.height = "auto";
+      printContent.style.maxHeight = "none";
+      printContent.style.overflow = "visible";
 
-      // Create a temporary container for printing
+      // Create a full-page print container
       const printContainer = document.createElement("div");
       printContainer.style.position = "absolute";
-      printContainer.style.left = "-9999px"; // Move off-screen
+      printContainer.style.left = "0";
+      printContainer.style.top = "0";
+      printContainer.style.width = "100vw";
+      printContainer.style.height = "auto"; // Use auto height
+      printContainer.style.overflow = "visible";
+      printContainer.style.background = "white";
       printContainer.appendChild(printContent);
 
-      // Append the container to the body
       document.body.appendChild(printContainer);
 
-      // Trigger the print dialog
       window.print();
 
-      // Clean up the temporary container
       document.body.removeChild(printContainer);
     },
 
@@ -1491,8 +1496,7 @@ input[type="date"] {
   .print-hide {
     display: none !important;
   }
-
-  /* Ensure only the modal content is printed */
+  /* Hide everything except the modal content */
   body * {
     visibility: hidden;
   }
@@ -1500,8 +1504,14 @@ input[type="date"] {
   .modal-content,
   .modal-content * {
     visibility: visible;
+    height: auto !important; /* Ensure modal content is fully visible */
+    max-height: none !important; /* Remove max-height constraints */
+    overflow: visible !important; /* Ensure no content is clipped */
+    position: static !important; /* Ensure modal content is not constrained */
+    height: auto !important; /* Ensure full height */
+    max-height: none !important; /* Remove max-height constraints */
+    overflow: visible !important; /* Ensure no content is clipped */
   }
-
   .modal-content {
     position: absolute;
     left: 0;
@@ -1509,6 +1519,7 @@ input[type="date"] {
     width: 100%;
     margin: 0;
     padding: 0;
+    box-shadow: none; /* Remove any shadows for printing */
   }
 
   /* Hide buttons and other unnecessary elements */
@@ -1524,5 +1535,10 @@ input[type="date"] {
     font-size: 12px;
     color: #666;
   }
+}
+
+.modal-content {
+  max-height: 90vh; /* Adjust as needed for small screens */
+  overflow-y: auto; /* Allow scrolling on small screens */
 }
 </style>
