@@ -764,7 +764,9 @@
                 <input
                   v-model="selectedSlip.driverId"
                   type="text"
-                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                  readonly
+                  disabled
+                  class="mt-1 block w-full px-4 py-2 border border-[#800000] rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
