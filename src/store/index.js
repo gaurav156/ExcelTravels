@@ -1,10 +1,7 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import { createStore } from "vuex";
 import axios from "axios";
 
-Vue.use(Vuex);
-
-export default new Vuex.Store({
+export default createStore({
   state: {
     user: null,
     token: null,
@@ -52,17 +49,38 @@ export default new Vuex.Store({
         console.error("OTP sending failed:", error);
       }
     },
-    async verifyOTP({ commit, state }, otp) {
+    async verifyOTP({ state }, otp) {
       try {
+        // Make the API call
         const response = await axios.post("/api/verify-otp", {
           email: state.email,
           otp,
         });
+  
+        // Check if the OTP verification was successful
         if (response.data.success) {
           return true;
+        } else {
+          console.error("OTP verification failed:", response.data.message);
+          return false;
         }
       } catch (error) {
+        // Log the full error object for debugging
         console.error("OTP verification failed:", error);
+  
+        // Check if the error is due to a network issue
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          console.error("Server responded with status:", error.response.status);
+          console.error("Response data:", error.response.data);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.error("No response received from the server");
+        } else {
+          // Something happened in setting up the request
+          console.error("Error setting up the request:", error.message);
+        }
+  
         return false;
       }
     },

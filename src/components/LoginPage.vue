@@ -284,6 +284,7 @@
 <script>
 import { mapActions } from "vuex";
 import Swal from "sweetalert2";
+import api from "@/utils/api";
 
 export default {
   name: "LoginForm",
@@ -313,16 +314,27 @@ export default {
     isSuperAdmin() {
       return this.loginForm.password === this.userRoles.superAdmin.password;
     },
+    isOfficer() {
+      return this.$store.state.user?.role === "officer";
+    },
   },
   methods: {
     ...mapActions(["login", "sendOTP", "verifyOTP"]),
     async handleLogin() {
-      const { password } = this.loginForm;
-      const role = Object.keys(this.userRoles).find(
-        (key) => this.userRoles[key].password === password
-      );
+      try {
+        const response = await api.post("/auth/login", this.loginForm);
+        this.$store.commit("SET_USER", response.data.user);
+        this.$store.commit("SET_TOKEN", response.data.token);
+        this.$router.push("/dutyslip");
 
-      if (role) {
+        const { password } = this.loginForm;
+
+        const role = Object.keys(this.userRoles).find(
+          (key) => this.userRoles[key].password === password
+        );
+
+        // if (role) { // TODO - Is this check needed?
+
         Swal.fire({
           title: "Success!",
           text: `Logged in as ${role}.`,
@@ -331,7 +343,7 @@ export default {
           confirmButtonText: "OK",
         });
         this.$router.push("/dutyslip");
-      } else {
+      } catch (error) {
         Swal.fire({
           title: "Error!",
           text: "Invalid username or password.",
@@ -348,16 +360,26 @@ export default {
       this.isForgotPasswordModalVisible = false;
     },
     showChangePasswordModal() {
-      // Show OTP modal first
+      if (this.$store.state.user?.role === "admin") {
+        Swal.fire({
+          title: "Error!",
+          text: "You are not allowed to change passwords.",
+          icon: "error",
+          confirmButtonColor: "#d33",
+          confirmButtonText: "OK",
+        });
+        return;
+      }
       this.isOTPForChangePasswordModalVisible = true;
-      this.sendOTPForChangePassword(); // Send OTP to phatakjanita@gmail.com
+      // TODO - is this needed?
+      // this.sendOTPForChangePassword(); // Send OTP to phatakjanita@gmail.com
     },
     hideChangePasswordModal() {
       this.isChangePasswordModalVisible = false;
     },
     async sendOTP() {
       try {
-        await this.sendOTP(this.forgotPasswordEmail);
+        await api.post("/auth/send-otp", { email: this.forgotPasswordEmail });
         this.hideForgotPasswordModal();
         this.isOTPModalVisible = true;
       } catch (error) {
@@ -386,17 +408,20 @@ export default {
     async verifyOTP() {
       const enteredOTP = this.otp.join("");
       try {
-        await this.verifyOTP({
+        const response = await api.post("/auth/verify-otp", {
           email: this.forgotPasswordEmail,
           otp: enteredOTP,
         });
-        Swal.fire({
-          title: "Success!",
-          text: "OTP verified successfully.",
-          icon: "success",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "OK",
-        });
+        if (response.data.success) {
+          Swal.fire({
+            title: "Success!",
+            text: "OTP verified successfully.",
+            icon: "success",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "OK",
+          });
+          this.isOTPModalVisible = false;
+        }
         this.hideOTPModal();
       } catch (error) {
         Swal.fire({
@@ -453,8 +478,10 @@ export default {
       }
 
       try {
-        // Add your logic to change the password here
-        // For example, you might call an API to update the password
+        await api.post("/auth/change-password", {
+          email: this.$store.state.email,
+          newPassword: this.newPassword,
+        });
         Swal.fire({
           title: "Success!",
           text: "Password changed successfully.",
