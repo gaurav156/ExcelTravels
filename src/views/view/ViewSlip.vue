@@ -70,7 +70,7 @@
 
     <!-- Table -->
     <!-- Card Layout for Small and Medium Screens -->
-    <div class="sm:block md:block lg:hidden">
+    <div class="sm:block md:block lg:hidden print-hide">
       <div
         v-for="slip in paginatedData"
         :key="slip.dutySlipId"
@@ -1054,16 +1054,9 @@ export default {
       const modalContent = document.querySelector(".modal-content");
       const printContent = modalContent.cloneNode(true);
 
-      // Find the customer signature section
-      const signatureSection = printContent.querySelector(".signature-section");
-
-      // Remove all elements after the signature section
-      let nextElement = signatureSection.nextElementSibling;
-      while (nextElement) {
-        const temp = nextElement.nextElementSibling;
-        nextElement.remove();
-        nextElement = temp;
-      }
+      // Remove elements that should not be printed
+      const elementsToRemove = printContent.querySelectorAll(".print-hide");
+      elementsToRemove.forEach((el) => el.remove());
 
       // Create a temporary container for printing
       const printContainer = document.createElement("div");
@@ -1493,18 +1486,20 @@ input[type="date"] {
 }
 
 @media print {
-  /* Hide everything except the modal */
+  .print-hide {
+    display: none !important;
+  }
+
+  /* Ensure only the modal content is printed */
   body * {
     visibility: hidden;
   }
 
-  /* Show only the modal and its content */
   .modal-content,
   .modal-content * {
     visibility: visible;
   }
 
-  /* Position the modal at the top-left of the page */
   .modal-content {
     position: absolute;
     left: 0;
@@ -1514,13 +1509,7 @@ input[type="date"] {
     padding: 0;
   }
 
-  /* Ensure images and other elements fit within the page */
-  img {
-    max-width: 100%;
-    height: auto;
-  }
-
-  /* Remove unnecessary elements like buttons */
+  /* Hide buttons and other unnecessary elements */
   button {
     display: none;
   }
