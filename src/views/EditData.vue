@@ -195,6 +195,7 @@ export default {
       exportStartDate: null,
       exportEndDate: null,
       duty: [], // Array to store fetched duty slips
+      isExporting: false, // Loading state for export
     };
   },
   methods: {
@@ -202,6 +203,17 @@ export default {
       this.exportStartDate = null;
       this.exportEndDate = null;
     },
+
+    // Validate if the start date is smaller than the end date
+    validateDateRange() {
+      if (this.exportStartDate && this.exportEndDate) {
+        const startDate = new Date(this.exportStartDate);
+        const endDate = new Date(this.exportEndDate);
+        return startDate <= endDate;
+      }
+      return false;
+    },
+
     async fetchDutySlips() {
       try {
         // Fetch duty slips from the backend
@@ -229,10 +241,43 @@ export default {
     },
 
     async exportToExcel() {
+      // Validate if dates are selected
+      if (!this.exportStartDate || !this.exportEndDate) {
+        Swal.fire({
+          title: "Error!",
+          text: "Please select both start and end dates before exporting.",
+          icon: "error",
+          confirmButtonColor: "#d33",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "swal2-popup", // Apply custom class
+          },
+        });
+        return;
+      }
+
+      // Validate if start date is smaller than end date
+      if (!this.validateDateRange()) {
+        Swal.fire({
+          title: "Error!",
+          text: "Start date must be smaller than or equal to the end date.",
+          icon: "error",
+          confirmButtonColor: "#d33",
+          confirmButtonText: "OK",
+          customClass: {
+            popup: "swal2-popup", // Apply custom class
+          },
+        });
+        return;
+      }
+
+      // Set loading state
+      this.isExporting = true;
+
       // Fetch duty slips before exporting
       await this.fetchDutySlips();
 
-      // Check if data is available
+      // Check if data is available for the selected date range
       if (this.duty.length === 0) {
         Swal.fire({
           title: "No Data!",
@@ -244,6 +289,7 @@ export default {
             popup: "swal2-popup", // Apply custom class
           },
         });
+        this.isExporting = false; // Reset loading state
         return;
       }
 
@@ -256,18 +302,21 @@ export default {
         // Generate and download the Excel file
         XLSX.writeFile(workbook, "Duty_Slips.xlsx");
 
-        // Show success message
-        Swal.fire({
-          title: "Success!",
-          text: "Data exported successfully. Check your downloads for the Excel sheet.",
-          icon: "success",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "OK",
-          customClass: {
-            popup: "swal2-popup", // Apply custom class
-          },
-        });
-        this.clearDateFields();
+        // Delay the success popup to ensure the download prompt is shown first
+        setTimeout(() => {
+          Swal.fire({
+            title: "Success!",
+            text: "Data exported successfully. Check your downloads for the Excel sheet.",
+            icon: "success",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "OK",
+            customClass: {
+              popup: "swal2-popup", // Apply custom class
+            },
+          });
+          this.clearDateFields();
+          this.isExporting = false; // Reset loading state
+        }, 1000); // 1-second delay
       } catch (error) {
         console.error("Error exporting to Excel:", error);
         Swal.fire({
@@ -280,18 +329,9 @@ export default {
             popup: "swal2-popup", // Apply custom class
           },
         });
+        this.isExporting = false; // Reset loading state
       }
     },
-
-    // viewPayslipData() {
-    //   this.$router.push("/viewslip"); // Navigate to ViewSlip page
-    // },
-    // viewDriverData() {
-    //   this.$router.push("/viewdriver"); // Navigate to ViewDriver page
-    // },
-    // viewCompanyData() {
-    //   this.$router.push("/viewcompany"); // Navigate to ViewCompany page
-    // },
   },
 };
 </script>
