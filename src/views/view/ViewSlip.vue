@@ -406,46 +406,128 @@
             </div>
 
             <!-- Images Section -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-              <!-- Start KM Photo -->
-              <div>
-                <p class="text-sm font-medium text-gray-700">Start KM Photo</p>
-                <img
-                  v-if="selectedSlip.startKMPhoto"
-                  :src="selectedSlip.startKMPhoto"
-                  alt="Start KM Photo"
-                  class="w-full rounded-lg shadow-sm"
-                  @error="handleImageError('startKMPhoto')"
-                />
-                <p v-else class="text-gray-500">No image available</p>
+            <div>
+              <!-- Images Section -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <!-- Start KM Photo -->
+                <div>
+                  <p class="text-sm font-medium text-gray-700">
+                    Start KM Photo
+                  </p>
+                  <div
+                    v-if="selectedSlip.startKMPhoto"
+                    class="relative group mt-1"
+                  >
+                    <img
+                      :src="selectedSlip.startKMPhoto"
+                      alt="Start KM Photo"
+                      class="w-full h-32 object-cover rounded-lg shadow-sm"
+                      @error="handleImageError('startKMPhoto')"
+                    />
+                    <button
+                      class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center opacity-0 group-hover:opacity-100 transition duration-300 text-white text-sm font-medium"
+                      @click="openImage(selectedSlip.startKMPhoto)"
+                    >
+                      View Full Image
+                    </button>
+                  </div>
+                  <p v-else class="text-gray-500">No image available</p>
+                </div>
+
+                <!-- End KM Photo -->
+                <div>
+                  <p class="text-sm font-medium text-gray-700">End KM Photo</p>
+                  <div
+                    v-if="selectedSlip.endKMPhoto"
+                    class="relative group mt-1"
+                  >
+                    <img
+                      :src="selectedSlip.endKMPhoto"
+                      alt="End KM Photo"
+                      class="w-full h-32 object-cover rounded-lg shadow-sm"
+                      @error="handleImageError('endKMPhoto')"
+                    />
+                    <button
+                      class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center opacity-0 group-hover:opacity-100 transition duration-300 text-white text-sm font-medium"
+                      @click="openImage(selectedSlip.endKMPhoto)"
+                    >
+                      View Full Image
+                    </button>
+                  </div>
+                  <p v-else class="text-gray-500">No image available</p>
+                </div>
+
+                <!-- Customer Signature -->
+                <div>
+                  <p class="text-sm font-medium text-gray-700">
+                    Customer Signature
+                  </p>
+                  <div
+                    v-if="selectedSlip.customerSignature"
+                    class="relative group mt-1"
+                  >
+                    <img
+                      :src="selectedSlip.customerSignature"
+                      alt="Customer Signature"
+                      class="w-full h-32 object-cover rounded-lg shadow-sm"
+                      @error="handleImageError('customerSignature')"
+                    />
+                    <button
+                      class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center opacity-0 group-hover:opacity-100 transition duration-300 text-white text-sm font-medium"
+                      @click="openImage(selectedSlip.customerSignature)"
+                    >
+                      View Full Image
+                    </button>
+                  </div>
+                  <p v-else class="text-gray-500">No image available</p>
+                </div>
               </div>
 
-              <!-- End KM Photo -->
-              <div>
-                <p class="text-sm font-medium text-gray-700">End KM Photo</p>
-                <img
-                  v-if="selectedSlip.endKMPhoto"
-                  :src="selectedSlip.endKMPhoto"
-                  alt="End KM Photo"
-                  class="w-full rounded-lg shadow-sm"
-                  @error="handleImageError('endKMPhoto')"
-                />
-                <p v-else class="text-gray-500">No image available</p>
-              </div>
+              <!-- Custom Image Preview Modal -->
+              <div
+                v-if="fullImage"
+                class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center p-4 z-50"
+              >
+                <div
+                  class="bg-white rounded-lg shadow-lg w-full max-w-4xl h-[90vh] md:h-[80vh] lg:h-[70vh] flex flex-col overflow-hidden"
+                >
+                  <!-- Modal Header with Close Button -->
+                  <div
+                    class="flex justify-between items-center p-6 border-b border-gray-200 bg-maroon"
+                  >
+                    <h3 class="text-xl font-bold text-white">Image Preview</h3>
+                    <!-- Close Button [x] -->
+                    <button
+                      @click="fullImage = null"
+                      class="text-white hover:text-gray-200 focus:outline-none"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-8 w-8"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  </div>
 
-              <!-- Customer Signature -->
-              <div>
-                <p class="text-sm font-medium text-gray-700">
-                  Customer Signature
-                </p>
-                <img
-                  v-if="selectedSlip.customerSignature"
-                  :src="selectedSlip.customerSignature"
-                  alt="Customer Signature"
-                  class="w-full rounded-lg shadow-sm"
-                  @error="handleImageError('customerSignature')"
-                />
-                <p v-else class="text-gray-500">No image available</p>
+                  <!-- Image Display -->
+                  <div
+                    class="p-6 flex justify-center items-center flex-1 overflow-auto"
+                  >
+                    <img
+                      :src="fullImage"
+                      class="max-w-full max-h-full object-contain rounded-lg"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -779,6 +861,7 @@ export default {
       companies: [], // List of companies fetched from the API
       companySearchQuery: "", // Search query for companies
       windowWidth: window.innerWidth, // Track window width for responsiveness
+      fullImage: null,
     };
   },
   computed: {
@@ -934,11 +1017,16 @@ export default {
         });
       }
     },
+    openImage(imageUrl) {
+      this.fullImage = imageUrl;
+    },
     // Handle image loading errors
     handleImageError(field) {
-      // Replace the image URL with a placeholder or display the URL as text
+      console.error(`Error loading ${field} image`);
+
+      // Replace the failed image with a placeholder or a message
       this.selectedSlip[field] =
-        "Image failed to load: " + this.selectedSlip[field];
+        "https://via.placeholder.com/150?text=Image+Not+Available"; // Placeholder URL
     },
     // Close modal
     closeModal() {
@@ -1265,5 +1353,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 input[type="date"] {
   -webkit-appearance: none;
   appearance: none;
+}
+/* Ensure uniform image size */
+.group img {
+  transition: transform 0.3s ease-in-out;
+}
+.group:hover img {
+  transform: scale(1.05);
 }
 </style>
