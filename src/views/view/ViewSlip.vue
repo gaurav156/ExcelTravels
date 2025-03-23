@@ -256,7 +256,7 @@
     <!-- View/Edit Modal -->
     <div
       v-if="isModalOpen"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 modal-content"
     >
       <div
         class="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden"
@@ -293,122 +293,170 @@
         <!-- Scrollable Content -->
         <div class="overflow-y-auto p-6">
           <!-- Duty Slip Details -->
-          <div v-if="!isEditMode" class="space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <p class="text-sm font-medium text-gray-700">Duty Slip ID</p>
-                <p class="text-gray-500">
-                  {{ selectedSlip.dutySlipId }}
-                </p>
+          <div v-if="!isEditMode" class="space-y-6">
+            <!-- Duty Slip ID and Created At -->
+            <div>
+              <h4 class="text-lg font-semibold text-maroon mb-2">
+                Duty Slip Information
+              </h4>
+              <hr class="mb-4" />
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <p class="text-sm font-medium text-gray-700">Duty Slip ID</p>
+                  <p class="text-gray-500">
+                    {{ selectedSlip.dutySlipId }}
+                  </p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-700">Created At</p>
+                  <p class="text-gray-500">
+                    {{ formatDate(selectedSlip.createdAt) }}
+                  </p>
+                </div>
               </div>
-              <div>
-                <p class="text-sm font-medium text-gray-700">Created At</p>
-                <p class="text-gray-500">
-                  {{ formatDate(selectedSlip.createdAt) }}
-                </p>
+            </div>
+
+            <!-- Customer Information -->
+            <div>
+              <h4 class="text-lg font-semibold text-maroon mb-2">
+                Customer Information
+              </h4>
+              <hr class="mb-4" />
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <p class="text-sm font-medium text-gray-700">Company ID</p>
+                  <p class="text-gray-500">
+                    {{ selectedSlip.companyId }}
+                  </p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-700">Company Name</p>
+                  <p class="text-gray-500">
+                    {{ selectedSlip.companyName }}
+                  </p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-700">Customer Name</p>
+                  <p class="text-gray-500">
+                    {{ selectedSlip.customerName }}
+                  </p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-700">City</p>
+                  <p class="text-gray-500">
+                    {{ selectedSlip.city }}
+                  </p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-700">Address</p>
+                  <p class="text-gray-500">
+                    {{ selectedSlip.address }}
+                  </p>
+                </div>
               </div>
-              <div>
-                <p class="text-sm font-medium text-gray-700">Company ID</p>
-                <p class="text-gray-500">
-                  {{ selectedSlip.companyId }}
-                </p>
+            </div>
+            <!-- Driver Information -->
+            <div>
+              <h4 class="text-lg font-semibold text-maroon mb-2">
+                Driver Information
+              </h4>
+              <hr class="mb-4" />
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <p class="text-sm font-medium text-gray-700">Driver ID</p>
+                  <p class="text-gray-500">
+                    {{ selectedSlip.driverId }}
+                  </p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-700">Driver Name</p>
+                  <p class="text-gray-500">
+                    {{ selectedSlip.driverName }}
+                  </p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-700">Phone Number</p>
+                  <p class="text-gray-500">
+                    {{ selectedSlip.phoneNumber }}
+                  </p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-700">Car Number</p>
+                  <p class="text-gray-500">
+                    {{ selectedSlip.carNumber }}
+                  </p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-700">Car Booked</p>
+                  <p class="text-gray-500">
+                    {{ selectedSlip.carBooked }}
+                  </p>
+                </div>
               </div>
-              <div>
-                <p class="text-sm font-medium text-gray-700">Company Name</p>
-                <p class="text-gray-500">
-                  {{ selectedSlip.companyName }}
-                </p>
-              </div>
-              <div>
-                <p class="text-sm font-medium text-gray-700">Customer Name</p>
-                <p class="text-gray-500">
-                  {{ selectedSlip.customerName }}
-                </p>
-              </div>
-              <div>
-                <p class="text-sm font-medium text-gray-700">City</p>
-                <p class="text-gray-500">
-                  {{ selectedSlip.city }}
-                </p>
-              </div>
-              <div>
-                <p class="text-sm font-medium text-gray-700">Address</p>
-                <p class="text-gray-500">
-                  {{ selectedSlip.address }}
-                </p>
-              </div>
-              <div>
-                <p class="text-sm font-medium text-gray-700">Car Booked</p>
-                <p class="text-gray-500">
-                  {{ selectedSlip.carBooked }}
-                </p>
-              </div>
-              <div>
-                <p class="text-sm font-medium text-gray-700">Phone Number</p>
-                <p class="text-gray-500">
-                  {{ selectedSlip.phoneNumber }}
-                </p>
-              </div>
-              <div>
-                <p class="text-sm font-medium text-gray-700">Duty Type</p>
-                <p class="text-gray-500">
-                  {{ selectedSlip.dutyType }}
-                </p>
-              </div>
-              <div>
-                <p class="text-sm font-medium text-gray-700">Driver ID</p>
-                <p class="text-gray-500">
-                  {{ selectedSlip.driverId }}
-                </p>
-              </div>
-              <div>
-                <p class="text-sm font-medium text-gray-700">Driver Name</p>
-                <p class="text-gray-500">
-                  {{ selectedSlip.driverName }}
-                </p>
-              </div>
-              <div>
-                <p class="text-sm font-medium text-gray-700">Car Number</p>
-                <p class="text-gray-500">
-                  {{ selectedSlip.carNumber }}
-                </p>
-              </div>
-              <div>
-                <p class="text-sm font-medium text-gray-700">Trip Route</p>
-                <p class="text-gray-500">
-                  {{ selectedSlip.tripRoute }}
-                </p>
-              </div>
-              <div>
-                <p class="text-sm font-medium text-gray-700">Date From</p>
-                <p class="text-gray-500">
-                  {{ formatDate(selectedSlip.dateFrom) }}
-                </p>
-              </div>
-              <div>
-                <p class="text-sm font-medium text-gray-700">Date To</p>
-                <p class="text-gray-500">
-                  {{ formatDate(selectedSlip.dateTo) }}
-                </p>
-              </div>
-              <div>
-                <p class="text-sm font-medium text-gray-700">Start KM</p>
-                <p class="text-gray-500">
-                  {{ selectedSlip.startKM }}
-                </p>
-              </div>
-              <div>
-                <p class="text-sm font-medium text-gray-700">End KM</p>
-                <p class="text-gray-500">
-                  {{ selectedSlip.endKM }}
-                </p>
+            </div>
+            <!-- Duty Information -->
+            <div>
+              <h4 class="text-lg font-semibold text-maroon mb-4">
+                Duty Information
+              </h4>
+              <hr class="mb-4" />
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <p class="text-sm font-medium text-gray-700">Date From</p>
+                  <p class="text-gray-500">
+                    {{ formatDate(selectedSlip.dateFrom) }}
+                  </p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-700">Date To</p>
+                  <p class="text-gray-500">
+                    {{ formatDate(selectedSlip.dateTo) }}
+                  </p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-700">Duty Type</p>
+                  <p class="text-gray-500">
+                    {{ selectedSlip.dutyType }}
+                  </p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-700">Trip Route</p>
+                  <p class="text-gray-500">
+                    {{ selectedSlip.tripRoute }}
+                  </p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-700">Start KM</p>
+                  <p class="text-gray-500">
+                    {{ selectedSlip.startKM }}
+                  </p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-700">End KM</p>
+                  <p class="text-gray-500">
+                    {{ selectedSlip.endKM }}
+                  </p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-700">Start Time</p>
+                  <p class="text-gray-500">
+                    {{ selectedSlip.startTime }}
+                  </p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-700">End Time</p>
+                  <p class="text-gray-500">
+                    {{ selectedSlip.endTime }}
+                  </p>
+                </div>
               </div>
             </div>
 
             <!-- Images Section -->
             <div>
-              <!-- Images Section -->
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <h4 class="text-lg font-semibold text-maroon mb-4">Images</h4>
+              <hr class="mb-4" />
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- Start KM Photo -->
                 <div>
                   <p class="text-sm font-medium text-gray-700">
@@ -456,33 +504,80 @@
                   </div>
                   <p v-else class="text-gray-500">No image available</p>
                 </div>
+              </div>
+            </div>
 
-                <!-- Customer Signature -->
+            <!-- Totals -->
+            <div>
+              <h4 class="text-lg font-semibold text-maroon mb-4">Totals</h4>
+              <hr class="mb-4" />
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <p class="text-sm font-medium text-gray-700">
-                    Customer Signature
-                  </p>
-                  <div
-                    v-if="selectedSlip.customerSignature"
-                    class="relative group mt-1"
-                  >
-                    <img
-                      :src="selectedSlip.customerSignature"
-                      alt="Customer Signature"
-                      class="w-full h-32 object-cover rounded-lg shadow-sm"
-                      @error="handleImageError('customerSignature')"
-                    />
-                    <button
-                      class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center opacity-0 group-hover:opacity-100 transition duration-300 text-white text-sm font-medium"
-                      @click="openImage(selectedSlip.customerSignature)"
-                    >
-                      View Full Image
-                    </button>
-                  </div>
-                  <p v-else class="text-gray-500">No image available</p>
+                  <p class="text-sm font-medium text-gray-700">Total KM</p>
+                  <p class="text-gray-500">{{ totalKM }}</p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-700">Total Time</p>
+                  <p class="text-gray-500">{{ totalTime }}</p>
                 </div>
               </div>
+            </div>
 
+            <!-- Signature Section -->
+            <div>
+              <h4 class="text-lg font-semibold text-maroon mb-4">Signature</h4>
+              <hr class="mb-4" />
+              <div class="signature-section">
+                <p class="text-sm font-medium text-gray-700">
+                  Customer Signature
+                </p>
+                <div
+                  v-if="selectedSlip.customerSignature"
+                  class="relative group mt-1 max-w-xs mx-auto"
+                >
+                  <img
+                    :src="selectedSlip.customerSignature"
+                    alt="Customer Signature"
+                    class="w-full h-32 object-cover rounded-lg shadow-sm"
+                    @error="handleImageError('customerSignature')"
+                  />
+                  <button
+                    class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center opacity-0 group-hover:opacity-100 transition duration-300 text-white text-sm font-medium"
+                    @click="openImage(selectedSlip.customerSignature)"
+                  >
+                    View Full Image
+                  </button>
+                </div>
+                <p v-else class="text-gray-500">No signature available</p>
+              </div>
+
+              <!-- Print Button -->
+              <div class="mt-6 flex justify-end">
+                <button
+                  @click="printDutySlip"
+                  class="flex items-center px-4 py-2 bg-maroon text-white rounded-md hover:bg-maroon-700"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-5 w-5 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+                    />
+                  </svg>
+                  Print
+                </button>
+              </div>
+              <div class="print-footer">
+                © 2025 Excel Tours & Travels. All rights reserved.<br />
+                Email: excel.travel@rediffmail.com
+              </div>
               <!-- Custom Image Preview Modal -->
               <div
                 v-if="fullImage"
@@ -779,31 +874,6 @@
                   />
                 </svg>
               </div>
-
-              <div>
-                <label class="block text-sm font-medium text-gray-700"
-                  >Start KM</label
-                >
-                <input
-                  v-model="selectedSlip.startKM"
-                  type="text"
-                  readonly
-                  disabled
-                  class="mt-1 block w-full px-4 py-2 border border-[#800000] rounded-md shadow-sm bg-gray-100"
-                />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700"
-                  >End KM</label
-                >
-                <input
-                  v-model="selectedSlip.endKM"
-                  type="text"
-                  readonly
-                  disabled
-                  class="mt-1 block w-full px-4 py-2 border border-[#800000] rounded-md shadow-sm bg-gray-100"
-                />
-              </div>
             </div>
 
             <!-- Save and Cancel Buttons -->
@@ -865,6 +935,30 @@ export default {
     };
   },
   computed: {
+    totalKM() {
+      // Ensure values are numbers and calculate difference
+      return (
+        Number(this.selectedSlip.endKM) - Number(this.selectedSlip.startKM) || 0
+      );
+    },
+    totalTime() {
+      if (!this.selectedSlip.startTime || !this.selectedSlip.endTime)
+        return "N/A";
+
+      // Convert times to Date objects
+      const start = new Date(`1970-01-01T${this.selectedSlip.startTime}`);
+      const end = new Date(`1970-01-01T${this.selectedSlip.endTime}`);
+
+      // Calculate difference in minutes
+      let diffMinutes = Math.floor((end - start) / (1000 * 60));
+
+      if (diffMinutes < 0) return "Invalid Time"; // Handle invalid cases
+
+      const hours = Math.floor(diffMinutes / 60);
+      const minutes = diffMinutes % 60;
+
+      return `${hours}h ${minutes}m`;
+    },
     // Dynamically adjust itemsPerPage based on screen size
     itemsPerPage() {
       if (this.windowWidth < 1024) {
@@ -955,6 +1049,38 @@ export default {
     window.removeEventListener("resize", this.handleResize); // Clean up listener
   },
   methods: {
+    printDutySlip() {
+      // Clone the modal content
+      const modalContent = document.querySelector(".modal-content");
+      const printContent = modalContent.cloneNode(true);
+
+      // Find the customer signature section
+      const signatureSection = printContent.querySelector(".signature-section");
+
+      // Remove all elements after the signature section
+      let nextElement = signatureSection.nextElementSibling;
+      while (nextElement) {
+        const temp = nextElement.nextElementSibling;
+        nextElement.remove();
+        nextElement = temp;
+      }
+
+      // Create a temporary container for printing
+      const printContainer = document.createElement("div");
+      printContainer.style.position = "absolute";
+      printContainer.style.left = "-9999px"; // Move off-screen
+      printContainer.appendChild(printContent);
+
+      // Append the container to the body
+      document.body.appendChild(printContainer);
+
+      // Trigger the print dialog
+      window.print();
+
+      // Clean up the temporary container
+      document.body.removeChild(printContainer);
+    },
+
     // Fetch duty slips from the API
     async fetchDutySlips() {
       try {
@@ -1179,6 +1305,10 @@ export default {
 </script>
 
 <style scoped>
+.print-footer {
+  display: none;
+}
+
 /* Maroon background for header */
 .bg-maroon {
   background-color: maroon;
@@ -1360,5 +1490,48 @@ input[type="date"] {
 }
 .group:hover img {
   transform: scale(1.05);
+}
+
+@media print {
+  /* Hide everything except the modal */
+  body * {
+    visibility: hidden;
+  }
+
+  /* Show only the modal and its content */
+  .modal-content,
+  .modal-content * {
+    visibility: visible;
+  }
+
+  /* Position the modal at the top-left of the page */
+  .modal-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Ensure images and other elements fit within the page */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Remove unnecessary elements like buttons */
+  button {
+    display: none;
+  }
+
+  /* Add a footer for the printed page */
+  .print-footer {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 12px;
+    color: #666;
+  }
 }
 </style>
