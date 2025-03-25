@@ -216,30 +216,28 @@ export default {
 
     async fetchDutySlips() {
       try {
-        // Fetch duty slips from the backend
+        this.duty = []; // Clear previous data
+
         const response = await api.get("/dutyslips", {
           params: {
             dateFrom: this.exportStartDate,
             dateTo: this.exportEndDate,
           },
         });
-        this.duty = response.data; // Store fetched data
-        console.log("Fetched Duty Slips:", this.duty); // Debugging: Log fetched data
+
+        // Always return the data (which might be empty)
+        this.duty = response.data || [];
+        return this.duty;
       } catch (error) {
-        console.error("Error fetching duty slips:", error);
-        Swal.fire({
-          title: "Error!",
-          text: "Failed to fetch duty slips. Please try again.",
-          icon: "error",
-          confirmButtonColor: "#d33",
-          confirmButtonText: "OK",
-          customClass: {
-            popup: "swal2-popup", // Apply custom class
-          },
-        });
+        console.error("Fetch error:", error);
+        // If it's a 404, treat it as empty data
+        if (error.response && error.response.status === 404) {
+          this.duty = [];
+          return this.duty;
+        }
+        throw error; // Re-throw other errors
       }
     },
-
     async exportToExcel() {
       // Validate if dates are selected
       if (!this.exportStartDate || !this.exportEndDate) {
@@ -249,14 +247,11 @@ export default {
           icon: "error",
           confirmButtonColor: "#d33",
           confirmButtonText: "OK",
-          customClass: {
-            popup: "swal2-popup", // Apply custom class
-          },
         });
         return;
       }
 
-      // Validate if start date is smaller than end date
+      // Validate date range
       if (!this.validateDateRange()) {
         Swal.fire({
           title: "Error!",
@@ -264,45 +259,33 @@ export default {
           icon: "error",
           confirmButtonColor: "#d33",
           confirmButtonText: "OK",
-          customClass: {
-            popup: "swal2-popup", // Apply custom class
-          },
         });
         return;
       }
 
-      // Set loading state
       this.isExporting = true;
 
-      // Fetch duty slips before exporting
-      await this.fetchDutySlips();
-
-      // Check if data is available for the selected date range
-      if (this.duty.length === 0) {
-        Swal.fire({
-          title: "No Data!",
-          text: "No data available for the selected date range.",
-          icon: "warning",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "OK",
-          customClass: {
-            popup: "swal2-popup", // Apply custom class
-          },
-        });
-        this.isExporting = false; // Reset loading state
-        return;
-      }
-
       try {
-        // Convert data to worksheet
-        const worksheet = XLSX.utils.json_to_sheet(this.duty);
+        const dutySlips = await this.fetchDutySlips();
+
+        // Check for empty data
+        if (dutySlips.length === 0) {
+          Swal.fire({
+            title: "No Data!",
+            text: "No data available for the selected date range.",
+            icon: "info",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "OK",
+          });
+          return;
+        }
+
+        // Proceed with export
+        const worksheet = XLSX.utils.json_to_sheet(dutySlips);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Duty Slips");
-
-        // Generate and download the Excel file
         XLSX.writeFile(workbook, "Duty_Slips.xlsx");
 
-        // Delay the success popup to ensure the download prompt is shown first
         setTimeout(() => {
           Swal.fire({
             title: "Success!",
@@ -310,26 +293,20 @@ export default {
             icon: "success",
             confirmButtonColor: "#3085d6",
             confirmButtonText: "OK",
-            customClass: {
-              popup: "swal2-popup", // Apply custom class
-            },
           });
           this.clearDateFields();
-          this.isExporting = false; // Reset loading state
-        }, 1000); // 1-second delay
+        }, 1000);
       } catch (error) {
-        console.error("Error exporting to Excel:", error);
+        console.error("Export error:", error);
         Swal.fire({
           title: "Error!",
-          text: "Failed to export data. Please try again.",
+          text: "An error occurred while exporting data.",
           icon: "error",
           confirmButtonColor: "#d33",
           confirmButtonText: "OK",
-          customClass: {
-            popup: "swal2-popup", // Apply custom class
-          },
         });
-        this.isExporting = false; // Reset loading state
+      } finally {
+        this.isExporting = false;
       }
     },
   },
