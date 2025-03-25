@@ -1,6 +1,237 @@
+// const express = require("express");
+// const User = require("../models/User");
+// const OTP = require("../models/OTP");
+// const { authenticate, checkRole } = require("../middlewares/auth");
+// const { sendEmail } = require("../utils/sendEmail");
+// const bcrypt = require("bcrypt");
+// const jwt = require("jsonwebtoken");
+
+// const router = express.Router();
+
+// // Login endpoint
+// router.post("/login", async (req, res) => {
+//   const { username, password } = req.body;
+
+//   try {
+//     // First check if it's a system account
+//     const systemAccount = Object.values(SYSTEM_ACCOUNTS).find(
+//       (account) => account.username === username
+//     );
+
+//     let user;
+//     if (systemAccount) {
+//       // Verify system account password
+//       const isMatch = await bcrypt.compare(password, systemAccount.password);
+//       if (!isMatch) {
+//         return res.status(401).json({ message: "Invalid credentials" });
+//       }
+//       user = systemAccount;
+//     } else {
+//       // Regular user login
+//       user = await User.findOne({
+//         $or: [{ username }, { email: username }],
+//       });
+
+//       if (!user) {
+//         return res.status(401).json({ message: "Invalid credentials" });
+//       }
+
+//       if (!user.isActive) {
+//         return res.status(403).json({ message: "Account is deactivated" });
+//       }
+
+//       const isMatch = await user.comparePassword(password);
+//       if (!isMatch) {
+//         return res.status(401).json({ message: "Invalid credentials" });
+//       }
+//     }
+
+//     // Generate JWT token
+//     const token = jwt.sign(
+//       {
+//         userId: user._id || user.username, // Use username for system accounts
+//         role: user.role,
+//         username: user.username,
+//         isSystemAccount: !!systemAccount,
+//       },
+//       process.env.JWT_SECRET,
+//       { expiresIn: "8h" }
+//     );
+
+//     // Prepare user response
+//     const userResponse = {
+//       username: user.username,
+//       email: user.email,
+//       role: user.role,
+//       isSystemAccount: !!systemAccount,
+//     };
+
+//     res.json({
+//       user: userResponse,
+//       token,
+//       expiresIn: 8 * 60 * 60,
+//     });
+//   } catch (error) {
+//     console.error("Login error:", error);
+//     res.status(500).json({ message: "Server error during login" });
+//   }
+// });
+
+// // Send OTP
+// router.post("/send-otp", async (req, res) => {
+//   const { email } = req.body;
+
+//   try {
+//     // Check both database and system accounts
+//     const user =
+//       (await User.findOne({ email })) ||
+//       Object.values(SYSTEM_ACCOUNTS).find((acc) => acc.email === email);
+
+//     if (!user) {
+//       return res.status(404).json({ message: "Email not registered" });
+//     }
+
+//     // Generate and send OTP
+//     const otp = Math.floor(100000 + Math.random() * 900000).toString();
+//     await OTP.create({
+//       email,
+//       otp,
+//       expiresAt: new Date(Date.now() + 600000), // 10 minutes
+//     });
+
+//     await sendEmail({
+//       to: email,
+//       subject: "Your OTP Code",
+//       text: `Your OTP code is: ${otp}`,
+//     });
+
+//     res.json({ success: true });
+//   } catch (error) {
+//     res.status(500).json({ message: "Failed to send OTP" });
+//   }
+// });
+
+// // Verify OTP
+// router.post("/verify-otp", async (req, res) => {
+//   const { email, otp } = req.body;
+
+//   try {
+//     // Find the OTP record
+//     const otpRecord = await OTP.findOne({ email, otp });
+
+//     // Check if OTP exists and isn't expired
+//     if (!otpRecord || otpRecord.expiresAt < new Date()) {
+//       return res.status(400).json({ message: "Invalid or expired OTP" });
+//     }
+
+//     // Delete the OTP after verification
+//     await OTP.deleteOne({ _id: otpRecord._id });
+
+//     res.json({
+//       success: true,
+//       message: "OTP verified successfully",
+//     });
+//   } catch (error) {
+//     console.error("OTP verification error:", error);
+//     res.status(500).json({ message: "Failed to verify OTP" });
+//   }
+// });
+
+// // Change Password
+// router.post("/change-password", authenticate, async (req, res) => {
+//   const { email, newPassword, confirmPassword, isReset } = req.body;
+
+//   try {
+//     // Validate new password
+//     if (newPassword !== confirmPassword) {
+//       return res.status(400).json({ message: "Passwords do not match" });
+//     }
+
+//     if (newPassword.length < 8) {
+//       return res.status(400).json({
+//         message: "Password must be at least 8 characters",
+//       });
+//     }
+
+//     let user;
+//     if (isReset) {
+//       // For password reset flow (skip current password check)
+//       user = await User.findOne({ email });
+//     } else {
+//       // For regular password change
+//       user = await User.findById(req.user._id);
+//       const isMatch = await user.comparePassword(currentPassword);
+//       if (!isMatch) {
+//         return res
+//           .status(401)
+//           .json({ message: "Current password is incorrect" });
+//       }
+//     }
+
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+//     // Update password
+//     user.password = newPassword;
+//     await user.save();
+
+//     res.json({
+//       success: true,
+//       message: "Password changed successfully",
+//     });
+//   } catch (error) {
+//     res.status(500).json({ message: "Failed to change password" });
+//   }
+// });
+// // Admin-only route example
+// router.get(
+//   "/admin/users",
+//   authenticate,
+//   checkRole(["admin", "superadmin"]),
+//   async (req, res) => {
+//     try {
+//       const users = await User.find().select("-password");
+//       res.json(users);
+//     } catch (error) {
+//       res.status(500).json({ message: "Server error" });
+//     }
+//   }
+// );
+
+// // Superadmin-only route example
+// router.post(
+//   "/admin/users/:id/deactivate",
+//   authenticate,
+//   checkRole(["superadmin"]),
+//   async (req, res) => {
+//     try {
+//       const user = await User.findByIdAndUpdate(
+//         req.params.id,
+//         { isActive: false },
+//         { new: true }
+//       ).select("-password");
+
+//       if (!user) {
+//         return res.status(404).json({ message: "User not found" });
+//       }
+
+//       res.json({
+//         success: true,
+//         message: "User deactivated successfully",
+//         user,
+//       });
+//     } catch (error) {
+//       res.status(500).json({ message: "Server error" });
+//     }
+//   }
+// );
+
+// module.exports = router;
+
 const express = require("express");
 const User = require("../models/User");
-const OTP = require("../models/OTP"); // Create an OTP model if needed
+const OTP = require("../models/OTP");
 const { authenticate, checkRole } = require("../middlewares/auth");
 const { sendEmail } = require("../utils/sendEmail");
 const bcrypt = require("bcrypt");
@@ -8,88 +239,104 @@ const jwt = require("jsonwebtoken");
 
 const router = express.Router();
 
-// Login
-router.post("/login", async (req, res) => {
-  const { username, password } = req.body;
-
-  try {
-    // Find the user by username
-    const user = await User.findOne({ username });
-
-    // If user not found
-    if (!user) {
-      return res.status(401).json({ message: "Invalid username or password" });
-    }
-
-    // Compare the input password with the hashed password in the database
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
-    // If password is invalid
-    if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid username or password" });
-    }
-
-    // Generate JWT token
-    const token = jwt.sign(
-      { userId: user._id, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" }
-    );
-
-    // Return user and token
-    res.json({ user, token });
-  } catch (error) {
-    console.error("Login failed:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-// Send OTP
+// Send OTP (Fixed)
 router.post("/send-otp", async (req, res) => {
   const { email } = req.body;
 
   try {
-    const otp = Math.floor(100000 + Math.random() * 900000); // Generate 6-digit OTP
-    await OTP.create({ email, otp, expiresAt: Date.now() + 600000 }); // Expires in 10 minutes
+    // Check user in database
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "Email not registered" });
+    }
+
+    // Delete any existing OTP for this email
+    await OTP.deleteMany({ email });
+
+    // Generate new OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    await OTP.create({
+      email,
+      otp,
+      expiresAt: new Date(Date.now() + 600000), // 10 minutes
+    });
 
     // Send OTP via email
-    await sendEmail(email, "Your OTP", `Your OTP is: ${otp}`);
+    await sendEmail({
+      to: email,
+      subject: "Your OTP Code",
+      text: `Your OTP code is: ${otp}. It is valid for 10 minutes.`,
+    });
 
-    res.json({ success: true });
+    res.json({ success: true, message: "OTP sent successfully" });
   } catch (error) {
+    console.error("OTP sending error:", error);
     res.status(500).json({ message: "Failed to send OTP" });
   }
 });
 
-// Verify OTP
+// Verify OTP (Fixed to trigger modal)
 router.post("/verify-otp", async (req, res) => {
   const { email, otp } = req.body;
 
   try {
+    // Find the OTP record
     const otpRecord = await OTP.findOne({ email, otp });
-    if (!otpRecord || otpRecord.expiresAt < Date.now()) {
+
+    if (!otpRecord || otpRecord.expiresAt < new Date()) {
       return res.status(400).json({ message: "Invalid or expired OTP" });
     }
 
-    // Delete the OTP after verification
-    await OTP.deleteOne({ email, otp });
+    // Delete OTP after verification
+    await OTP.deleteOne({ _id: otpRecord._id });
 
-    res.json({ success: true });
+    res.json({
+      success: true,
+      message: "OTP verified successfully",
+      showChangePasswordModal: true, // This helps frontend to display the modal
+    });
   } catch (error) {
+    console.error("OTP verification error:", error);
     res.status(500).json({ message: "Failed to verify OTP" });
   }
 });
 
-// Change Password
-router.post("/change-password", authenticate, async (req, res) => {
-  const { email, newPassword } = req.body;
+// Change Password (Fixed)
+router.post("/change-password", async (req, res) => {
+  const { email, newPassword, confirmPassword } = req.body;
 
   try {
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    await User.updateOne({ email }, { password: hashedPassword });
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
 
-    res.json({ success: true });
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match" });
+    }
+
+    if (newPassword.length < 8) {
+      return res.status(400).json({
+        message: "Password must be at least 8 characters",
+      });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Hash new password
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "Password changed successfully",
+    });
   } catch (error) {
+    console.error("Password change error:", error);
     res.status(500).json({ message: "Failed to change password" });
   }
 });

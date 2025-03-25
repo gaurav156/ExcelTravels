@@ -250,7 +250,7 @@ export default {
       isChangePasswordModalVisible: false,
       newPassword: "",
       confirmPassword: "",
-      // Define user roles with their passwords and permissions
+      isLoading: false,
       userRoles: {
         superAdmin: {
           password: "superadmin123",
@@ -271,7 +271,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["login", "sendOTP", "verifyOTP"]),
+    ...mapActions(["login", "setUser"]),
 
     async handleLogin() {
       if (!this.loginForm.username || !this.loginForm.password) {
@@ -279,11 +279,13 @@ export default {
         return;
       }
 
+      this.isLoading = true;
+
       try {
-        // Check if it's one of the predefined role accounts
+        // Check if it's a predefined role account
         const role = this.detectUserRole();
         if (role) {
-          this.handleRoleLogin(role);
+          await this.handleRoleLogin(role);
           return;
         }
 
@@ -292,12 +294,13 @@ export default {
         this.$store.commit("SET_USER", response.data.user);
         this.$store.commit("SET_TOKEN", response.data.token);
 
-        this.showSuccess(
-          `Welcome ${response.data.user.name || response.data.user.username}!`
-        );
-        this.$router.push("/dutyslip");
+        this.showSuccess(`Welcome ${response.data.user.username}!`);
+        this.redirectBasedOnRole(response.data.user.role);
       } catch (error) {
-        this.showError("Invalid username or password");
+        const message = error.response?.data?.message || "Login failed";
+        this.showError(message);
+      } finally {
+        this.isLoading = false;
       }
     },
 
@@ -307,25 +310,54 @@ export default {
       );
     },
 
-    handleRoleLogin(role) {
-      this.$store.commit("SET_USER", {
-        username: role,
-        role: role,
-        email: `${role}@system.com`,
-      });
+    async handleRoleLogin(role) {
+      try {
+        // For system accounts, we still want to hit the API for consistency
+        const response = await api.post("/auth/login", {
+          username: role,
+          password: this.userRoles[role].password,
+        });
 
-      this.showSuccess(`Logged in as system ${role}`);
-      this.$router.push("/dutyslip");
+        this.$store.commit("SET_USER", response.data.user);
+        this.$store.commit("SET_TOKEN", response.data.token);
+
+        //   this.showSuccess(`Logged in as system ${role}`);
+        // this.$router.push("/dutyslip");
+
+        this.showSuccess(`Logged in as system ${role}`);
+        this.redirectBasedOnRole(role);
+      } catch (error) {
+        this.showError("System account login failed");
+      }
+    },
+
+    redirectBasedOnRole(role) {
+      const routes = {
+        superadmin: "/admin/dashboard",
+        admin: "/admin/overview",
+        officer: "/dutyslip",
+      };
+      this.$router.push(routes[role] || "/dashboard");
     },
 
     async sendOTP() {
+      if (!this.email) {
+        this.showError("Please enter your email address");
+        return;
+      }
+
+      this.isLoading = true;
+
       try {
         await api.post("/auth/send-otp", { email: this.email });
-        this.hideForgotPasswordModal();
+        this.showSuccess("OTP sent to your email");
+        this.isForgotPasswordModalVisible = false;
         this.isOTPModalVisible = true;
-        this.showSuccess("OTP sent successfully");
       } catch (error) {
-        this.showError("Failed to send OTP. Please try again.");
+        const message = error.response?.data?.message || "Failed to send OTP";
+        this.showError(message);
+      } finally {
+        this.isLoading = false;
       }
     },
 
@@ -335,19 +367,22 @@ export default {
         return;
       }
 
+      this.isLoading = true;
+
       try {
-        const response = await api.post("/auth/verify-otp", {
+        await api.post("/auth/verify-otp", {
           email: this.email,
           otp: this.otp.join(""),
         });
 
-        if (response.data.success) {
-          this.showSuccess("OTP verified successfully");
-          this.isOTPModalVisible = false;
-          this.isChangePasswordModalVisible = true;
-        }
+        this.showSuccess("OTP verified successfully");
+        this.isOTPModalVisible = false;
+        this.isChangePasswordModalVisible = true;
       } catch (error) {
-        this.showError("Invalid OTP. Please try again.");
+        const message = error.response?.data?.message || "Invalid OTP";
+        this.showError(message);
+      } finally {
+        this.isLoading = false;
       }
     },
 
@@ -362,20 +397,27 @@ export default {
         return;
       }
 
+      this.isLoading = true;
+
       try {
         await api.post("/auth/change-password", {
           email: this.email,
           newPassword: this.newPassword,
+          isReset: true, // Indicate this is a password reset flow
         });
 
         this.showSuccess("Password changed successfully");
-        this.resetPasswordChangeForm();
+        this.resetPasswordForms();
       } catch (error) {
-        this.showError("Failed to change password. Please try again.");
+        const message =
+          error.response?.data?.message || "Failed to change password";
+        this.showError(message);
+      } finally {
+        this.isLoading = false;
       }
     },
 
-    resetPasswordChangeForm() {
+    resetPasswordForms() {
       this.newPassword = "";
       this.confirmPassword = "";
       this.otp = Array(6).fill("");
