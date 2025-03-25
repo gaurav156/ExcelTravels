@@ -155,13 +155,13 @@
         </div>
         <div class="flex justify-end">
           <button
-            @click="verifyOTPForChangePassword"
+            @click="verifyOTPForPasswordReset"
             class="bg-maroon text-white px-4 py-2 rounded-md text-sm font-semibold shadow-md transition duration-300 hover:bg-maroon-dark hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-maroon focus:ring-offset-2"
           >
             Verify OTP
           </button>
           <button
-            @click="hideOTPForChangePasswordModal"
+            @click="hideOTPModal"
             class="ml-2 bg-gray-500 text-white px-4 py-2 rounded-md text-sm font-semibold shadow-md transition duration-300 hover:bg-gray-600 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
           >
             Cancel
@@ -295,7 +295,8 @@ export default {
         this.$store.commit("SET_TOKEN", response.data.token);
 
         this.showSuccess(`Welcome ${response.data.user.username}!`);
-        this.redirectBasedOnRole(response.data.user.role);
+        this.$router.push("/dutyslip");
+        // this.redirectBasedOnRole(response.data.user.role);
       } catch (error) {
         const message = error.response?.data?.message || "Login failed";
         this.showError(message);
@@ -325,20 +326,21 @@ export default {
         // this.$router.push("/dutyslip");
 
         this.showSuccess(`Logged in as system ${role}`);
-        this.redirectBasedOnRole(role);
+        this.$router.push("/dutyslip");
+        // this.redirectBasedOnRole(role);
       } catch (error) {
         this.showError("System account login failed");
       }
     },
 
-    redirectBasedOnRole(role) {
-      const routes = {
-        superadmin: "/admin/dashboard",
-        admin: "/admin/overview",
-        officer: "/dutyslip",
-      };
-      this.$router.push(routes[role] || "/dashboard");
-    },
+    // redirectBasedOnRole(role) {
+    //   const routes = {
+    //     superadmin: "/admin/dashboard",
+    //     admin: "/admin/overview",
+    //     officer: "/dutyslip",
+    //   };
+    //   this.$router.push();
+    // },
 
     async sendOTP() {
       if (!this.email) {
