@@ -84,18 +84,6 @@
         </a>
       </div>
 
-      <!-- Change Password (Only for Super Admin) -->
-      <!-- <div class="mb-6 text-right" v-if="isSuperAdmin"> -->
-      <div class="mb-6 text-right">
-        <a
-          href="#"
-          class="text-sm text-maroon hover:underline"
-          @click.prevent="showChangePasswordModal"
-        >
-          Change Password
-        </a>
-      </div>
-
       <!-- Submit Button -->
       <div class="mt-6">
         <button
@@ -153,46 +141,7 @@
       >
         <h3 class="text-xl font-bold text-maroon mb-4">Enter OTP</h3>
         <p class="text-sm text-gray-600 mb-4">
-          An OTP has been sent to your email.
-        </p>
-        <div class="flex justify-between mb-4">
-          <input
-            v-for="i in 6"
-            :key="i"
-            type="text"
-            v-model="otp[i - 1]"
-            maxlength="1"
-            class="w-12 h-12 text-center border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
-          />
-        </div>
-        <div class="flex justify-end">
-          <button
-            @click="verifyOTP"
-            class="bg-maroon text-white px-4 py-2 rounded-md text-sm font-semibold shadow-md transition duration-300 hover:bg-maroon-dark hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-maroon focus:ring-offset-2"
-          >
-            Verify OTP
-          </button>
-          <button
-            @click="hideOTPModal"
-            class="ml-2 bg-gray-500 text-white px-4 py-2 rounded-md text-sm font-semibold shadow-md transition duration-300 hover:bg-gray-600 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- OTP Modal for Change Password -->
-    <div
-      v-if="isOTPForChangePasswordModalVisible"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
-    >
-      <div
-        class="bg-white p-6 rounded-lg shadow-md border border-gray-300 w-96"
-      >
-        <h3 class="text-xl font-bold text-maroon mb-4">Enter OTP</h3>
-        <p class="text-sm text-gray-600 mb-4">
-          An OTP has been sent to your email (phatakjanita@gmail.com).
+          An OTP has been sent to your email (excel.travel@rediffmail.com).
         </p>
         <div class="flex justify-between mb-4">
           <input
@@ -290,219 +239,192 @@ export default {
   name: "LoginForm",
   data() {
     return {
-      email: "excel.travel@rediffmail.com",
+      email: "phatakjanita@gmail.com",
       loginForm: {
         username: "",
         password: "",
       },
-      forgotPasswordEmail: "excel.travel@rediffmail.com",
       otp: Array(6).fill(""),
       isForgotPasswordModalVisible: false,
       isOTPModalVisible: false,
-      isOTPForChangePasswordModalVisible: false, // New property
       isChangePasswordModalVisible: false,
       newPassword: "",
       confirmPassword: "",
+      // Define user roles with their passwords and permissions
       userRoles: {
-        superAdmin: { password: "superadmin123", canResetPassword: true },
-        admin: { password: "admin123", canResetPassword: false },
-        officer: { password: "officer123", canResetPassword: false },
+        superAdmin: {
+          password: "superadmin123",
+          canResetPassword: true,
+          canChangeOthersPassword: true,
+        },
+        admin: {
+          password: "admin123",
+          canResetPassword: false,
+          canChangeOthersPassword: false,
+        },
+        officer: {
+          password: "officer123",
+          canResetPassword: false,
+          canChangeOthersPassword: false,
+        },
       },
     };
   },
-  computed: {
-    isSuperAdmin() {
-      return this.loginForm.password === this.userRoles.superAdmin.password;
-    },
-    isOfficer() {
-      return this.$store.state.user?.role === "officer";
-    },
-  },
   methods: {
     ...mapActions(["login", "sendOTP", "verifyOTP"]),
+
     async handleLogin() {
+      if (!this.loginForm.username || !this.loginForm.password) {
+        this.showError("Please enter both username and password");
+        return;
+      }
+
       try {
+        // Check if it's one of the predefined role accounts
+        const role = this.detectUserRole();
+        if (role) {
+          this.handleRoleLogin(role);
+          return;
+        }
+
+        // Regular API login for other users
         const response = await api.post("/auth/login", this.loginForm);
         this.$store.commit("SET_USER", response.data.user);
         this.$store.commit("SET_TOKEN", response.data.token);
-        this.$router.push("/dutyslip");
 
-        const { password } = this.loginForm;
-
-        const role = Object.keys(this.userRoles).find(
-          (key) => this.userRoles[key].password === password
+        this.showSuccess(
+          `Welcome ${response.data.user.name || response.data.user.username}!`
         );
-
-        // if (role) { // TODO - Is this check needed?
-
-        Swal.fire({
-          title: "Success!",
-          text: `Logged in as ${role}.`,
-          icon: "success",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "OK",
-        });
         this.$router.push("/dutyslip");
       } catch (error) {
-        Swal.fire({
-          title: "Error!",
-          text: "Invalid username or password.",
-          icon: "error",
-          confirmButtonColor: "#d33",
-          confirmButtonText: "OK",
-        });
+        this.showError("Invalid username or password");
       }
     },
-    showForgotPasswordModal() {
-      this.isForgotPasswordModalVisible = true;
+
+    detectUserRole() {
+      return Object.keys(this.userRoles).find(
+        (key) => this.userRoles[key].password === this.loginForm.password
+      );
     },
-    hideForgotPasswordModal() {
-      this.isForgotPasswordModalVisible = false;
+
+    handleRoleLogin(role) {
+      this.$store.commit("SET_USER", {
+        username: role,
+        role: role,
+        email: `${role}@system.com`,
+      });
+
+      this.showSuccess(`Logged in as system ${role}`);
+      this.$router.push("/dutyslip");
     },
-    showChangePasswordModal() {
-      if (this.$store.state.user?.role === "admin") {
-        Swal.fire({
-          title: "Error!",
-          text: "You are not allowed to change passwords.",
-          icon: "error",
-          confirmButtonColor: "#d33",
-          confirmButtonText: "OK",
-        });
-        return;
-      }
-      this.isOTPForChangePasswordModalVisible = true;
-      // TODO - is this needed?
-      // this.sendOTPForChangePassword(); // Send OTP to phatakjanita@gmail.com
-    },
-    hideChangePasswordModal() {
-      this.isChangePasswordModalVisible = false;
-    },
+
     async sendOTP() {
       try {
-        await api.post("/auth/send-otp", { email: this.forgotPasswordEmail });
+        await api.post("/auth/send-otp", { email: this.email });
         this.hideForgotPasswordModal();
         this.isOTPModalVisible = true;
+        this.showSuccess("OTP sent successfully");
       } catch (error) {
-        Swal.fire({
-          title: "Error!",
-          text: "Failed to send OTP. Please try again.",
-          icon: "error",
-          confirmButtonColor: "#d33",
-          confirmButtonText: "OK",
-        });
+        this.showError("Failed to send OTP. Please try again.");
       }
     },
-    async sendOTPForChangePassword() {
-      try {
-        await this.sendOTP("phatakjanita@gmail.com"); // Send OTP to specific email
-      } catch (error) {
-        Swal.fire({
-          title: "Error!",
-          text: "Failed to send OTP. Please try again.",
-          icon: "error",
-          confirmButtonColor: "#d33",
-          confirmButtonText: "OK",
-        });
+
+    async verifyOTPForPasswordReset() {
+      if (this.otp.some((digit) => !digit)) {
+        this.showError("Please enter complete OTP");
+        return;
       }
-    },
-    async verifyOTP() {
-      const enteredOTP = this.otp.join("");
+
       try {
         const response = await api.post("/auth/verify-otp", {
-          email: this.forgotPasswordEmail,
-          otp: enteredOTP,
+          email: this.email,
+          otp: this.otp.join(""),
         });
+
         if (response.data.success) {
-          Swal.fire({
-            title: "Success!",
-            text: "OTP verified successfully.",
-            icon: "success",
-            confirmButtonColor: "#3085d6",
-            confirmButtonText: "OK",
-          });
+          this.showSuccess("OTP verified successfully");
           this.isOTPModalVisible = false;
+          this.isChangePasswordModalVisible = true;
         }
-        this.hideOTPModal();
       } catch (error) {
-        Swal.fire({
-          title: "Error!",
-          text: "Invalid OTP. Please try again.",
-          icon: "error",
-          confirmButtonColor: "#d33",
-          confirmButtonText: "OK",
-        });
+        this.showError("Invalid OTP. Please try again.");
       }
     },
-    async verifyOTPForChangePassword() {
-      const enteredOTP = this.otp.join("");
-      try {
-        await this.verifyOTP({
-          email: "phatakjanita@gmail.com",
-          otp: enteredOTP,
-        });
-        Swal.fire({
-          title: "Success!",
-          text: "OTP verified successfully.",
-          icon: "success",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "OK",
-        });
-        this.hideOTPForChangePasswordModal();
-        this.isChangePasswordModalVisible = true; // Show Change Password modal after OTP verification
-      } catch (error) {
-        Swal.fire({
-          title: "Error!",
-          text: "Invalid OTP. Please try again.",
-          icon: "error",
-          confirmButtonColor: "#d33",
-          confirmButtonText: "OK",
-        });
-      }
-    },
-    hideOTPModal() {
-      this.isOTPModalVisible = false;
-    },
-    hideOTPForChangePasswordModal() {
-      this.isOTPForChangePasswordModalVisible = false;
-    },
+
     async changePassword() {
       if (this.newPassword !== this.confirmPassword) {
-        Swal.fire({
-          title: "Error!",
-          text: "Passwords do not match.",
-          icon: "error",
-          confirmButtonColor: "#d33",
-          confirmButtonText: "OK",
-        });
+        this.showError("Passwords do not match");
+        return;
+      }
+
+      if (this.newPassword.length < 8) {
+        this.showError("Password must be at least 8 characters");
         return;
       }
 
       try {
         await api.post("/auth/change-password", {
-          email: this.$store.state.email,
+          email: this.email,
           newPassword: this.newPassword,
         });
-        Swal.fire({
-          title: "Success!",
-          text: "Password changed successfully.",
-          icon: "success",
-          confirmButtonColor: "#3085d6",
-          confirmButtonText: "OK",
-        });
-        this.hideChangePasswordModal();
+
+        this.showSuccess("Password changed successfully");
+        this.resetPasswordChangeForm();
       } catch (error) {
-        Swal.fire({
-          title: "Error!",
-          text: "Failed to change password. Please try again.",
-          icon: "error",
-          confirmButtonColor: "#d33",
-          confirmButtonText: "OK",
-        });
+        this.showError("Failed to change password. Please try again.");
       }
+    },
+
+    resetPasswordChangeForm() {
+      this.newPassword = "";
+      this.confirmPassword = "";
+      this.otp = Array(6).fill("");
+      this.isChangePasswordModalVisible = false;
+    },
+
+    showForgotPasswordModal() {
+      if (!this.email) {
+        this.showError("No email associated with this account");
+        return;
+      }
+      this.isForgotPasswordModalVisible = true;
+    },
+
+    hideForgotPasswordModal() {
+      this.isForgotPasswordModalVisible = false;
+    },
+
+    hideOTPModal() {
+      this.isOTPModalVisible = false;
+    },
+
+    hideChangePasswordModal() {
+      this.isChangePasswordModalVisible = false;
+    },
+
+    showSuccess(message) {
+      Swal.fire({
+        title: "Success!",
+        text: message,
+        icon: "success",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "OK",
+      });
+    },
+
+    showError(message) {
+      Swal.fire({
+        title: "Error!",
+        text: message,
+        icon: "error",
+        confirmButtonColor: "#d33",
+        confirmButtonText: "OK",
+      });
     },
   },
 };
 </script>
+
 <style scoped>
 /* Custom Colors */
 .text-maroon {
@@ -524,5 +446,23 @@ export default {
 .border-maroon {
   border-color: #800000;
   box-shadow: 0 0 10px rgba(128, 0, 0, 0.8);
+}
+
+/* Apply border and focus styles to all fields */
+input:not([readonly]):not([disabled]),
+select:not([readonly]):not([disabled]),
+textarea:not([readonly]):not([disabled]) {
+  border: 1px solid #800000 !important;
+  border-radius: 4px !important;
+  padding: 8px;
+  color: black !important;
+}
+
+input:focus:not([readonly]):not([disabled]),
+select:focus:not([readonly]):not([disabled]),
+textarea:focus:not([readonly]):not([disabled]) {
+  outline: none;
+  border-color: #800000 !important;
+  box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
 }
 </style>
