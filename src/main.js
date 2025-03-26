@@ -1,9 +1,44 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
-import store from "./store"; // Import the Vuex store
+import store from "./store";
 
+// Function to restore both token and user data
+const initializeAuth = async () => {
+  const token = localStorage.getItem("token");
+
+  let user = null;
+  try {
+    user = JSON.parse(localStorage.getItem("user"));
+  } catch (e) {
+    console.error("Failed to parse user data", e);
+    localStorage.removeItem("user");
+  }
+
+  if (token) {
+    store.commit("SET_TOKEN", token);
+    
+    // Only restore user data if it exists
+    if (user) {
+      store.commit("SET_USER", user);
+    } else {
+      // Optional: Fetch fresh user data if needed
+      try {
+        await store.dispatch("fetchUser"); // API call to /me or /user
+      } catch (error) {
+        console.error("Failed to fetch user", error);
+        localStorage.removeItem("token"); // Clear invalid token
+        store.commit("CLEAR_TOKEN");
+      }
+    }
+  }
+};
+
+// Initialize auth state before mounting the app
+initializeAuth();
+
+// Create and mount the app
 createApp(App)
-  .use(router) // Use the router
-  .use(store) // Use the Vuex store
+  .use(router)
+  .use(store)
   .mount("#app");

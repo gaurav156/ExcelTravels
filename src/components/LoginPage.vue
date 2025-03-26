@@ -291,11 +291,15 @@ export default {
 
         // Regular API login for other users
         const response = await api.post("/auth/login", this.loginForm);
+        // Store authentication data
+        localStorage.setItem('token', response.data.token);
+        // During login (after successful authentication)
+        localStorage.setItem("user", JSON.stringify(response.data.user)); // Stringify object
         this.$store.commit("SET_USER", response.data.user);
         this.$store.commit("SET_TOKEN", response.data.token);
 
         this.showSuccess(`Welcome ${response.data.user.username}!`);
-        this.$router.push("/dutyslip");
+        this.$router.replace("/dutyslip");
         // this.redirectBasedOnRole(response.data.user.role);
       } catch (error) {
         const message = error.response?.data?.message || "Login failed";

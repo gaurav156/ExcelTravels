@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-import axios from "axios";
+import api from "@/utils/api";
 
 export default createStore({
   state: {
@@ -18,6 +18,13 @@ export default createStore({
     SET_TOKEN(state, token) {
       state.token = token;
     },
+    CLEAR_USER(state) {
+      state.user = null;
+      state.isAuthenticated = false;
+    },
+    CLEAR_TOKEN(state) {
+      state.token = null;
+    },
     SET_EMAIL(state, email) {
       state.email = email;
     },
@@ -33,7 +40,7 @@ export default createStore({
   actions: {
     async login({ commit }, { username, password }) {
       try {
-        const response = await axios.post("/api/login", { username, password });
+        const response = await api.post("/auth/login", { username, password });
         commit("SET_USER", response.data.user);
         commit("SET_TOKEN", response.data.token);
       } catch (error) {
@@ -42,7 +49,7 @@ export default createStore({
     },
     async sendOTP({ commit }, email) {
       try {
-        await axios.post("/api/send-otp", { email });
+        await api.post("/auth/send-otp", { email });
         commit("SET_EMAIL", email);
         commit("SET_OTP_SENT", true);
       } catch (error) {
@@ -52,7 +59,7 @@ export default createStore({
     async verifyOTP({ state }, otp) {
       try {
         // Make the API call
-        const response = await axios.post("/api/verify-otp", {
+        const response = await api.post("/auth/verify-otp", {
           email: state.email,
           otp,
         });
@@ -86,7 +93,7 @@ export default createStore({
     },
     async changePassword({ state }, newPassword) {
       try {
-        await axios.post("/api/change-password", {
+        await api.post("/auth/change-password", {
           email: state.email,
           newPassword,
         });
@@ -96,6 +103,32 @@ export default createStore({
     },
     logout({ commit }) {
       commit("LOGOUT");
+    },
+    // Async action to fetch user data
+    async fetchUser({ commit, state }) {
+      try {
+        // Call your API (uses the stored token)
+        const response = await api.get('/users/me', {
+          headers: {
+            Authorization: `Bearer ${state.token}`,
+          },
+        });
+        
+        // Update Vuex state
+        commit('SET_USER', response.data);
+        
+        // Optional: Store user data in localStorage
+        localStorage.setItem('user', JSON.stringify(response.data));
+        
+        return response.data; // Return data for optional chaining
+      } catch (error) {
+        console.error('Failed to fetch user:', error);
+        
+        // Clear invalid token on failure (e.g., expired)
+        localStorage.removeItem('token');
+        commit("CLEAR_TOKEN");
+        throw error; // Re-throw for error handling in components
+      }
     },
   },
 });
