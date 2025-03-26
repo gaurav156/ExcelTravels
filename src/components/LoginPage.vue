@@ -283,18 +283,18 @@ export default {
 
       try {
         // Check if it's a predefined role account
-        const role = this.detectUserRole();
-        if (role) {
-          await this.handleRoleLogin(role);
-          return;
-        }
+        // const role = this.detectUserRole();
+        // if (role) {
+        //   await this.handleRoleLogin(role);
+        //   return;
+        // }
 
         // Regular API login for other users
         const response = await api.post("/auth/login", this.loginForm);
         // Store authentication data
-        localStorage.setItem('token', response.data.token);
+        sessionStorage.setItem('token', response.data.token);
         // During login (after successful authentication)
-        localStorage.setItem("user", JSON.stringify(response.data.user)); // Stringify object
+        sessionStorage.setItem("user", JSON.stringify(response.data.user)); // Stringify object
         this.$store.commit("SET_USER", response.data.user);
         this.$store.commit("SET_TOKEN", response.data.token);
 
@@ -326,11 +326,9 @@ export default {
         this.$store.commit("SET_USER", response.data.user);
         this.$store.commit("SET_TOKEN", response.data.token);
 
-        //   this.showSuccess(`Logged in as system ${role}`);
-        // this.$router.push("/dutyslip");
-
         this.showSuccess(`Logged in as system ${role}`);
-        this.$router.push("/dutyslip");
+        this.$router.replace("/dutyslip");
+        // this.$router.push("/dutyslip");
         // this.redirectBasedOnRole(role);
       } catch (error) {
         this.showError("System account login failed");

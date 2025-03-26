@@ -5,14 +5,14 @@ import store from "./store";
 
 // Function to restore both token and user data
 const initializeAuth = async () => {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
 
   let user = null;
   try {
-    user = JSON.parse(localStorage.getItem("user"));
+    user = JSON.parse(sessionStorage.getItem("user"));
   } catch (e) {
     console.error("Failed to parse user data", e);
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("user");
   }
 
   if (token) {
@@ -27,7 +27,7 @@ const initializeAuth = async () => {
         await store.dispatch("fetchUser"); // API call to /me or /user
       } catch (error) {
         console.error("Failed to fetch user", error);
-        localStorage.removeItem("token"); // Clear invalid token
+        sessionStorage.removeItem("token"); // Clear invalid token
         store.commit("CLEAR_TOKEN");
       }
     }

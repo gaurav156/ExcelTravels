@@ -388,8 +388,8 @@ export default {
         this.$store.commit("CLEAR_TOKEN");
 
         // Remove token from localStorage (if stored)
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("user");
 
         this.$router.replace("/login")
 
