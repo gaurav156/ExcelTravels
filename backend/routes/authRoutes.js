@@ -124,7 +124,7 @@ router.post("/verify-otp", async (req, res) => {
 });
 
 // Change Password
-router.post("/change-password", authenticate, async (req, res) => {
+router.post("/change-password", async (req, res) => {
   const { email, newPassword, confirmPassword, isReset } = req.body;
 
   try {
@@ -160,9 +160,7 @@ router.post("/change-password", authenticate, async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-
-    // Hash new password
-    user.password = await bcrypt.hash(newPassword, 10);
+    user.password = newPassword;
     await user.save();
 
     res.json({

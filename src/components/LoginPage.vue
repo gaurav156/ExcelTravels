@@ -534,6 +534,7 @@ export default {
         await api.post(endpoint, {
           email: this.email,
           newPassword: this.newPassword,
+          confirmPassword: this.confirmPassword,
           isReset: true,
         });
 
