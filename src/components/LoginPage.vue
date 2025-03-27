@@ -1,4 +1,11 @@
 <template>
+  <head>
+    <!-- Other meta tags -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+      rel="stylesheet"
+    />
+  </head>
   <div
     style="background-color: #f5f5dc"
     class="p-8 rounded-lg shadow-xl border-2 border-maroon max-w-lg mx-auto transform transition duration-300 hover:shadow-2xl relative"
@@ -59,18 +66,35 @@
       </div>
 
       <!-- Password -->
-      <div class="mb-6">
+      <div class="mb-6 relative">
         <label for="password" class="block text-sm font-medium text-maroon">
           Password
         </label>
-        <input
-          type="password"
-          id="password"
-          v-model="loginForm.password"
-          placeholder="Enter your password"
-          class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-          required
-        />
+        <div class="relative">
+          <input
+            :type="passwordVisibility.login ? 'text' : 'password'"
+            id="password"
+            v-model="loginForm.password"
+            placeholder="Enter your password"
+            class="hide-password-toggle focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+            required
+          />
+          <button
+            type="button"
+            @click="passwordVisibility.login = !passwordVisibility.login"
+            class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-maroon"
+            aria-label="Toggle password visibility"
+          >
+            <span
+              v-if="passwordVisibility.login"
+              class="material-icons-outlined text-base"
+              >visibility_off</span
+            >
+            <span v-else class="material-icons-outlined text-base"
+              >visibility</span
+            >
+          </button>
+        </div>
       </div>
 
       <!-- Forgot Password -->
@@ -252,38 +276,77 @@
         class="bg-white p-6 rounded-lg shadow-md border border-gray-300 w-96"
       >
         <h3 class="text-xl font-bold text-maroon mb-4">Change Password</h3>
-        <div class="mb-4">
+
+        <!-- New Password Field in Change Password Modal -->
+        <div class="mb-4 relative">
           <label
             for="newPassword"
             class="block text-sm font-medium text-maroon"
           >
             New Password
           </label>
-          <input
-            type="password"
-            id="newPassword"
-            v-model="newPassword"
-            placeholder="Enter new password"
-            class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-            required
-          />
+          <div class="relative">
+            <input
+              :type="passwordVisibility.new ? 'text' : 'password'"
+              id="newPassword"
+              v-model="newPassword"
+              placeholder="Enter new password"
+              class="hide-password-toggle focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+              required
+            />
+            <button
+              type="button"
+              @click="passwordVisibility.new = !passwordVisibility.new"
+              class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-maroon"
+              aria-label="Toggle new password visibility"
+            >
+              <span
+                v-if="passwordVisibility.new"
+                class="material-icons-outlined text-base"
+                >visibility_off</span
+              >
+              <span v-else class="material-icons-outlined text-base"
+                >visibility</span
+              >
+            </button>
+          </div>
         </div>
-        <div class="mb-4">
+
+        <!-- Confirm Password Field in Change Password Modal -->
+        <div class="mb-4 relative">
           <label
             for="confirmPassword"
             class="block text-sm font-medium text-maroon"
           >
             Confirm Password
           </label>
-          <input
-            type="password"
-            id="confirmPassword"
-            v-model="confirmPassword"
-            placeholder="Confirm new password"
-            class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
-            required
-          />
+          <div class="relative">
+            <input
+              :type="passwordVisibility.confirm ? 'text' : 'password'"
+              id="confirmPassword"
+              v-model="confirmPassword"
+              placeholder="Confirm new password"
+              class="hide-password-toggle focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+              required
+            />
+            <button
+              type="button"
+              @click="passwordVisibility.confirm = !passwordVisibility.confirm"
+              class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-maroon"
+              aria-label="Toggle confirm password visibility"
+            >
+              <span
+                v-if="passwordVisibility.confirm"
+                class="material-icons-outlined text-base"
+                >visibility_off</span
+              >
+              <span v-else class="material-icons-outlined text-base"
+                >visibility</span
+              >
+            </button>
+          </div>
         </div>
+
         <div class="flex justify-end">
           <button
             @click="changePassword"
@@ -317,6 +380,13 @@ export default {
         username: "",
         password: "",
       },
+      passwordVisibility: {
+        login: false,
+        new: false,
+        confirm: false,
+      },
+
+      showConfirmPassword: false,
       otp: Array.from({ length: 6 }, () => ""),
       isRoleSelectionModalVisible: false,
       isForgotPasswordModalVisible: false,
@@ -523,6 +593,9 @@ export default {
       this.isChangePasswordModalVisible = false;
       this.newPassword = "";
       this.confirmPassword = "";
+      // Reset visibility states
+      this.passwordVisibility.new = false;
+      this.passwordVisibility.confirm = false;
     },
 
     async changePassword() {
@@ -655,4 +728,39 @@ textarea:focus:not([readonly]):not([disabled]) {
     margin: 3px;
   }
 }
+
+/* Hide default password toggle in all browsers */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear,
+input[type="password"]::-webkit-contacts-auto-fill-button,
+input[type="password"]::-webkit-credentials-auto-fill-button {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  position: absolute;
+  right: -9999px;
+}
+
+/* For Edge specifically */
+input::-ms-reveal {
+  display: none;
+}
+
+/* For Chrome/Safari */
+input::-webkit-credentials-auto-fill-button {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* .hide-password-toggle::-ms-reveal,
+.hide-password-toggle::-ms-clear,
+.hide-password-toggle::-webkit-contacts-auto-fill-button,
+.hide-password-toggle::-webkit-credentials-auto-fill-button {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  position: absolute;
+  right: -9999px;
+} */
 </style>
