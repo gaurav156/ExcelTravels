@@ -412,7 +412,7 @@ export default {
     document.addEventListener("click", this.handleClickOutside);
   },
   onCreate() {
-    this.closeDropdown();  
+    this.closeDropdown();
   },
   beforeUnmount() {
     window.removeEventListener("scroll", this.handleScroll);
@@ -461,12 +461,25 @@ export default {
     },
     async handleLogout() {
       try {
-        this.$store.commit("CLEAR_USER");
-        this.$store.commit("CLEAR_TOKEN");
-        sessionStorage.removeItem("token");
-        sessionStorage.removeItem("user");
-        this.$router.replace("/login");
-        // this.showSuccess("Logged out successfully!");
+        const result = await Swal.fire({
+          title: "Are you sure?",
+          text: "You will be logged out from the system.",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, logout!",
+          cancelButtonText: "Cancel",
+        });
+
+        if (result.isConfirmed) {
+          this.$store.commit("CLEAR_USER");
+          this.$store.commit("CLEAR_TOKEN");
+          sessionStorage.removeItem("token");
+          sessionStorage.removeItem("user");
+          this.$router.replace("/login");
+          this.showSuccess("Logged out successfully!");
+        }
       } catch (error) {
         this.showError("Logout failed. Please try again.");
       }
@@ -480,10 +493,18 @@ export default {
         confirmButtonText: "OK",
       });
     },
+    showError(message) {
+      Swal.fire({
+        title: "Error!",
+        text: message,
+        icon: "error",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "OK",
+      });
+    },
   },
 };
 </script>
-
 <style scoped>
 /* Custom Colors */
 
