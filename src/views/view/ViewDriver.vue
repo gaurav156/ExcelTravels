@@ -615,8 +615,8 @@ export default {
     },
   },
   mounted() {
-    window.addEventListener("scroll", this.handleScroll);
-    document.addEventListener("click", this.handleClickOutside);
+    const role = this.$store.state.user?.role || JSON.parse(sessionStorage.getItem("user")).role;
+    this.allowDelete = (role && role === "admin");
   },
   created() {
     this.fetchDrivers();
