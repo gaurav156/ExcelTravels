@@ -78,7 +78,7 @@
         <a
           href="#"
           class="text-sm text-maroon hover:underline"
-          @click.prevent="showForgotPasswordModal"
+          @click.prevent="showRoleSelectionModal"
         >
           Forgot Password?
         </a>
@@ -95,10 +95,79 @@
       </div>
     </form>
 
+    <!-- Role Selection Modal -->
+    <div
+      v-if="isRoleSelectionModalVisible"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+    >
+      <div
+        class="bg-white p-6 rounded-lg shadow-md border border-gray-300 w-96"
+      >
+        <h3 class="text-xl font-bold text-maroon mb-4">Reset Password For</h3>
+
+        <p class="text-sm text-gray-600 mb-4">
+          Select the role for which you want to reset the password:
+        </p>
+
+        <div class="grid grid-cols-2 gap-4 mb-4">
+          <button
+            @click="selectRole('admin')"
+            class="flex flex-col items-center justify-center p-4 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-8 w-8 text-maroon"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span class="mt-2 font-medium">Admin</span>
+          </button>
+
+          <button
+            @click="selectRole('officer')"
+            class="flex flex-col items-center justify-center p-4 border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-maroon"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-8 w-8 text-maroon"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+              />
+            </svg>
+            <span class="mt-2 font-medium">Officer</span>
+          </button>
+        </div>
+
+        <div class="flex justify-end">
+          <button
+            @click="hideRoleSelectionModal"
+            class="ml-2 bg-gray-500 text-white px-4 py-2 rounded-md text-sm font-semibold shadow-md transition duration-300 hover:bg-gray-600 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Forgot Password Modal -->
     <div
       v-if="isForgotPasswordModalVisible"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
     >
       <div
         class="bg-white p-6 rounded-lg shadow-md border border-gray-300 w-96"
@@ -134,23 +203,26 @@
     <!-- OTP Modal -->
     <div
       v-if="isOTPModalVisible"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
     >
       <div
         class="bg-white p-6 rounded-lg shadow-md border border-gray-300 w-96"
       >
         <h3 class="text-xl font-bold text-maroon mb-4">Enter OTP</h3>
         <p class="text-sm text-gray-600 mb-4">
-          An OTP has been sent to your email (excel.travel@rediffmail.com).
+          An OTP has been sent to your email ({{ email }}).
         </p>
-        <div class="flex justify-between mb-4">
+        <div class="otp-inputs">
           <input
-            v-for="i in 6"
-            :key="i"
+            v-for="(digit, index) in otp"
+            :key="index"
+            v-model="otp[index]"
+            ref="otpInputs"
             type="text"
-            v-model="otp[i - 1]"
             maxlength="1"
-            class="w-12 h-12 text-center border border-gray-400 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+            @input="handleInput(index, $event)"
+            @keydown.backspace="handleBackspace(index, $event)"
+            @paste="handlePaste"
           />
         </div>
         <div class="flex justify-end">
@@ -173,7 +245,7 @@
     <!-- Change Password Modal -->
     <div
       v-if="isChangePasswordModalVisible"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
     >
       <div
         class="bg-white p-6 rounded-lg shadow-md border border-gray-300 w-96"
@@ -244,13 +316,15 @@ export default {
         username: "",
         password: "",
       },
-      otp: Array(6).fill(""),
+      otp: Array.from({ length: 6 }, () => ""),
+      isRoleSelectionModalVisible: false,
       isForgotPasswordModalVisible: false,
       isOTPModalVisible: false,
       isChangePasswordModalVisible: false,
       newPassword: "",
       confirmPassword: "",
       isLoading: false,
+      selectedRole: null,
       userRoles: {
         superAdmin: {
           password: "superadmin123",
@@ -282,25 +356,14 @@ export default {
       this.isLoading = true;
 
       try {
-        // Check if it's a predefined role account
-        // const role = this.detectUserRole();
-        // if (role) {
-        //   await this.handleRoleLogin(role);
-        //   return;
-        // }
-
-        // Regular API login for other users
         const response = await api.post("/auth/login", this.loginForm);
-        // Store authentication data
-        sessionStorage.setItem('token', response.data.token);
-        // During login (after successful authentication)
-        sessionStorage.setItem("user", JSON.stringify(response.data.user)); // Stringify object
+        sessionStorage.setItem("token", response.data.token);
+        sessionStorage.setItem("user", JSON.stringify(response.data.user));
         this.$store.commit("SET_USER", response.data.user);
         this.$store.commit("SET_TOKEN", response.data.token);
 
         this.showSuccess(`Welcome ${response.data.user.username}!`);
         this.$router.replace("/dutyslip");
-        // this.redirectBasedOnRole(response.data.user.role);
       } catch (error) {
         const message = error.response?.data?.message || "Login failed";
         this.showError(message);
@@ -309,40 +372,33 @@ export default {
       }
     },
 
-    detectUserRole() {
-      return Object.keys(this.userRoles).find(
-        (key) => this.userRoles[key].password === this.loginForm.password
-      );
+    showRoleSelectionModal() {
+      this.isRoleSelectionModalVisible = true;
     },
 
-    async handleRoleLogin(role) {
-      try {
-        // For system accounts, we still want to hit the API for consistency
-        const response = await api.post("/auth/login", {
-          username: role,
-          password: this.userRoles[role].password,
-        });
+    hideRoleSelectionModal() {
+      this.isRoleSelectionModalVisible = false;
+      this.selectedRole = null;
+    },
 
-        this.$store.commit("SET_USER", response.data.user);
-        this.$store.commit("SET_TOKEN", response.data.token);
+    selectRole(role) {
+      this.selectedRole = role;
+      this.hideRoleSelectionModal();
+      this.showForgotPasswordModal();
+    },
 
-        this.showSuccess(`Logged in as system ${role}`);
-        this.$router.replace("/dutyslip");
-        // this.$router.push("/dutyslip");
-        // this.redirectBasedOnRole(role);
-      } catch (error) {
-        this.showError("System account login failed");
+    showForgotPasswordModal() {
+      if (!this.email) {
+        this.showError("No email associated with this account");
+        return;
       }
+      this.isForgotPasswordModalVisible = true;
     },
 
-    // redirectBasedOnRole(role) {
-    //   const routes = {
-    //     superadmin: "/admin/dashboard",
-    //     admin: "/admin/overview",
-    //     officer: "/dutyslip",
-    //   };
-    //   this.$router.push();
-    // },
+    hideForgotPasswordModal() {
+      this.isForgotPasswordModalVisible = false;
+      this.selectedRole = null;
+    },
 
     async sendOTP() {
       if (!this.email) {
@@ -353,7 +409,11 @@ export default {
       this.isLoading = true;
 
       try {
-        await api.post("/auth/send-otp", { email: this.email });
+        const endpoint = this.selectedRole
+          ? `/auth/send-otp/${this.selectedRole}`
+          : "/auth/send-otp";
+
+        await api.post(endpoint, { email: this.email });
         this.showSuccess("OTP sent to your email");
         this.isForgotPasswordModalVisible = false;
         this.isOTPModalVisible = true;
@@ -365,6 +425,58 @@ export default {
       }
     },
 
+    hideOTPModal() {
+      this.isOTPModalVisible = false;
+      this.otp = Array(6).fill("");
+    },
+
+    handleInput(index, event) {
+      const value = event.target.value;
+      if (/\d/.test(value)) {
+        this.otp[index] = value;
+        if (index < this.otp.length - 1) {
+          this.$refs.otpInputs[index + 1].focus();
+        }
+      } else {
+        this.otp[index] = "";
+      }
+    },
+    handleBackspace(index) {
+      if (!this.otp[index] && index > 0) {
+        this.$refs.otpInputs[index - 1].focus();
+      }
+    },
+    handlePaste(event) {
+      event.preventDefault();
+      const pastedData = event.clipboardData
+        .getData("text")
+        .slice(0, 6)
+        .split("");
+      pastedData.forEach((char, i) => {
+        if (i < this.otp.length) {
+          this.otp[i] = char;
+        }
+      });
+      this.$nextTick(() => {
+        const nextEmptyIndex = this.otp.findIndex((val) => val === "");
+        if (nextEmptyIndex !== -1) {
+          this.$refs.otpInputs[nextEmptyIndex].focus();
+        }
+      });
+    },
+
+    // focusNext(index, event) {
+    //   if (event.target.value && index < 6) {
+    //     this.$refs[`otp-${index}`][0].focus();
+    //   }
+    // },
+
+    // focusPrevious(index, event) {
+    //   if (event.key === "Backspace" && !event.target.value && index > 1) {
+    //     this.$refs[`otp-${index - 2}`][0].focus();
+    //   }
+    // },
+
     async verifyOTPForPasswordReset() {
       if (this.otp.some((digit) => !digit)) {
         this.showError("Please enter complete OTP");
@@ -374,7 +486,11 @@ export default {
       this.isLoading = true;
 
       try {
-        await api.post("/auth/verify-otp", {
+        const endpoint = this.selectedRole
+          ? `/auth/verify-otp/${this.selectedRole}`
+          : "/auth/verify-otp";
+
+        await api.post(endpoint, {
           email: this.email,
           otp: this.otp.join(""),
         });
@@ -388,6 +504,12 @@ export default {
       } finally {
         this.isLoading = false;
       }
+    },
+
+    hideChangePasswordModal() {
+      this.isChangePasswordModalVisible = false;
+      this.newPassword = "";
+      this.confirmPassword = "";
     },
 
     async changePassword() {
@@ -404,10 +526,14 @@ export default {
       this.isLoading = true;
 
       try {
-        await api.post("/auth/change-password", {
+        const endpoint = this.selectedRole
+          ? `/auth/change-password/${this.selectedRole}`
+          : "/auth/change-password";
+
+        await api.post(endpoint, {
           email: this.email,
           newPassword: this.newPassword,
-          isReset: true, // Indicate this is a password reset flow
+          isReset: true,
         });
 
         this.showSuccess("Password changed successfully");
@@ -425,26 +551,7 @@ export default {
       this.newPassword = "";
       this.confirmPassword = "";
       this.otp = Array(6).fill("");
-      this.isChangePasswordModalVisible = false;
-    },
-
-    showForgotPasswordModal() {
-      if (!this.email) {
-        this.showError("No email associated with this account");
-        return;
-      }
-      this.isForgotPasswordModalVisible = true;
-    },
-
-    hideForgotPasswordModal() {
-      this.isForgotPasswordModalVisible = false;
-    },
-
-    hideOTPModal() {
-      this.isOTPModalVisible = false;
-    },
-
-    hideChangePasswordModal() {
+      this.selectedRole = null;
       this.isChangePasswordModalVisible = false;
     },
 
@@ -510,5 +617,29 @@ textarea:focus:not([readonly]):not([disabled]) {
   outline: none;
   border-color: #800000 !important;
   box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
+}
+.modal-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+.otp-inputs input {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  margin: 5px;
+  font-size: 20px;
 }
 </style>
