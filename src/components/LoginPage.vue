@@ -186,9 +186,10 @@
         <div class="flex justify-end">
           <button
             @click="sendOTP"
+            :disabled="isLoading"
             class="bg-maroon text-white px-4 py-2 rounded-md text-sm font-semibold shadow-md transition duration-300 hover:bg-maroon-dark hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-maroon focus:ring-offset-2"
           >
-            Send OTP
+            {{ isLoading ? "Sending..." : "Send OTP" }}
           </button>
           <button
             @click="hideForgotPasswordModal"
@@ -414,7 +415,7 @@ export default {
           : "/auth/send-otp";
 
         await api.post(endpoint, { email: this.email });
-        this.showSuccess("OTP sent to your email");
+        // this.showSuccess("OTP sent to your email");
         this.isForgotPasswordModalVisible = false;
         this.isOTPModalVisible = true;
       } catch (error) {
@@ -618,28 +619,27 @@ textarea:focus:not([readonly]):not([disabled]) {
   border-color: #800000 !important;
   box-shadow: 0 0 5px rgba(128, 0, 0, 0.5);
 }
-.modal-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-}
-.modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 5px;
-  text-align: center;
-}
 .otp-inputs input {
   width: 40px;
   height: 40px;
   text-align: center;
   margin: 5px;
   font-size: 20px;
+}
+/* Responsive styles for small screens */
+@media (max-width: 480px) {
+  .otp-inputs {
+    display: flex;
+    justify-content: center;
+    gap: 3px;
+    margin-bottom: 15px;
+  }
+
+  .otp-inputs input {
+    width: 35px;
+    height: 35px;
+    font-size: 18px;
+    margin: 3px;
+  }
 }
 </style>
