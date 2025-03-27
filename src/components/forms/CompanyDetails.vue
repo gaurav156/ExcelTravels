@@ -44,6 +44,7 @@
     <form
       @submit.prevent="handleSubmit"
       class="bg-white p-6 rounded-lg shadow-md border border-gray-300"
+      autocomplete="off"
     >
       <!-- Company ID (Auto-populated) -->
       <div class="mb-6">
