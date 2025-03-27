@@ -55,7 +55,7 @@
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 mr-2 text-red-600"
+              class="h-5 w-5 mr-2"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -386,8 +386,8 @@ export default {
     userName() {
       // Get user name from your store or session storage
       return (
-        this.$store.state.user?.name ||
-        sessionStorage.getItem("userName") ||
+        this.$store.state.user?.username ||
+        JSON.parse(sessionStorage.getItem("user")).username ||
         "User"
       );
     },
@@ -587,7 +587,7 @@ export default {
   width: 100%;
   padding: 8px 16px;
   font-size: 14px;
-  color: #444;
+  color: maroon;
   border-top: 1px solid maroon;
   background-color: white;
   transition: background-color 0.3s ease, color 0.3s ease;
