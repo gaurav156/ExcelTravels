@@ -407,6 +407,17 @@ export default {
       return this.$store.state.isDropdownOpen;
     },
   },
+  mounted() {
+    window.addEventListener("scroll", this.handleScroll);
+    document.addEventListener("click", this.handleClickOutside);
+  },
+  onCreate() {
+    this.closeDropdown();  
+  },
+  beforeUnmount() {
+    window.removeEventListener("scroll", this.handleScroll);
+    document.removeEventListener("click", this.handleClickOutside);
+  },
   methods: {
     toggleDropdown() {
       this.$store.commit("SET_DROPDOWN_STATE", !this.showDropdown);
@@ -468,16 +479,6 @@ export default {
         confirmButtonColor: "#3085d6",
         confirmButtonText: "OK",
       });
-    },
-
-    mounted() {
-      window.addEventListener("scroll", this.handleScroll);
-      document.addEventListener("click", this.handleClickOutside);
-      this.closeDropdown();
-    },
-    beforeUnmount() {
-      window.removeEventListener("scroll", this.handleScroll);
-      document.removeEventListener("click", this.handleClickOutside);
     },
   },
 };
