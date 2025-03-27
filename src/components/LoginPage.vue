@@ -33,7 +33,7 @@
         class="h-12 mb-2 sm:mb-0"
       />
       <div class="text-m font-semibold text-maroon cursor-pointer">
-        {{ email }}
+        excel.travel@rediffmail.com
       </div>
     </div>
     <h2 class="text-3xl font-extrabold text-maroon text-center mb-6">Login</h2>
@@ -174,8 +174,8 @@
       >
         <h3 class="text-xl font-bold text-maroon mb-4">Forgot Password</h3>
 
-        <p class="text-sm text-gray-600 mb-4">
-          An OTP will be sent to your registered email.
+        <p class="text-sm text-gray-600 mb-2">
+          An OTP will be sent to the {{ selectedRole }}'s registered email:
         </p>
         <input
           v-model="email"
@@ -365,6 +365,7 @@ export default {
 
         this.showSuccess(`Welcome ${response.data.user.username}!`);
         this.$router.replace("/dutyslip");
+        this.showDropdown = false;
       } catch (error) {
         const message = error.response?.data?.message || "Login failed";
         this.showError(message);
@@ -382,13 +383,36 @@ export default {
       this.selectedRole = null;
     },
 
-    selectRole(role) {
+    // selectRole(role) {
+    //   this.selectedRole = role;
+    //   this.hideRoleSelectionModal();
+    //   this.showForgotPasswordModal();
+    // },
+
+    async selectRole(role) {
       this.selectedRole = role;
-      this.hideRoleSelectionModal();
-      this.showForgotPasswordModal();
+      this.isLoading = true;
+
+      try {
+        // Fetch the email for the selected role
+        const response = await api.get(`/auth/get-role-email/${role}`);
+        this.email = response.data.email; // Update the email with the fetched value
+
+        this.hideRoleSelectionModal();
+        this.showForgotPasswordModal();
+      } catch (error) {
+        const message =
+          error.response?.data?.message ||
+          "Failed to fetch email for this role";
+        this.showError(message);
+        this.hideRoleSelectionModal();
+      } finally {
+        this.isLoading = false;
+      }
     },
 
     showForgotPasswordModal() {
+      this.isForgotPasswordModalVisible = true;
       if (!this.email) {
         this.showError("No email associated with this account");
         return;
@@ -465,18 +489,6 @@ export default {
         }
       });
     },
-
-    // focusNext(index, event) {
-    //   if (event.target.value && index < 6) {
-    //     this.$refs[`otp-${index}`][0].focus();
-    //   }
-    // },
-
-    // focusPrevious(index, event) {
-    //   if (event.key === "Backspace" && !event.target.value && index > 1) {
-    //     this.$refs[`otp-${index - 2}`][0].focus();
-    //   }
-    // },
 
     async verifyOTPForPasswordReset() {
       if (this.otp.some((digit) => !digit)) {

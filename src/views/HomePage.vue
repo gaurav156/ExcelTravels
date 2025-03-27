@@ -384,12 +384,24 @@ export default {
   },
   computed: {
     userName() {
-      // Get user name from your store or session storage
-      return (
-        this.$store.state.user?.username ||
-        JSON.parse(sessionStorage.getItem("user")).username ||
-        "User"
-      );
+      try {
+        // Check store first
+        if (this.$store.state.user?.username) {
+          return this.$store.state.user.username;
+        }
+
+        // Then check sessionStorage
+        const userData = sessionStorage.getItem("user");
+        if (userData) {
+          const parsedUser = JSON.parse(userData);
+          return parsedUser?.username || "User";
+        }
+
+        return "User"; // Default fallback
+      } catch (e) {
+        console.error("Error getting username:", e);
+        return "User"; // Safe fallback
+      }
     },
   },
   methods: {
