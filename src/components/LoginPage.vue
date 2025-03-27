@@ -365,7 +365,7 @@ export default {
 
         this.showSuccess(`Welcome ${response.data.user.username}!`);
         this.$router.replace("/dutyslip");
-        this.showDropdown = false;
+        this.$store.commit("SET_DROPDOWN_STATE", false);
       } catch (error) {
         const message = error.response?.data?.message || "Login failed";
         this.showError(message);

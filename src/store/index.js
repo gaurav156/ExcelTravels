@@ -9,6 +9,7 @@ export default createStore({
     otpSent: false,
     otp: "",
     isAuthenticated: false,
+    isDropdownOpen: false,
   },
   mutations: {
     SET_USER(state, user) {
@@ -35,6 +36,9 @@ export default createStore({
       state.user = null;
       state.token = null;
       state.isAuthenticated = false;
+    },
+    SET_DROPDOWN_STATE(state, isOpen) {
+      state.isDropdownOpen = isOpen;
     },
   },
   actions: {
@@ -63,7 +67,7 @@ export default createStore({
           email: state.email,
           otp,
         });
-  
+
         // Check if the OTP verification was successful
         if (response.data.success) {
           return true;
@@ -74,7 +78,7 @@ export default createStore({
       } catch (error) {
         // Log the full error object for debugging
         console.error("OTP verification failed:", error);
-  
+
         // Check if the error is due to a network issue
         if (error.response) {
           // The request was made and the server responded with a status code
@@ -87,7 +91,7 @@ export default createStore({
           // Something happened in setting up the request
           console.error("Error setting up the request:", error.message);
         }
-  
+
         return false;
       }
     },
@@ -108,24 +112,24 @@ export default createStore({
     async fetchUser({ commit, state }) {
       try {
         // Call your API (uses the stored token)
-        const response = await api.get('/users/me', {
+        const response = await api.get("/users/me", {
           headers: {
             Authorization: `Bearer ${state.token}`,
           },
         });
-        
+
         // Update Vuex state
-        commit('SET_USER', response.data);
-        
+        commit("SET_USER", response.data);
+
         // Optional: Store user data in localStorage
-        localStorage.setItem('user', JSON.stringify(response.data));
-        
+        localStorage.setItem("user", JSON.stringify(response.data));
+
         return response.data; // Return data for optional chaining
       } catch (error) {
-        console.error('Failed to fetch user:', error);
-        
+        console.error("Failed to fetch user:", error);
+
         // Clear invalid token on failure (e.g., expired)
-        localStorage.removeItem('token');
+        localStorage.removeItem("token");
         commit("CLEAR_TOKEN");
         throw error; // Re-throw for error handling in components
       }

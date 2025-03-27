@@ -379,7 +379,7 @@ export default {
     return {
       showScrollToTop: false,
       isModalOpen: false,
-      showDropdown: false,
+      // showDropdown: false,
     };
   },
   computed: {
@@ -403,10 +403,13 @@ export default {
         return "User"; // Safe fallback
       }
     },
+    showDropdown() {
+      return this.$store.state.isDropdownOpen;
+    },
   },
   methods: {
     toggleDropdown() {
-      this.showDropdown = !this.showDropdown;
+      this.$store.commit("SET_DROPDOWN_STATE", !this.showDropdown);
     },
     closeDropdown() {
       this.showDropdown = false;
@@ -452,7 +455,7 @@ export default {
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("user");
         this.$router.replace("/login");
-        this.showSuccess("Logged out successfully!");
+        // this.showSuccess("Logged out successfully!");
       } catch (error) {
         this.showError("Logout failed. Please try again.");
       }
@@ -470,6 +473,7 @@ export default {
     mounted() {
       window.addEventListener("scroll", this.handleScroll);
       document.addEventListener("click", this.handleClickOutside);
+      this.closeDropdown();
     },
     beforeUnmount() {
       window.removeEventListener("scroll", this.handleScroll);
