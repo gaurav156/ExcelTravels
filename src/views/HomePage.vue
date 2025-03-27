@@ -2,8 +2,77 @@
   <div class="min-h-screen bg-beige flex flex-col overflow-hidden">
     <!-- Header -->
     <header class="bg-beige text-white p-4 pb-8 relative">
+      <!-- User Dropdown - Top Right Corner -->
+      <div class="absolute right-4 top-4 z-50" v-if="$route.path !== '/login'">
+        <button
+          @click="toggleDropdown"
+          class="flex items-center space-x-2 focus:outline-none group"
+        >
+          <div
+            class="profile-circle w-10 h-10 rounded-full bg-maroon flex items-center justify-center text-white group-hover:bg-maroon-700 transition-colors"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              />
+            </svg>
+          </div>
+          <span class="hidden md:inline text-gray-800 font-medium"
+            >Hi, {{ userName }}</span
+          >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4 text-maroon transition-transform duration-200 dropdown-arrow"
+            :class="{ 'transform rotate-180': showDropdown }"
+            viewBox="0 0 24 24"
+            fill="#800000"
+          >
+            <path d="M7 10l5 5 5-5z" />
+          </svg>
+        </button>
+
+        <!-- Dropdown Menu -->
+        <div
+          v-if="showDropdown"
+          class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-maroon"
+        >
+          <div class="px-4 py-2 text-sm text-gray-700 border-b border-maroon">
+            <p class="font-medium">Logged in as</p>
+            <p class="truncate">{{ userName }}</p>
+          </div>
+          <button
+            @click="handleLogout"
+            class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-maroon hover:text-white border-t border-maroon transition-colors logout-btn"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 mr-2 text-red-600"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            Logout
+          </button>
+        </div>
+      </div>
+
+      <!-- Logo Container (Centered) -->
       <div
-        class="container mx-auto flex justify-center relative bg-[rgb(249,245,255)]"
+        class="relative container mx-auto flex justify-center bg-[rgb(249,245,255)] mt-14"
       >
         <img
           src="@/assets/logo.png"
@@ -19,38 +88,6 @@
     </header>
 
     <div v-if="$route.path !== '/login'" class="bg-maroon py-6 mt-4">
-      <!-- Logout Button - Responsive positioning -->
-      <div class="absolute top-45 right-4 sm:right-6 md:right-8 z-50 mt-2">
-        <!-- <button @click="logout"
-          class="bg-white/90 hover:bg-white text-maroon rounded-full p-2 shadow-md flex items-center justify-center transition-colors duration-200 group"
-          title="Logout"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 group-hover:scale-110 transition-transform"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-            />
-          </svg>
-          <span class="hidden md:inline ml-2 font-medium">Logout</span>
-        </button> -->
-        <button @click="handleLogout" class="LogoutBtn">
-          <div class="logout-sign"><svg viewBox="0 0 512 512">
-              <path
-                d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z">
-              </path>
-            </svg></div>
-          <div class="text font-medium">Logout</div>
-        </button>
-      </div>
-
       <div class="container mx-auto px-4 relative">
         <!-- Menu for Small Screens -->
         <div class="md:hidden flex justify-center gap-4 pt-2">
@@ -340,25 +377,43 @@ export default {
   name: "HomePage",
   data() {
     return {
-      showScrollToTop: false, // Controls visibility of the scroll-to-top button
-      isModalOpen: false, // Controls modal visibility
+      showScrollToTop: false,
+      isModalOpen: false,
+      showDropdown: false,
     };
   },
-  watch: {
-    // Watch for route changes
-    $route(to, from) {
-      if (to.fullPath !== from.fullPath) {
-        this.hideScrollButtonInstantly();
-      }
+  computed: {
+    userName() {
+      // Get user name from your store or session storage
+      return (
+        this.$store.state.user?.name ||
+        sessionStorage.getItem("userName") ||
+        "User"
+      );
     },
   },
-  mounted() {
-    window.addEventListener("scroll", this.handleScroll);
-  },
-  beforeUnmount() {
-    window.removeEventListener("scroll", this.handleScroll);
-  },
   methods: {
+    toggleDropdown() {
+      this.showDropdown = !this.showDropdown;
+    },
+    closeDropdown() {
+      this.showDropdown = false;
+    },
+    // Handle click outside dropdown
+    handleClickOutside(event) {
+      if (!this.$el.contains(event.target)) {
+        this.closeDropdown();
+      }
+    },
+    watch: {
+      // Watch for route changes
+      $route(to, from) {
+        if (to.fullPath !== from.fullPath) {
+          this.hideScrollButtonInstantly();
+        }
+      },
+    },
+
     // Instantly hide the button on page change
     hideScrollButtonInstantly() {
       this.showScrollToTop = false;
@@ -380,20 +435,11 @@ export default {
     },
     async handleLogout() {
       try {
-        // Optionally call a logout API (if needed for server-side invalidation)
-        // await api.post("/auth/logout"); 
-
-        // Clear user data and token from Vuex
         this.$store.commit("CLEAR_USER");
         this.$store.commit("CLEAR_TOKEN");
-
-        // Remove token from localStorage (if stored)
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("user");
-
-        this.$router.replace("/login")
-
-        // Show success message
+        this.$router.replace("/login");
         this.showSuccess("Logged out successfully!");
       } catch (error) {
         this.showError("Logout failed. Please try again.");
@@ -408,24 +454,31 @@ export default {
         confirmButtonText: "OK",
       });
     },
+
+    mounted() {
+      window.addEventListener("scroll", this.handleScroll);
+      document.addEventListener("click", this.handleClickOutside);
+    },
+    beforeUnmount() {
+      window.removeEventListener("scroll", this.handleScroll);
+      document.removeEventListener("click", this.handleClickOutside);
+    },
   },
 };
 </script>
 
 <style scoped>
 /* Custom Colors */
+
+.border-maroon {
+  border-color: #800000 !important;
+}
 .bg-beige {
   background-color: #f5f5dc;
 }
 
 .bg-maroon {
   background-color: #800000;
-}
-.text-maroon {
-  color: #800000;
-}
-.font-serif {
-  font-family: Georgia, serif;
 }
 
 /* Button Styling */
@@ -502,78 +555,46 @@ export default {
   .car-animation {
     animation-duration: 8s; /* Faster speed for mobile */
   }
-  }
-  .LogoutBtn {
-    --maroon: #800000;
-    --ch-maroon: #800000;
-    --eer-maroon: #800000;
-    --night-rider: #800000;
-    --white: #ffffff;
-    --af-white: #f3f3f3;
-    --ch-white: #e1e1e1;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    width: 45px;
-    height: 45px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition-duration: .3s;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
-    background-color: var(--af-white);
-  }
+}
 
-  /* plus sign */
-  .logout-sign {
-    width: 100%;
-    transition-duration: .3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+/* Dropdown Arrow Icon */
+.dropdown-arrow {
+  color: maroon; /* Keeps the dropdown arrow maroon */
+  transition: transform 0.2s ease-in-out;
+}
 
-  .logout-sign svg {
-    width: 17px;
-  }
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
 
-  .logout-sign svg path {
-    fill: var(--night-rider);
-  }
-  /* text */
-  .text {
-    position: absolute;
-    right: 0%;
-    width: 0%;
-    opacity: 0;
-    color: var(--night-rider);
-    /* font-size: 1.2em;
-    font-weight: 600; */
-    transition-duration: .3s;
-  }
-  /* hover effect on button width */
-  .LogoutBtn:hover {
-    width: 125px;
-    border-radius: 5px;
-    transition-duration: .3s;
-  }
+/* User Profile Circle */
+.profile-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: maroon;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: background-color 0.3s ease;
+}
 
-  .LogoutBtn:hover .logout-sign {
-    width: 30%;
-    transition-duration: .3s;
-    padding-left: 20px;
-  }
-  /* hover effect button's text */
-  .LogoutBtn:hover .text {
-    opacity: 1;
-    width: 70%;
-    transition-duration: .3s;
-    padding-right: 10px;
-  }
-  /* button click effect*/
-  .LogoutBtn:active {
-    transform: translate(2px ,2px);
-  }
+/* Logout Button */
+.logout-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #444;
+  border-top: 1px solid maroon;
+  background-color: white;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: maroon;
+  color: white;
+}
 </style>
