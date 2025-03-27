@@ -213,7 +213,7 @@
         <p class="text-sm text-gray-600 mb-4">
           An OTP has been sent to your email ({{ email }}).
         </p>
-        <div class="otp-inputs">
+        <div class="otp-inputs mb-6 flex justify-center items-center">
           <input
             v-for="(digit, index) in otp"
             :key="index"
