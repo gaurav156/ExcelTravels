@@ -51,7 +51,7 @@
         type="text"
         id="dutySlipId"
         v-model="form.dutySlipId"
-        class="w-32 text-center focus:ring-[#800000] focus:outline-none px-2 py-1 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+        class="w-32 text-center px-2 py-1 border border-[#800000] rounded-md shadow-sm bg-gray-50 text-black"
         disabled
       />
     </div>
@@ -736,14 +736,6 @@ textarea::selection {
   padding: 7px 12px;
 }
 
-/* Focus and Open State */
-:deep(.vs__dropdown-toggle:focus-within),
-:deep(.vs__dropdown-toggle.vs--open) {
-  outline: none;
-  border-color: #800000 !important;
-  box-shadow: 0 0 5px rgba(128, 0, 0, 0.5) !important;
-}
-
 /* Dropdown Indicator (Arrow) */
 :deep(.vs__open-indicator) {
   cursor: pointer !important;
@@ -821,5 +813,44 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 input[type="date"] {
   -webkit-appearance: none;
   appearance: none;
+}
+
+/* Add this at the end of your style section */
+:deep(.vs__search::placeholder),
+:deep(.vs__dropdown-toggle)::placeholder,
+input::placeholder,
+textarea::placeholder {
+  color: #9fa6b2 !important;
+  opacity: 1 !important;
+}
+
+/* For disabled inputs */
+input:disabled:not(#dutySlipId) {
+  background-color: #f3f4f6 !important;
+  color: #6b7280 !important;
+}
+
+/* Add this at the end of your style section */
+
+input::placeholder,
+textarea::placeholder,
+input[type="date"]::placeholder,
+input[type="time"]::placeholder,
+input[type="datetime-local"]::placeholder {
+  color: #9fa6b2 !important;
+  opacity: 1 !important;
+}
+
+/* For VueSelect dropdown placeholder */
+/* For date and time inputs in Chrome/Safari */
+input[type="date"]:not(:focus):invalid::-webkit-datetime-edit,
+input[type="time"]:not(:focus):invalid::-webkit-datetime-edit {
+  color: #9fa6b2 !important;
+}
+
+/* For date and time inputs in Firefox */
+input[type="date"]:invalid,
+input[type="time"]:invalid {
+  color: #9fa6b2 !important;
 }
 </style>
