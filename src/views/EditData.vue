@@ -274,17 +274,111 @@ export default {
             title: "No Data!",
             text: "No data available for the selected date range.",
             icon: "info",
-            confirmButtonColor: "#3085d6",
+            iconColor: "maroon",
+            confirmButtonColor: "maroon",
             confirmButtonText: "OK",
           });
           return;
         }
 
-        // Proceed with export
-        const worksheet = XLSX.utils.json_to_sheet(dutySlips);
+        // Define field mappings (database field → display name)
+        const fieldMappings = {
+          dutySlipId: "Duty Slip ID",
+          createdAt: "Created At",
+          companyId: "Company ID",
+          companyName: "Company Name",
+          customerName: "Customer Name",
+          city: "City",
+          address: "Address",
+          carBooked: "Car Booked",
+          phoneNumber: "Phone Number",
+          dutyType: "Duty Type",
+          driverId: "Driver ID",
+          driverName: "Driver Name",
+          carNumber: "Car Number",
+          dateFrom: "Start Date",
+          dateTo: "End Date",
+          tripRoute: "Trip Route",
+          startKM: "Start KM",
+          endKM: "End KM",
+          startTime: "Start Time",
+          endTime: "End Time"
+        };
+
+        // Format data and transform headers
+        const formattedData = dutySlips.map(slip => {
+          const formattedSlip = {};
+          Object.keys(fieldMappings).forEach(field => {
+            if (field === 'dateFrom' || field === 'dateTo' || field === 'createdAt') {
+              // Format dates as DD-MM-YYYY
+              formattedSlip[fieldMappings[field]] = slip[field] 
+                ? new Date(slip[field]).toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                  }).replace(/\//g, '-')
+                : '';
+            } else {
+              formattedSlip[fieldMappings[field]] = slip[field] || '';
+            }
+          });
+          return formattedSlip;
+        });
+
+        // Create worksheet with formatted headers
+        const worksheet = XLSX.utils.json_to_sheet(formattedData);
+
+        // Auto-size columns for better readability
+        worksheet['!cols'] = Object.keys(fieldMappings).map(() => ({
+          wch: 15 // Character width (adjust as needed)
+        }));
+        
+        // Format date columns in Excel
+        const dateColumns = ['dateFrom', 'dateTo'];
+        dateColumns.forEach(col => {
+          if (worksheet[`!ref`]) {
+            const range = XLSX.utils.decode_range(worksheet[`!ref`]);
+            for (let i = range.s.r + 1; i <= range.e.r; ++i) {
+              const cellAddress = XLSX.utils.encode_cell({ r: i, c: Object.keys(formattedData[0]).indexOf(col) });
+              if (worksheet[cellAddress]) {
+                worksheet[cellAddress].z = 'dd-mm-yyyy'; // Excel format code
+              }
+            }
+          }
+        });
+
+        // Create workbook
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Duty Slips");
-        XLSX.writeFile(workbook, "Duty_Slips.xlsx");
+        
+        // Generate filename with date range
+        const startDate = new Date(this.exportStartDate).toLocaleDateString('en-GB', {
+          day: '2-digit', month: '2-digit', year: 'numeric'
+        }).replace(/\//g, '');
+        
+        const endDate = new Date(this.exportEndDate).toLocaleDateString('en-GB', {
+          day: '2-digit', month: '2-digit', year: 'numeric'
+        }).replace(/\//g, '');
+
+        // Add this before the export code
+        const { value: fileName } = await Swal.fire({
+          title: 'Enter file name',
+          input: 'text',
+          inputValue: `DutySlip_${startDate}-${endDate}`,
+          confirmButtonText: "OK",
+          confirmButtonColor: "maroon",
+          showCancelButton: true,
+          inputValidator: (value) => {
+            if (!value) {
+              return 'You need to enter a file name!';
+            }
+          }
+        });
+
+        if (!fileName) return; // User cancelled
+
+        // Export the file
+        XLSX.writeFile(workbook, `${fileName}.xlsx`);
 
         setTimeout(() => {
           Swal.fire({
@@ -308,7 +402,7 @@ export default {
       } finally {
         this.isExporting = false;
       }
-    },
+    }
   },
 };
 </script>
