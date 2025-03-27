@@ -124,12 +124,17 @@
 
           <!-- Delete Icon -->
           <svg
-            @click="deleteSlip(slip.dutySlipId)"
+            @click="allowDelete ? deleteSlip(slip.dutySlipId) : null"
             xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 text-red-500 hover:text-red-700 cursor-pointer"
+            class="h-6 w-6"
+            :class="{
+              'text-red-500 hover:text-red-700 cursor-pointer': allowDelete,
+              'text-gray-400 cursor-not-allowed': !allowDelete
+            }"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
+            :disabled="!allowDelete"
           >
             <path
               stroke-linecap="round"
@@ -221,12 +226,17 @@
             <td class="border p-2 text-center">
               <!-- Delete Icon -->
               <svg
-                @click="deleteSlip(slip.dutySlipId)"
+                @click="allowDelete ? deleteSlip(slip.dutySlipId) : null"
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6 text-red-500 hover:text-red-700 cursor-pointer mx-auto"
+                class="h-6 w-6 mx-auto"
+                :class="{
+                  'text-red-500 hover:text-red-700 cursor-pointer': allowDelete,
+                  'text-gray-400 cursor-not-allowed': !allowDelete
+                }"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
+                :disabled="!allowDelete"
               >
                 <path
                   stroke-linecap="round"
@@ -934,6 +944,7 @@ export default {
       companySearchQuery: "", // Search query for companies
       windowWidth: window.innerWidth, // Track window width for responsiveness
       fullImage: null,
+      allowDelete: false,
     };
   },
   computed: {
@@ -1040,6 +1051,10 @@ export default {
         )
         .slice(0, 5); // Limit the number of displayed options
     },
+  },
+  mounted() {
+    const role = this.$store.state.user?.role || JSON.parse(sessionStorage.getItem("user")).role;
+    this.allowDelete = (role && role === "admin");
   },
   created() {
     this.fetchDutySlips();

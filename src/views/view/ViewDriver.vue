@@ -92,12 +92,17 @@
 
           <!-- Delete Icon -->
           <svg
-            @click="deleteDriver(driver.driverId)"
+            @click="allowDelete ? deleteDriver(driver.driverId) : null"
             xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 text-red-500 hover:text-red-700 cursor-pointer"
+            class="h-6 w-6"
+            :class="{
+                  'text-red-500 hover:text-red-700 cursor-pointer': allowDelete,
+                  'text-gray-400 cursor-not-allowed': !allowDelete
+            }"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
+            :disabled="!allowDelete"
           >
             <path
               stroke-linecap="round"
@@ -188,12 +193,17 @@
             <td class="border p-2 text-center">
               <!-- Delete Icon -->
               <svg
-                @click="deleteDriver(driver.driverId)"
+                @click="allowDelete ? deleteDriver(driver.driverId) : null"
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6 text-red-500 hover:text-red-700 cursor-pointer mx-auto"
+                class="h-6 w-6 mx-auto"
+                :class="{
+                  'text-red-500 hover:text-red-700 cursor-pointer': allowDelete,
+                  'text-gray-400 cursor-not-allowed': !allowDelete
+                }"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
+                :disabled="!allowDelete"
               >
                 <path
                   stroke-linecap="round"
@@ -568,6 +578,7 @@ export default {
       isEditMode: false, // Toggles between view and edit modes
       selectedDriver: {}, // Stores the selected driver data
       windowWidth: window.innerWidth, // Track window width for responsiveness
+      allowDelete: false,
     };
   },
   computed: {
@@ -602,6 +613,10 @@ export default {
     totalPages() {
       return Math.ceil(this.filteredData.length / this.itemsPerPage);
     },
+  },
+  mounted() {
+    window.addEventListener("scroll", this.handleScroll);
+    document.addEventListener("click", this.handleClickOutside);
   },
   created() {
     this.fetchDrivers();
