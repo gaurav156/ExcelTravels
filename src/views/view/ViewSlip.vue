@@ -666,7 +666,7 @@
                   class="mt-1 block w-full px-4 py-2 border border-[#800000] rounded-md shadow-sm bg-gray-100"
                 />
               </div>
-              <div>
+              <!-- <div>
                 <label class="block text-sm font-medium text-gray-700"
                   >Created At</label
                 >
@@ -677,8 +677,8 @@
                   disabled
                   class="mt-1 block w-full px-4 py-2 border border-[#800000] rounded-md shadow-sm bg-gray-100"
                 />
-              </div>
-              <div v-if="selectedSlip.modifiedAt">
+              </div> -->
+              <!-- <div v-if="selectedSlip.modifiedAt">
                 <label class="block text-sm font-medium text-gray-700"
                   >Modified At</label
                 >
@@ -689,7 +689,7 @@
                   disabled
                   class="mt-1 block w-full px-4 py-2 border border-[#800000] rounded-md shadow-sm bg-gray-100"
                 />
-              </div>
+              </div> -->
 
               <!-- Editable Fields (now with required attribute) -->
               <div>
@@ -703,6 +703,43 @@
                   readonly
                   disabled
                 />
+              </div>
+              <div class="relative">
+                <label class="block text-sm font-medium text-gray-700">
+                  Pickup Time <span class="text-red-500">*</span>
+                </label>
+                <div class="relative">
+                  <input
+                    id="pickupTime2"
+                    v-model="selectedSlip.pickupTime"
+                    type="time"
+                    class="time-input focus:ring-[#800000] focus:outline-none bg-white mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon pr-10 cursor-pointer"
+                    required
+                  />
+                  <!-- Custom Clock Icon (Only one remains) -->
+                  <svg
+                    class="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#800000] pointer-events-none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 6v6l4 2"
+                    />
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="8"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      fill="none"
+                    />
+                  </svg>
+                </div>
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700">
@@ -858,7 +895,32 @@
                   class="bg-white mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon pr-10 cursor-pointer"
                   required
                 />
-                <!-- Calendar Icon remains same -->
+                <!-- Custom Calendar Icon -->
+                <svg
+                  class="absolute right-3 top-11 transform -translate-y-1/2 h-5 w-5 text-maroon pointer-events-none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 2v2M16 2v2M4 6h16M5 10h14M12 14v4m0 0h-2m2 0h2"
+                  />
+                  <rect
+                    x="3"
+                    y="4"
+                    width="18"
+                    height="18"
+                    rx="2"
+                    ry="2"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    fill="none"
+                  />
+                </svg>
               </div>
 
               <div class="relative">
@@ -871,45 +933,32 @@
                   class="bg-white mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon pr-10 cursor-pointer"
                   required
                 />
-                <!-- Calendar Icon remains same -->
-              </div>
-
-              <div class="relative">
-                <label class="block text-sm font-medium text-gray-700">
-                  Pickup Time <span class="text-red-500">*</span>
-                </label>
-                <div class="relative">
-                  <input
-                  id="pickupTime2"
-                    v-model="selectedSlip.pickupTime"
-                    type="time"
-                    class="time-input focus:ring-[#800000] focus:outline-none bg-white mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon pr-10 cursor-pointer"
-                    required
+                <!-- Custom Calendar Icon -->
+                <svg
+                  class="absolute right-3 top-11 transform -translate-y-1/2 h-5 w-5 text-maroon pointer-events-none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M8 2v2M16 2v2M4 6h16M5 10h14M12 14v4m0 0h-2m2 0h2"
                   />
-                  <!-- Custom Clock Icon (Always Visible & Clickable) -->
-                  <svg
-                    class="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#800000] pointer-events-none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
+                  <rect
+                    x="3"
+                    y="4"
+                    width="18"
+                    height="18"
+                    rx="2"
+                    ry="2"
                     stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 6v6l4 2"
-                    />
-                    <circle
-                      cx="12"
-                      cy="12"
-                      r="8"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      fill="none"
-                    />
-                  </svg>
-                </div>
+                    stroke-width="2"
+                    fill="none"
+                  />
+                </svg>
               </div>
             </div>
 
@@ -1174,7 +1223,7 @@ export default {
         "tripRoute",
         "formattedDateFrom",
         "formattedDateTo",
-        "pickupTime"
+        "pickupTime",
       ];
 
       // Check if any required field is empty
@@ -1643,5 +1692,17 @@ input[type="date"] {
 .modal-content {
   max-height: 90vh; /* Adjust as needed for small screens */
   overflow-y: auto; /* Allow scrolling on small screens */
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  opacity: 0; /* Makes it invisible but still clickable */
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+input[type="time"] {
+  -webkit-appearance: none;
+  appearance: none;
 }
 </style>
