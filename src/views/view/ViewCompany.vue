@@ -17,6 +17,7 @@
           v-model="nameFilter"
           type="text"
           placeholder="Search by Company Name"
+          autocomplete="off"
           class="custom-select focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon placeholder:text-xs lg:placeholder:text-sm"
         />
         <!-- Cross (✖) Icon to Clear Input -->
@@ -96,7 +97,7 @@
             class="h-6 w-6"
             :class="{
               'text-red-500 hover:text-red-700 cursor-pointer': allowDelete,
-              'text-gray-400 cursor-not-allowed': !allowDelete
+              'text-gray-400 cursor-not-allowed': !allowDelete,
             }"
             fill="none"
             viewBox="0 0 24 24"
@@ -193,7 +194,7 @@
                 class="h-6 w-6 mx-auto"
                 :class="{
                   'text-red-500 hover:text-red-700 cursor-pointer': allowDelete,
-                  'text-gray-400 cursor-not-allowed': !allowDelete
+                  'text-gray-400 cursor-not-allowed': !allowDelete,
                 }"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -456,8 +457,10 @@ export default {
     },
   },
   mounted() {
-    const role = this.$store.state.user?.role || JSON.parse(sessionStorage.getItem("user")).role;
-    this.allowDelete = (role && role === "admin");
+    const role =
+      this.$store.state.user?.role ||
+      JSON.parse(sessionStorage.getItem("user")).role;
+    this.allowDelete = role && role === "admin";
   },
   created() {
     this.fetchCompanies();
