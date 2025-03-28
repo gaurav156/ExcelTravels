@@ -201,13 +201,10 @@ export default {
   computed: {
     totalKM(startKM, endKM) {
       // Ensure values are numbers and calculate difference
-      return (
-        Number(endKM) - Number(startKM) || 0
-      );
+      return Number(endKM) - Number(startKM) || 0;
     },
     totalTime(startTime, endTime) {
-      if (!startTime || !endTime)
-        return "N/A";
+      if (!startTime || !endTime) return "N/A";
 
       // Convert times to Date objects
       const start = new Date(`1970-01-01T${startTime}`);
@@ -225,6 +222,28 @@ export default {
     },
   },
   methods: {
+    calculateTotalKM(slip) {
+      if (!slip.endKM || !slip.startKM) return 0;
+      return Number(slip.endKM) - Number(slip.startKM);
+    },
+
+    calculateTotalTime(slip) {
+      if (!slip.startTime || !slip.endTime) return "N/A";
+
+      // Convert times to Date objects
+      const start = new Date(`1970-01-01T${slip.startTime}`);
+      const end = new Date(`1970-01-01T${slip.endTime}`);
+
+      // Calculate difference in minutes
+      let diffMinutes = Math.floor((end - start) / (1000 * 60));
+
+      if (diffMinutes < 0) return "Invalid Time";
+
+      const hours = Math.floor(diffMinutes / 60);
+      const minutes = diffMinutes % 60;
+
+      return `${hours}h ${minutes}m`;
+    },
     clearDateFields() {
       this.exportStartDate = null;
       this.exportEndDate = null;
@@ -331,48 +350,64 @@ export default {
           endKM: "End KM",
           startTime: "Start Time",
           endTime: "End Time",
+          // These will be calculated below
           totalKM: "Total KM",
-          totalTime: "Total Time"
+          totalTime: "Total Time",
         };
 
         // Format data and transform headers
-        const formattedData = dutySlips.map(slip => {
+        const formattedData = dutySlips.map((slip) => {
           const formattedSlip = {};
-          Object.keys(fieldMappings).forEach(field => {
-            if (field === 'dateFrom' || field === 'dateTo' || 
-                field === 'createdAt' || field === 'modifiedAt') {
+
+          // Add all other fields
+          Object.keys(fieldMappings).forEach((field) => {
+            if (field === "totalKM" || field === "totalTime") return; // Skip as we already added them
+
+            if (
+              field === "dateFrom" ||
+              field === "dateTo" ||
+              field === "createdAt" ||
+              field === "modifiedAt"
+            ) {
               // Format dates as DD-MM-YYYY
-              formattedSlip[fieldMappings[field]] = slip[field] 
-                ? new Date(slip[field]).toLocaleDateString('en-GB', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric'
-                  }).replace(/\//g, '-')
-                : '';
+              formattedSlip[fieldMappings[field]] = slip[field]
+                ? new Date(slip[field])
+                    .toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                    })
+                    .replace(/\//g, "-")
+                : "";
             } else {
-              formattedSlip[fieldMappings[field]] = slip[field] || '';
+              formattedSlip[fieldMappings[field]] = slip[field] || "";
             }
           });
+          formattedSlip[fieldMappings.totalKM] = this.calculateTotalKM(slip);
+          formattedSlip[fieldMappings.totalTime] =
+            this.calculateTotalTime(slip);
           return formattedSlip;
         });
-
         // Create worksheet with formatted headers
         const worksheet = XLSX.utils.json_to_sheet(formattedData);
 
         // Auto-size columns for better readability
-        worksheet['!cols'] = Object.keys(fieldMappings).map(() => ({
-          wch: 15 // Character width (adjust as needed)
+        worksheet["!cols"] = Object.keys(fieldMappings).map(() => ({
+          wch: 15, // Character width (adjust as needed)
         }));
-        
+
         // Format date columns in Excel
-        const dateColumns = ['dateFrom', 'dateTo'];
-        dateColumns.forEach(col => {
+        const dateColumns = ["dateFrom", "dateTo"];
+        dateColumns.forEach((col) => {
           if (worksheet[`!ref`]) {
             const range = XLSX.utils.decode_range(worksheet[`!ref`]);
             for (let i = range.s.r + 1; i <= range.e.r; ++i) {
-              const cellAddress = XLSX.utils.encode_cell({ r: i, c: Object.keys(formattedData[0]).indexOf(col) });
+              const cellAddress = XLSX.utils.encode_cell({
+                r: i,
+                c: Object.keys(formattedData[0]).indexOf(col),
+              });
               if (worksheet[cellAddress]) {
-                worksheet[cellAddress].z = 'dd-mm-yyyy'; // Excel format code
+                worksheet[cellAddress].z = "dd-mm-yyyy"; // Excel format code
               }
             }
           }
@@ -381,29 +416,37 @@ export default {
         // Create workbook
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Duty Slips");
-        
+
         // Generate filename with date range
-        const startDate = new Date(this.exportStartDate).toLocaleDateString('en-GB', {
-          day: '2-digit', month: '2-digit', year: 'numeric'
-        }).replace(/\//g, '');
-        
-        const endDate = new Date(this.exportEndDate).toLocaleDateString('en-GB', {
-          day: '2-digit', month: '2-digit', year: 'numeric'
-        }).replace(/\//g, '');
+        const startDate = new Date(this.exportStartDate)
+          .toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          })
+          .replace(/\//g, "");
+
+        const endDate = new Date(this.exportEndDate)
+          .toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          })
+          .replace(/\//g, "");
 
         // Add this before the export code
         const { value: fileName } = await Swal.fire({
-          title: 'Enter file name',
-          input: 'text',
+          title: "Enter file name",
+          input: "text",
           inputValue: `DutySlip_${startDate}-${endDate}`,
           confirmButtonText: "OK",
           confirmButtonColor: "maroon",
           showCancelButton: true,
           inputValidator: (value) => {
             if (!value) {
-              return 'You need to enter a file name!';
+              return "You need to enter a file name!";
             }
-          }
+          },
         });
 
         if (!fileName) return; // User cancelled
@@ -433,7 +476,7 @@ export default {
       } finally {
         this.isExporting = false;
       }
-    }
+    },
   },
 };
 </script>
