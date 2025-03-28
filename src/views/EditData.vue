@@ -285,6 +285,7 @@ export default {
         const fieldMappings = {
           dutySlipId: "Duty Slip ID",
           createdAt: "Created At",
+          modifiedAt: "Modified At",
           companyId: "Company ID",
           companyName: "Company Name",
           customerName: "Customer Name",
@@ -309,7 +310,8 @@ export default {
         const formattedData = dutySlips.map(slip => {
           const formattedSlip = {};
           Object.keys(fieldMappings).forEach(field => {
-            if (field === 'dateFrom' || field === 'dateTo' || field === 'createdAt') {
+            if (field === 'dateFrom' || field === 'dateTo' || 
+                field === 'createdAt' || field === 'modifiedAt') {
               // Format dates as DD-MM-YYYY
               formattedSlip[fieldMappings[field]] = slip[field] 
                 ? new Date(slip[field]).toLocaleDateString('en-GB', {
