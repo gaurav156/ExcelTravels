@@ -323,6 +323,12 @@
                     {{ formatDate(selectedSlip.createdAt) }}
                   </p>
                 </div>
+                <div v-if="selectedSlip.modifiedAt">
+                  <p class="text-sm font-medium text-gray-700">Modified At</p>
+                  <p class="text-gray-500">
+                    {{ formatDate(selectedSlip.modifiedAt) }}
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -659,6 +665,18 @@
                 >
                 <input
                   v-model="selectedSlip.createdAt"
+                  type="text"
+                  readonly
+                  disabled
+                  class="mt-1 block w-full px-4 py-2 border border-[#800000] rounded-md shadow-sm bg-gray-100"
+                />
+              </div>
+              <div v-if="selectedSlip.modifiedAt">
+                <label class="block text-sm font-medium text-gray-700"
+                  >Modified At</label
+                >
+                <input
+                  v-model="selectedSlip.modifiedAt"
                   type="text"
                   readonly
                   disabled

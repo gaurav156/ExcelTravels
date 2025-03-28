@@ -165,6 +165,7 @@ router.get("/:dutySlipId", async (req, res) => {
 router.put("/:dutySlipId", async (req, res) => {
   try {
     const { dutySlipId } = req.params;
+    req.body.modifiedAt = new Date();
     const updatedDutySlip = await DutySlip.findOneAndUpdate(
       { dutySlipId },
       req.body,

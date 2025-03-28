@@ -24,6 +24,7 @@ const DutySlipSchema = new mongoose.Schema({
   endTime: { type: String },
   customerSignature: { type: String }, // URL to Firebase or storage
   createdAt: { type: Date, default: Date.now },
+  modifiedAt: { type: Date },
 });
 
 module.exports = mongoose.model("DutySlip", DutySlipSchema);
