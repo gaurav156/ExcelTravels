@@ -198,6 +198,32 @@ export default {
       isExporting: false, // Loading state for export
     };
   },
+  computed: {
+    totalKM(startKM, endKM) {
+      // Ensure values are numbers and calculate difference
+      return (
+        Number(endKM) - Number(startKM) || 0
+      );
+    },
+    totalTime(startTime, endTime) {
+      if (!startTime || !endTime)
+        return "N/A";
+
+      // Convert times to Date objects
+      const start = new Date(`1970-01-01T${startTime}`);
+      const end = new Date(`1970-01-01T${endTime}`);
+
+      // Calculate difference in minutes
+      let diffMinutes = Math.floor((end - start) / (1000 * 60));
+
+      if (diffMinutes < 0) return "Invalid Time"; // Handle invalid cases
+
+      const hours = Math.floor(diffMinutes / 60);
+      const minutes = diffMinutes % 60;
+
+      return `${hours}h ${minutes}m`;
+    },
+  },
   methods: {
     clearDateFields() {
       this.exportStartDate = null;
@@ -299,11 +325,14 @@ export default {
           carNumber: "Car Number",
           dateFrom: "Start Date",
           dateTo: "End Date",
+          pickupTime: "Pickup Time",
           tripRoute: "Trip Route",
           startKM: "Start KM",
           endKM: "End KM",
           startTime: "Start Time",
-          endTime: "End Time"
+          endTime: "End Time",
+          totalKM: "Total KM",
+          totalTime: "Total Time"
         };
 
         // Format data and transform headers

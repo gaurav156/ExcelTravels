@@ -13,6 +13,7 @@ const DutySlipSchema = new mongoose.Schema({
   dutyType: { type: String },
   driverName: { type: String },
   carNumber: { type: String },
+  pickupTime: { type: String },
   dateFrom: { type: Date },
   dateTo: { type: Date },
   tripRoute: { type: String },

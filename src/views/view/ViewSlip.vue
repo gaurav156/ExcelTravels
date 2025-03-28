@@ -431,6 +431,12 @@
                   </p>
                 </div>
                 <div>
+                  <p class="text-sm font-medium text-gray-700">Pickup Time</p>
+                  <p class="text-gray-500">
+                    {{ selectedSlip.pickupTime }}
+                  </p>
+                </div>
+                <div>
                   <p class="text-sm font-medium text-gray-700">Duty Type</p>
                   <p class="text-gray-500">
                     {{ selectedSlip.dutyType }}
@@ -867,6 +873,44 @@
                 />
                 <!-- Calendar Icon remains same -->
               </div>
+
+              <div class="relative">
+                <label class="block text-sm font-medium text-gray-700">
+                  Pickup Time <span class="text-red-500">*</span>
+                </label>
+                <div class="relative">
+                  <input
+                  id="pickupTime2"
+                    v-model="selectedSlip.pickupTime"
+                    type="time"
+                    class="time-input focus:ring-[#800000] focus:outline-none bg-white mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon pr-10 cursor-pointer"
+                    required
+                  />
+                  <!-- Custom Clock Icon (Always Visible & Clickable) -->
+                  <svg
+                    class="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#800000] pointer-events-none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 6v6l4 2"
+                    />
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="8"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      fill="none"
+                    />
+                  </svg>
+                </div>
+              </div>
             </div>
 
             <!-- Save and Cancel Buttons -->
@@ -1130,6 +1174,7 @@ export default {
         "tripRoute",
         "formattedDateFrom",
         "formattedDateTo",
+        "pickupTime"
       ];
 
       // Check if any required field is empty
