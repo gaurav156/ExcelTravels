@@ -23,6 +23,8 @@ const DutySlipSchema = new mongoose.Schema({
   endKMPhoto: { type: String }, // URL to Firebase or storage
   startTime: { type: String },
   endTime: { type: String },
+  tollFees: { type: Number },
+  parkingFees: { type: Number },
   customerSignature: { type: String }, // URL to Firebase or storage
   createdAt: { type: Date, default: Date.now },
   modifiedAt: { type: Date },

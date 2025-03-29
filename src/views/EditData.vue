@@ -353,6 +353,8 @@ export default {
           // These will be calculated below
           totalKM: "Total KM",
           totalTime: "Total Time",
+          parkingFees: "Parking Fees",
+          tollFees: "Tolll Fees",
         };
 
         // Format data and transform headers

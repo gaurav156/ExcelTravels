@@ -472,6 +472,14 @@
                     {{ selectedSlip.endTime }}
                   </p>
                 </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-700">Parking Fees</p>
+                  <p class="text-gray-500">₹{{ formattedParkingFees }}</p>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-700">Toll Fees</p>
+                  <p class="text-gray-500">₹{{ formattedTollFees }}</p>
+                </div>
               </div>
             </div>
 
@@ -960,6 +968,30 @@
                   />
                 </svg>
               </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700">
+                  Parking Fees (₹)
+                </label>
+                <input
+                  v-model.number="selectedSlip.parkingFees"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700">
+                  Toll Fees (₹)
+                </label>
+                <input
+                  v-model.number="selectedSlip.tollFees"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                />
+              </div>
             </div>
 
             <!-- Save and Cancel Buttons -->
@@ -1019,6 +1051,8 @@ export default {
       windowWidth: window.innerWidth, // Track window width for responsiveness
       fullImage: null,
       allowDelete: false,
+      parkingFees: 0, // Initialize with 0
+      tollFees: 0, // Initialize with 0
     };
   },
   computed: {
@@ -1045,6 +1079,20 @@ export default {
       const minutes = diffMinutes % 60;
 
       return `${hours}h ${minutes}m`;
+    },
+    formattedParkingFees() {
+      const value = this.selectedSlip.parkingFees;
+      return (value || 0).toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    },
+    formattedTollFees() {
+      const value = this.selectedSlip.tollFees;
+      return (value || 0).toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
     },
     // Dynamically adjust itemsPerPage based on screen size
     itemsPerPage() {
