@@ -396,141 +396,160 @@
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700"
-                  >Driver Name</label
+                  >Driver Name <span class="text-red-500">*</span></label
                 >
                 <input
                   v-model="selectedDriver.name"
                   type="text"
+                  required
                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700"
-                  >Age</label
+                  >Age <span class="text-red-500">*</span></label
                 >
                 <input
                   v-model="selectedDriver.age"
                   type="number"
+                  required
+                  min="18"
                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700"
-                  >Email</label
+                  >Email <span class="text-red-500">*</span></label
                 >
                 <input
                   v-model="selectedDriver.email"
                   type="email"
+                  required
                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700"
-                  >Contact</label
+                  >Contact <span class="text-red-500">*</span></label
                 >
                 <input
                   v-model="selectedDriver.contact"
                   type="tel"
+                  required
                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700"
-                  >Address</label
+                  >Address <span class="text-red-500">*</span></label
                 >
                 <input
                   v-model="selectedDriver.address"
                   type="text"
+                  required
                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700"
-                  >Emergency Name</label
+                  >Emergency Name <span class="text-red-500">*</span></label
                 >
                 <input
                   v-model="selectedDriver.emergencyName"
                   type="text"
+                  required
                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700"
-                  >Emergency Contact</label
+                  >Emergency Contact <span class="text-red-500">*</span></label
                 >
                 <input
                   v-model="selectedDriver.emergencyContact"
                   type="tel"
+                  required
                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700"
-                  >Bank Name</label
+                  >Bank Name <span class="text-red-500">*</span></label
                 >
                 <input
                   v-model="selectedDriver.bankName"
                   type="text"
+                  required
                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700"
-                  >Account Number</label
+                  >Account Number <span class="text-red-500">*</span></label
                 >
                 <input
                   v-model="selectedDriver.accountNumber"
                   type="text"
+                  required
                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700"
-                  >IFSC Code</label
+                  >IFSC Code <span class="text-red-500">*</span></label
                 >
                 <input
                   v-model="selectedDriver.ifscCode"
                   type="text"
+                  required
                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700"
-                  >Branch Name</label
+                  >Branch Name <span class="text-red-500">*</span></label
                 >
                 <input
                   v-model="selectedDriver.branch"
                   type="text"
+                  required
                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700"
-                  >Aadhar Number</label
+                  >Aadhar Number <span class="text-red-500">*</span></label
                 >
                 <input
                   v-model="selectedDriver.aadharNumber"
                   type="text"
+                  required
+                  pattern="[0-9]{12}"
+                  title="Aadhar number must be 12 digits"
                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700"
-                  >PAN Number</label
+                  >PAN Number <span class="text-red-500">*</span></label
                 >
                 <input
                   v-model="selectedDriver.panNumber"
                   type="text"
+                  required
+                  pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
+                  title="PAN number must be in format: ABCDE1234F"
                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700"
-                  >License Number</label
+                  >License Number <span class="text-red-500">*</span></label
                 >
                 <input
                   v-model="selectedDriver.licenseNumber"
                   type="text"
+                  required
                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                 />
               </div>
@@ -666,6 +685,40 @@ export default {
     },
     // Save edited driver
     async saveDriver() {
+      // Get the original driver data
+      const originalDriver = this.drivers.find(
+        (d) => d.driverId === this.selectedDriver.driverId
+      );
+
+      // Check if any changes were made
+      const hasChanges =
+        this.selectedDriver.name !== originalDriver.name ||
+        this.selectedDriver.age !== originalDriver.age ||
+        this.selectedDriver.email !== originalDriver.email ||
+        this.selectedDriver.contact !== originalDriver.contact ||
+        this.selectedDriver.address !== originalDriver.address ||
+        this.selectedDriver.emergencyName !== originalDriver.emergencyName ||
+        this.selectedDriver.emergencyContact !==
+          originalDriver.emergencyContact ||
+        this.selectedDriver.bankName !== originalDriver.bankName ||
+        this.selectedDriver.accountNumber !== originalDriver.accountNumber ||
+        this.selectedDriver.ifscCode !== originalDriver.ifscCode ||
+        this.selectedDriver.branch !== originalDriver.branch ||
+        this.selectedDriver.aadharNumber !== originalDriver.aadharNumber ||
+        this.selectedDriver.panNumber !== originalDriver.panNumber ||
+        this.selectedDriver.licenseNumber !== originalDriver.licenseNumber;
+
+      if (!hasChanges) {
+        Swal.fire({
+          title: "No Changes",
+          text: "No changes were made to the driver details.",
+          icon: "info",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "OK",
+        });
+        return;
+      }
+
       try {
         await api.put(
           `/drivers/${this.selectedDriver.driverId}`,

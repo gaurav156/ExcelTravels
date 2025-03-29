@@ -337,41 +337,45 @@
               </div>
               <div>
                 <label class="block text-sm text-gray-500 font-bold"
-                  >Company Name</label
+                  >Company Name <span class="text-red-500">*</span></label
                 >
                 <input
                   v-model="selectedCompany.companyName"
                   type="text"
+                  required
                   class="mt-1 block w-full px-4 py-2 border border-maroon rounded-md shadow-sm"
                 />
               </div>
               <div>
                 <label class="block text-sm text-gray-500 font-bold"
-                  >Email</label
+                  >Email <span class="text-red-500">*</span></label
                 >
                 <input
                   v-model="selectedCompany.email"
                   type="email"
+                  required
                   class="mt-1 block w-full px-4 py-2 border border-maroon rounded-md shadow-sm"
                 />
               </div>
               <div>
                 <label class="block text-sm text-gray-500 font-bold"
-                  >Contact</label
+                  >Contact <span class="text-red-500">*</span></label
                 >
                 <input
                   v-model="selectedCompany.contact"
                   type="tel"
+                  required
                   class="mt-1 block w-full px-4 py-2 border border-maroon rounded-md shadow-sm"
                 />
               </div>
               <div>
                 <label class="block text-sm text-gray-500 font-bold"
-                  >Address</label
+                  >Address <span class="text-red-500">*</span></label
                 >
                 <input
                   v-model="selectedCompany.address"
                   type="text"
+                  required
                   class="mt-1 block w-full px-4 py-2 border border-maroon rounded-md shadow-sm"
                 />
               </div>
@@ -507,6 +511,29 @@ export default {
     },
     // Save edited company
     async saveCompany() {
+      // Get the original company data
+      const originalCompany = this.companies.find(
+        (c) => c.companyId === this.selectedCompany.companyId
+      );
+
+      // Check if any changes were made
+      const hasChanges =
+        this.selectedCompany.companyName !== originalCompany.companyName ||
+        this.selectedCompany.email !== originalCompany.email ||
+        this.selectedCompany.contact !== originalCompany.contact ||
+        this.selectedCompany.address !== originalCompany.address;
+
+      if (!hasChanges) {
+        Swal.fire({
+          title: "No Changes",
+          text: "No changes were made to the company details.",
+          icon: "info",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "OK",
+        });
+        return;
+      }
+
       try {
         await api.put(
           `/companies/${this.selectedCompany.companyId}`,
