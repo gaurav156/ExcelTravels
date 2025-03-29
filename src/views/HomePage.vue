@@ -43,7 +43,7 @@
         <!-- Dropdown Menu -->
         <div
           v-if="showDropdown"
-          class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-maroon"
+          class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 border border-maroon"
         >
           <div class="px-4 py-2 text-sm text-gray-700 border-b border-maroon">
             <p class="font-medium">Logged in as</p>
@@ -351,7 +351,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-maroon text-white py-4">
+    <footer class="relative bg-maroon text-white py-4 z-10">
       <div class="container mx-auto text-center">
         <p class="text-lg font-semibold">
           &copy; 2025 Excel Tours & Travels. All rights reserved.
