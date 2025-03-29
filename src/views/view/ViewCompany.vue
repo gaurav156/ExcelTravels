@@ -270,38 +270,38 @@
           <div v-if="!isEditMode" class="space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <p class="text-sm text-gray-500 font-bold">Company ID</p>
-                <p class="font-semibold text-black">
+                <p class="text-sm font-medium text-gray-700">Company ID</p>
+                <p class="text-gray-500">
                   {{ selectedCompany.companyId }}
                 </p>
               </div>
               <div>
-                <p class="text-sm text-gray-500 font-bold">Created At</p>
-                <p class="font-semibold text-black">
+                <p class="text-sm font-medium text-gray-700">Created At</p>
+                <p class="text-gray-500">
                   {{ formatDate(selectedCompany.createdAt) }}
                 </p>
               </div>
               <div>
-                <p class="text-sm text-gray-500 font-bold">Company Name</p>
-                <p class="font-semibold text-black">
+                <p class="text-sm font-medium text-gray-700">Company Name</p>
+                <p class="text-gray-500">
                   {{ selectedCompany.companyName }}
                 </p>
               </div>
               <div>
-                <p class="text-sm text-gray-500 font-bold">Email</p>
-                <p class="font-semibold text-black">
+                <p class="text-sm font-medium text-gray-700">Email</p>
+                <p class="text-gray-500">
                   {{ selectedCompany.email }}
                 </p>
               </div>
               <div>
-                <p class="text-sm text-gray-500 font-bold">Contact</p>
-                <p class="font-semibold text-black">
+                <p class="text-sm font-medium text-gray-700">Contact</p>
+                <p class="text-gray-500">
                   {{ selectedCompany.contact }}
                 </p>
               </div>
               <div>
-                <p class="text-sm text-gray-500 font-bold">Address</p>
-                <p class="font-semibold text-black">
+                <p class="text-sm font-medium text-gray-700">Address</p>
+                <p class="text-gray-500">
                   {{ selectedCompany.address }}
                 </p>
               </div>

@@ -448,6 +448,11 @@
                     {{ selectedSlip.tripRoute }}
                   </p>
                 </div>
+                <div class="hidden md:block">
+                  <p class="text-sm font-medium text-gray-700"></p>
+                  <p class="text-gray-500">
+                  </p>
+                </div>
                 <div>
                   <p class="text-sm font-medium text-gray-700">Start KM</p>
                   <p class="text-gray-500">
