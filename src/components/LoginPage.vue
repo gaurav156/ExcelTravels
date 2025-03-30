@@ -58,7 +58,8 @@
         <input
           type="text"
           id="username"
-          v-model="loginForm.username"
+          v-model.trim="loginForm.username"
+          @input="loginForm.username = loginForm.username.toLowerCase()"
           placeholder="Enter your username"
           autocomplete="off"
           class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
