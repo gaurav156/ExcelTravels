@@ -9,7 +9,7 @@ const getBackendUrl = () => {
 };
 
 const api = axios.create({
-  baseURL: getBackendUrl(),
+  baseURL: process.env.VUE_APP_BACKEND_URL || getBackendUrl(), // Fallback
   headers: {
     "Content-Type": "application/json",
   },
