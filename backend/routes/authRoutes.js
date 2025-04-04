@@ -3,6 +3,7 @@ const User = require("../models/User");
 const OTP = require("../models/OTP");
 const { authenticate, checkRole } = require("../middlewares/auth");
 const { sendEmail } = require("../utils/sendEmail");
+const { getOTPEmailTemplate } = require("../utils/emailTemplates");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -139,10 +140,14 @@ router.post("/send-otp/:role?", async (req, res) => {
       expiresAt: new Date(Date.now() + 600000), // 10 minutes
     });
 
+    // Use the HTML template
+    const emailHtml = getOTPEmailTemplate(user.name || "User", otp);
+    
     await sendEmail(
       email,
-      "Your OTP Code",
-      `Your OTP code is: ${otp}. It is valid for 10 minutes.`
+      "Your Password Reset OTP - Excel Tours & Travels",
+      `Your OTP code is: ${otp}. It is valid for 10 minutes.`, // Fallback text version
+      emailHtml // HTML version
     );
 
     res.json({ success: true, message: "OTP sent successfully" });
