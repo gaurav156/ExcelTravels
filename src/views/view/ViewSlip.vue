@@ -267,7 +267,7 @@
     <!-- View/Edit Modal -->
     <div
       v-if="isModalOpen"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-[1000] overflow-y-auto"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-[1000] overflow-y-auto modal-content"
     >
       <div
         class="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden"
@@ -1709,13 +1709,11 @@ input[type="date"] {
   .modal-content,
   .modal-content * {
     visibility: visible;
-    height: auto !important; /* Ensure modal content is fully visible */
-    max-height: none !important; /* Remove max-height constraints */
-    overflow: visible !important; /* Ensure no content is clipped */
     position: static !important; /* Ensure modal content is not constrained */
     height: auto !important; /* Ensure full height */
     max-height: none !important; /* Remove max-height constraints */
     overflow: visible !important; /* Ensure no content is clipped */
+    overflow-y: auto; /* Allow scrolling on small screens */
   }
   .modal-content {
     position: absolute;
@@ -1740,11 +1738,6 @@ input[type="date"] {
     font-size: 12px;
     color: #666;
   }
-}
-
-.modal-content {
-  max-height: 90vh; /* Adjust as needed for small screens */
-  overflow-y: auto; /* Allow scrolling on small screens */
 }
 
 input[type="time"]::-webkit-calendar-picker-indicator {
