@@ -1,4 +1,4 @@
-# duty-slip
+# Excel Tours & Travels
 
 ## Project setup
 ```
