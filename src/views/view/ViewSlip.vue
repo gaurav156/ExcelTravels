@@ -1436,15 +1436,22 @@ export default {
     // Format date and time
     formatDate(dateString) {
       const date = new Date(dateString);
-      return new Intl.DateTimeFormat("en-US", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: true,
-      }).format(date);
+
+      if (!date) return ""; // Handle empty dates
+      const d = new Date(date);
+
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+      const year = d.getFullYear();
+      let hours = d.getHours();
+      const minutes = String(d.getMinutes()).padStart(2, '0');
+      const seconds = String(d.getSeconds()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12; // The hour '0' should be '12'
+      const formattedHours = String(hours).padStart(2, '0');
+
+      return `${day}-${month}-${year} ${formattedHours}:${minutes}:${seconds} ${ampm}`;
     },
     // Fetch drivers from the API
     async fetchDrivers() {
