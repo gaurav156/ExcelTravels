@@ -8,7 +8,7 @@
     <!-- Filter Section - Right-Aligned -->
     <div class="flex flex-col sm:flex-row gap-4 mb-6 justify-end">
       <!-- Custom Dropdown for Date Filter -->
-      <div class="flex items-center relative">
+      <div v-click-outside="handleClickOutside" class="flex items-center relative">
         <label class="mr-2 font-medium text-maroon">Filter by Date:</label>
         <div class="relative">
           <button
@@ -1027,11 +1027,15 @@ import api from "@/utils/api";
 import Swal from "sweetalert2";
 import VueSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
+import clickOutside from '../../directives/clickOutside';
 
 export default {
   name: "DutySlipList",
   components: {
     VueSelect,
+  },
+  directives: {
+    clickOutside,
   },
   props: {
     isModalOpen: {
@@ -1195,6 +1199,9 @@ export default {
     window.removeEventListener("resize", this.handleResize); // Clean up listener
   },
   methods: {
+    handleClickOutside() {
+      this.isDateDropdownOpen = false;
+    },
     printDutySlip() {
       const modalContent = document.querySelector(".modal-content");
       if (!modalContent) return;

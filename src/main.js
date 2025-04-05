@@ -2,6 +2,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+import clickOutside from './directives/clickOutside';
 
 // Function to restore both token and user data
 const initializeAuth = async () => {
@@ -41,4 +42,5 @@ initializeAuth();
 createApp(App)
   .use(router)
   .use(store)
+  .directive('click-outside', clickOutside)
   .mount("#app");

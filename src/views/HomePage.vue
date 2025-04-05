@@ -407,11 +407,19 @@ export default {
       return this.$store.state.isDropdownOpen;
     },
   },
+  watch: {
+    // Watch for route changes
+    $route(to, from) {
+      if (to.fullPath !== from.fullPath) {
+        this.hideScrollButtonInstantly();
+      }
+    },
+  },
   mounted() {
     window.addEventListener("scroll", this.handleScroll);
     document.addEventListener("click", this.handleClickOutside);
   },
-  onCreate() {
+  created() {
     this.closeDropdown();
   },
   beforeUnmount() {
@@ -423,7 +431,7 @@ export default {
       this.$store.commit("SET_DROPDOWN_STATE", !this.showDropdown);
     },
     closeDropdown() {
-      this.showDropdown = false;
+      this.$store.commit("SET_DROPDOWN_STATE", false);
     },
     // Handle click outside dropdown
     handleClickOutside(event) {
@@ -431,15 +439,6 @@ export default {
         this.closeDropdown();
       }
     },
-    watch: {
-      // Watch for route changes
-      $route(to, from) {
-        if (to.fullPath !== from.fullPath) {
-          this.hideScrollButtonInstantly();
-        }
-      },
-    },
-
     // Instantly hide the button on page change
     hideScrollButtonInstantly() {
       this.showScrollToTop = false;
