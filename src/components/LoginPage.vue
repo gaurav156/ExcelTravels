@@ -452,14 +452,7 @@ export default {
 
     hideRoleSelectionModal() {
       this.isRoleSelectionModalVisible = false;
-      this.selectedRole = null;
     },
-
-    // selectRole(role) {
-    //   this.selectedRole = role;
-    //   this.hideRoleSelectionModal();
-    //   this.showForgotPasswordModal();
-    // },
 
     async selectRole(role) {
       this.selectedRole = role;
