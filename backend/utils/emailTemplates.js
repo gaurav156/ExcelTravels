@@ -62,9 +62,9 @@ const getOTPEmailTemplate = (userName, otp) => {
       
       <div class="content">
         <h2>Password Reset Request</h2>
-        <p>Dear ${userName},</p>
+        <p>Dear User,</p>
         
-        <p>We received a request to reset your password. Please use the following One-Time Password (OTP) to proceed:</p>
+        <p>We received a request to reset your password for account with username: <b>${userName}</b>. Please use the following One-Time Password (OTP) to proceed:</p>
         
         <div class="otp-container">
           <div class="otp-code">${otp}</div>
