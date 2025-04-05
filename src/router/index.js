@@ -12,15 +12,15 @@ import store from "../store"
 
 const routes = [
   {
-    path: "/login",
-    component: LoginPage,
-    meta: { requiresAuth: false },
-  },
-  {
     path: "/",
     component: HomePage,
     redirect: "/login",
     children: [
+      {
+        path: "login",
+        component: LoginPage,
+        meta: { requiresAuth: false },
+      },
       {
         path: "dutyslip",
         component: DutySlipForm,

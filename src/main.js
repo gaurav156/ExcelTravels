@@ -3,6 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import clickOutside from './directives/clickOutside';
+import './assets/main.css'
 
 // Function to restore both token and user data
 const initializeAuth = async () => {

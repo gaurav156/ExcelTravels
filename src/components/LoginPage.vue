@@ -375,6 +375,12 @@ import api from "@/utils/api";
 
 export default {
   name: "LoginForm",
+  props: {
+    isModalOpen: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       email: "phatakjanita@gmail.com",
