@@ -141,12 +141,14 @@ router.post("/send-otp/:role?", async (req, res) => {
     });
 
     // Use the HTML template
-    const emailHtml = getOTPEmailTemplate(user.name || "User", otp);
-    
+    const emailHtml = getOTPEmailTemplate(user.username || "User", otp);
+    // Make sure the text version is still meaningful
+    const textVersion = `Excel Tours & Travels - Password Reset\n\nDear ${user.username},\n\nYour OTP is: ${otp}\nValid for 10 minutes.\n\nDo not share this code.`;
+
     await sendEmail(
       email,
       "Your Password Reset OTP - Excel Tours & Travels",
-      `Your OTP code is: ${otp}. It is valid for 10 minutes.`, // Fallback text version
+      textVersion, // Fallback text version
       emailHtml // HTML version
     );
 

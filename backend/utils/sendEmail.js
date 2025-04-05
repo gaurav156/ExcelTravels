@@ -20,7 +20,8 @@ const sendEmail = async (to, subject, text, html = null) => {
     attachments: [{
       filename: 'logo.png',
       path: path.join(__dirname, '../public/images/logo.png'),
-      cid: 'companylogo' // Same cid value as in the html img src
+      cid: 'companylogo', // Same cid value as in the html img src
+      disposition: 'inline' // This makes the image display inline rather than as attachment
     }]
   };
 

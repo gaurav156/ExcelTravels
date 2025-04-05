@@ -20,7 +20,7 @@ const getOTPEmailTemplate = (userName, otp) => {
           border-bottom: 1px solid #eee;
         }
         .logo {
-          max-width: 150px;
+          max-width: 400px;
         }
         .content {
           padding: 20px 0;
@@ -39,8 +39,6 @@ const getOTPEmailTemplate = (userName, otp) => {
           color: #2c3e50;
         }
         .footer {
-          margin-top: 30px;
-          padding-top: 20px;
           border-top: 1px solid #eee;
           font-size: 12px;
           color: #777;
@@ -75,16 +73,13 @@ const getOTPEmailTemplate = (userName, otp) => {
         
         <p>If you didn't request this password reset, please ignore this email or contact support if you have concerns.</p>
         
-        <p>For security reasons:</p>
-        <ul>
-          <li>Do not share this OTP with anyone</li>
-        </ul>
+        <p>For security reasons, do not share this OTP with unauthorized persons.</p>
       </div>
       
       <div class="footer">
-        <p>This is an automatically generated email – please do not reply to it.</p>
-        <p>For any technical queries or feedback, please contact us at <a href="mailto:whizzoninfotech@gmail.com">whizzoninfotech@gmail.com</a></p>
-        <p>&copy; ${new Date().getFullYear()} Excel Tours & Travels. All rights reserved.</p>
+        <p>This is an automatically generated email – please do not reply to it.<br>
+        For any technical queries or feedback, please contact us at <a href="mailto:whizzoninfotech@gmail.com">whizzoninfotech@gmail.com</a><br>
+        &copy; ${new Date().getFullYear()} Excel Tours & Travels. All rights reserved.</p>
       </div>
     </body>
     </html>
