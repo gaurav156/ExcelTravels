@@ -199,6 +199,7 @@
               type="text"
               id="carNumber"
               v-model="form.carNumber"
+              @input="capitalizeCarNumber"
               placeholder="Enter Car Number"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
               required
@@ -528,6 +529,9 @@ export default {
         }
       }
       return Object.keys(errors).length === 0 ? true : errors;
+    },
+    capitalizeCarNumber(event) {
+      this.form.carNumber = event.target.value.toUpperCase();
     },
     async fetchDutySlips() {
       try {
