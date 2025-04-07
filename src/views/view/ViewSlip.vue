@@ -8,7 +8,10 @@
     <!-- Filter Section - Right-Aligned -->
     <div class="flex flex-col sm:flex-row gap-4 mb-6 justify-end">
       <!-- Custom Dropdown for Date Filter -->
-      <div v-click-outside="handleClickOutside" class="flex items-center relative">
+      <div
+        v-click-outside="handleClickOutside"
+        class="flex items-center relative"
+      >
         <label class="mr-2 font-medium text-maroon">Filter by Date:</label>
         <div class="relative">
           <button
@@ -123,6 +126,23 @@
             />
           </svg>
 
+          <!-- Share Icon -->
+          <svg
+            @click="shareSlip(slip)"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 text-blue-500 hover:text-blue-700 cursor-pointer"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+            />
+          </svg>
+
           <!-- Delete Icon -->
           <svg
             @click="allowDelete ? deleteSlip(slip.dutySlipId) : null"
@@ -161,6 +181,7 @@
             <th class="border p-2 hidden sm:table-cell">Trip Route</th>
             <th class="border p-2">View</th>
             <th class="border p-2">Edit</th>
+            <th class="border p-2">Share</th>
             <th class="border p-2">Delete</th>
           </tr>
         </thead>
@@ -224,6 +245,26 @@
                 />
               </svg>
             </td>
+
+            <td class="border p-2 text-center">
+              <!-- Share Button (shown when delete is disabled) -->
+              <svg
+                @click="shareSlip(slip)"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-blue-500 hover:text-blue-700 cursor-pointer mx-auto"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                />
+              </svg>
+            </td>
+
             <td class="border p-2 text-center">
               <!-- Delete Icon -->
               <svg
@@ -450,8 +491,7 @@
                 </div>
                 <div class="hidden md:block">
                   <p class="text-sm font-medium text-gray-700"></p>
-                  <p class="text-gray-500">
-                  </p>
+                  <p class="text-gray-500"></p>
                 </div>
                 <div>
                   <p class="text-sm font-medium text-gray-700">Start KM</p>
@@ -1027,7 +1067,7 @@ import api from "@/utils/api";
 import Swal from "sweetalert2";
 import VueSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
-import clickOutside from '../../directives/clickOutside';
+import clickOutside from "../../directives/clickOutside";
 
 export default {
   name: "DutySlipList",
@@ -1230,6 +1270,60 @@ export default {
       window.print();
 
       document.body.removeChild(printContainer);
+    },
+
+    shareSlip(slip) {
+      // Get last 5 digits of driver's phone number
+      const driverPwd = slip.phoneNumber ? slip.phoneNumber.slice(-5) : "N/A";
+
+      // Format the message with all requested details
+      const message = `Hello ${slip.driverName || "Driver"},
+
+*Driver Login Details:*
+🔹 Username: ${slip.driverId || "N/A"}
+🔹 Password: ${driverPwd}
+
+*Trip Information:*
+🚗 Duty Slip ID: ${slip.dutySlipId}
+📅 Date: ${this.formatDate(slip.dateFrom)}
+⏰ Pickup Time: ${slip.pickupTime}
+📍 Route: ${slip.tripRoute}
+
+*Customer Details:*
+👤 ${slip.customerName}
+🏢 ${slip.companyName}
+
+Please login to the app using the credentials above for more details.`;
+
+      // Clean the phone number (remove any non-digit characters)
+      const cleanedPhone = slip.phoneNumber
+        ? slip.phoneNumber.replace(/\D/g, "")
+        : null;
+
+      if (cleanedPhone) {
+        // Create WhatsApp URL with phone number
+        const whatsappUrl = `https://wa.me/${cleanedPhone}?text=${encodeURIComponent(
+          message
+        )}`;
+
+        // Open in a new tab
+        window.open(whatsappUrl, "_blank");
+      } else {
+        // Fallback to regular share if no phone number
+        const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(
+          message
+        )}`;
+        window.open(whatsappUrl, "_blank");
+
+        // Optional: Show alert if no phone number exists
+        Swal.fire({
+          title: "No Phone Number",
+          text: "Driver phone number not available, opened general WhatsApp share instead",
+          icon: "warning",
+          confirmButtonColor: "#3085d6",
+          confirmButtonText: "OK",
+        });
+      }
     },
 
     // Fetch duty slips from the API
@@ -1447,16 +1541,16 @@ export default {
       if (!date) return ""; // Handle empty dates
       const d = new Date(date);
 
-      const day = String(d.getDate()).padStart(2, '0');
-      const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+      const day = String(d.getDate()).padStart(2, "0");
+      const month = String(d.getMonth() + 1).padStart(2, "0"); // Months are zero-based
       const year = d.getFullYear();
       let hours = d.getHours();
-      const minutes = String(d.getMinutes()).padStart(2, '0');
-      const seconds = String(d.getSeconds()).padStart(2, '0');
-      const ampm = hours >= 12 ? 'PM' : 'AM';
+      const minutes = String(d.getMinutes()).padStart(2, "0");
+      const seconds = String(d.getSeconds()).padStart(2, "0");
+      const ampm = hours >= 12 ? "PM" : "AM";
       hours = hours % 12;
       hours = hours ? hours : 12; // The hour '0' should be '12'
-      const formattedHours = String(hours).padStart(2, '0');
+      const formattedHours = String(hours).padStart(2, "0");
 
       return `${day}-${month}-${year} ${formattedHours}:${minutes}:${seconds} ${ampm}`;
     },
