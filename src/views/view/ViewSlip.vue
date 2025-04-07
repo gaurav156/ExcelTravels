@@ -1271,6 +1271,18 @@ export default {
 
       document.body.removeChild(printContainer);
     },
+    formatDateOnlyJP(dateString) {
+      if (!dateString) return "N/A";
+      const date = new Date(dateString);
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
+    },
+
+    //     *Driver Login Details:*
+    // 🔹 Username: ${slip.driverId || "N/A"}
+    // 🔹 Password: ${driverPwd}
 
     shareSlip(slip) {
       // Get last 5 digits of driver's phone number
@@ -1279,13 +1291,10 @@ export default {
       // Format the message with all requested details
       const message = `Hello ${slip.driverName || "Driver"},
 
-*Driver Login Details:*
-🔹 Username: ${slip.driverId || "N/A"}
-🔹 Password: ${driverPwd}
 
 *Trip Information:*
 🚗 Duty Slip ID: ${slip.dutySlipId}
-📅 Date: ${this.formatDate(slip.dateFrom)}
+📅 Date: ${this.formatDateOnlyJP(slip.dateFrom)}
 ⏰ Pickup Time: ${slip.pickupTime}
 📍 Route: ${slip.tripRoute}
 
