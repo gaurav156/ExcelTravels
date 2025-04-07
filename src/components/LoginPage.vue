@@ -375,6 +375,12 @@ import api from "@/utils/api";
 
 export default {
   name: "LoginForm",
+  props: {
+    isModalOpen: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       email: "phatakjanita@gmail.com",
@@ -452,14 +458,7 @@ export default {
 
     hideRoleSelectionModal() {
       this.isRoleSelectionModalVisible = false;
-      this.selectedRole = null;
     },
-
-    // selectRole(role) {
-    //   this.selectedRole = role;
-    //   this.hideRoleSelectionModal();
-    //   this.showForgotPasswordModal();
-    // },
 
     async selectRole(role) {
       this.selectedRole = role;
