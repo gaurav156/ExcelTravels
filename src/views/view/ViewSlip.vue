@@ -1281,12 +1281,12 @@ export default {
     },
 
     //     *Driver Login Details:*
-    // 🔹 Username: ${slip.driverId || "N/A"}
-    // 🔹 Password: ${driverPwd}
+    // Username: ${slip.driverId || "N/A"}
+    // Password: ${driverPwd}
 
     shareSlip(slip) {
       // Get last 5 digits of driver's phone number
-      const driverPwd = slip.phoneNumber ? slip.phoneNumber.slice(-5) : "N/A";
+      // const driverPwd = slip.phoneNumber ? slip.phoneNumber.slice(-5) : "N/A";
 
       // Format the message with all requested details
       const message = `Hello ${slip.driverName || "Driver"},
