@@ -578,14 +578,14 @@ export default {
       }
     },
     async fetchCompanies() {
-      this.isLoading = true;
+      // this.isLoading = true;
       try {
         const response = await api.get("/companies");
         this.companies = response.data;
       } catch (error) {
         console.error("Error fetching companies:", error);
       } finally {
-        this.isLoading = false;
+        // this.isLoading = false;
       }
     },
     // Handle company selection
@@ -604,14 +604,14 @@ export default {
       }
     },
     async fetchDrivers() {
-      this.isLoading = true;
+      // this.isLoading = true;
       try {
         const response = await api.get("/drivers");
         this.drivers = response.data;
       } catch (error) {
         console.error("Error fetching drivers:", error);
       } finally {
-        this.isLoading = false;
+        // this.isLoading = false;
       }
     },
     updateSearchQuery(query) {

@@ -1623,7 +1623,7 @@ Please login to the app using the credentials above for more details.`;
     },
     // Fetch drivers from the API
     async fetchDrivers() {
-      this.isLoading = true;
+      // this.isLoading = true;
       try {
         const response = await api.get("/drivers");
         this.drivers = response.data;
@@ -1640,7 +1640,7 @@ Please login to the app using the credentials above for more details.`;
           },
         });
       } finally {
-        this.isLoading = false;
+        // this.isLoading = false;
       }
     },
     // Update driver search query dynamically
@@ -1670,7 +1670,7 @@ Please login to the app using the credentials above for more details.`;
     },
     // Fetch companies from the API
     async fetchCompanies() {
-      this.isLoading = true;
+      // this.isLoading = true;
       try {
         const response = await api.get("/companies");
         this.companies = response.data;
@@ -1687,7 +1687,7 @@ Please login to the app using the credentials above for more details.`;
           },
         });
       } finally {
-        this.isLoading = false;
+        // this.isLoading = false;
       }
     },
     // Update company search query dynamically
