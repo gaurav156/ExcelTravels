@@ -437,6 +437,18 @@
       </div>
     </form>
   </div>
+
+  <!-- Loading Overlay -->
+  <div v-if="isLoading" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white p-8 rounded-lg shadow-xl flex flex-col items-center">
+      <!-- Heroicon: Arrow Path (spinner) -->
+      <svg class="animate-spin h-12 w-12 text-maroon mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      <p class="text-maroon font-semibold">Processing, please wait...</p>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -534,6 +546,7 @@ export default {
       this.form.carNumber = event.target.value.toUpperCase();
     },
     async fetchDutySlips() {
+      this.isLoading = true;
       try {
         const response = await api.get("/dutyslips");
         this.dutySlips = response.data;
@@ -549,21 +562,30 @@ export default {
             popup: "swal2-popup", // Apply custom class
           },
         });
+      } finally {
+        this.isLoading = false;
       }
 
       this.generateDutySlipId();
     },
     async generateDutySlipId() {
-      const response = await api.get("/dutyslips/generate-dutyslip-id");
-      this.form.dutySlipId = response.data.dutySlipId;
-      console.log("Generated dutySlipId:", this.form.dutySlipId);
+      this.isLoading = true;
+      try {
+        const response = await api.get("/dutyslips/generate-dutyslip-id");
+        this.form.dutySlipId = response.data.dutySlipId;
+      } finally {
+        this.isLoading = false;
+      }
     },
     async fetchCompanies() {
+      this.isLoading = true;
       try {
         const response = await api.get("/companies");
         this.companies = response.data;
       } catch (error) {
         console.error("Error fetching companies:", error);
+      } finally {
+        this.isLoading = false;
       }
     },
     // Handle company selection
@@ -582,11 +604,14 @@ export default {
       }
     },
     async fetchDrivers() {
+      this.isLoading = true;
       try {
         const response = await api.get("/drivers");
         this.drivers = response.data;
       } catch (error) {
         console.error("Error fetching drivers:", error);
+      } finally {
+        this.isLoading = false;
       }
     },
     updateSearchQuery(query) {
