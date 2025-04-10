@@ -25,4 +25,3 @@ pnpm-debug.log*
 
 #netlify directories an files
 .netlify
-backend/netlify
