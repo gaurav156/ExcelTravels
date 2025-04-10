@@ -1,5 +1,5 @@
 const getOTPEmailTemplate = (userName, otp) => {
-    return `
+  return `
     <!DOCTYPE html>
     <html>
     <head>
@@ -84,6 +84,6 @@ const getOTPEmailTemplate = (userName, otp) => {
     </body>
     </html>
     `;
-  };
-  
-  module.exports = { getOTPEmailTemplate };
+};
+
+module.exports = { getOTPEmailTemplate };

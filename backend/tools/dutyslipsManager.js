@@ -1,37 +1,36 @@
 import backupDutyslips from "./dutyslipsBackup";
 import restoreDutyslips from "./dutyslipsRestore";
-import yargs from 'yargs/yargs';
-import { hideBin } from 'yargs/helpers';
+import yargs from "yargs/yargs";
+import { hideBin } from "yargs/helpers";
 
 const argv = yargs(hideBin(process.argv))
-  .option('backup', {
-    type: 'boolean',
-    description: 'Run backup operation'
+  .option("backup", {
+    type: "boolean",
+    description: "Run backup operation",
   })
-  .option('restore', {
-    type: 'boolean',
-    description: 'Run restore operation'
+  .option("restore", {
+    type: "boolean",
+    description: "Run restore operation",
   })
-  .option('file', {
-    type: 'string',
-    description: 'Backup file path for restoration'
+  .option("file", {
+    type: "string",
+    description: "Backup file path for restoration",
   })
-  .option('compress', {
-    type: 'boolean',
+  .option("compress", {
+    type: "boolean",
     default: true,
-    description: 'Use compression for backup'
+    description: "Use compression for backup",
   })
-  .option('delete', {
-    type: 'boolean',
+  .option("delete", {
+    type: "boolean",
     default: false,
-    description: 'Delete from MongoDB after successful backup'
+    description: "Delete from MongoDB after successful backup",
   })
-  .option('months', {
-    type: 'number',
+  .option("months", {
+    type: "number",
     default: 4,
-    description: 'Months threshold for backup'
-  })
-  .argv;
+    description: "Months threshold for backup",
+  }).argv;
 
 async function main() {
   if (argv.backup) {
@@ -39,23 +38,25 @@ async function main() {
     const result = await backupDutyslips({
       shouldCompress: argv.compress,
       shouldDeleteAfterBackup: argv.delete,
-      monthsToKeep: argv.months
+      monthsToKeep: argv.months,
     });
-    console.log('Backup completed:', result);
-  } 
-  else if (argv.restore) {
+    console.log("Backup completed:", result);
+  } else if (argv.restore) {
     if (!argv.file) {
-      console.error('Please specify backup file with --file');
+      console.error("Please specify backup file with --file");
       process.exit(1);
     }
     console.log(`Restoring dutyslips from ${argv.file}...`);
     const count = await restoreDutyslips(argv.file);
     console.log(`Restored ${count} documents`);
-  } 
-  else {
-    console.log('Usage:');
-    console.log('  Backup: node dutyslipsManager.js --backup [--compress=false] [--delete] [--months=6]');
-    console.log('  Restore: node dutyslipsManager.js --restore --file=path/to/backup');
+  } else {
+    console.log("Usage:");
+    console.log(
+      "  Backup: node dutyslipsManager.js --backup [--compress=false] [--delete] [--months=6]"
+    );
+    console.log(
+      "  Restore: node dutyslipsManager.js --restore --file=path/to/backup"
+    );
   }
 }
 

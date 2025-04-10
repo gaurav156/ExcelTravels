@@ -85,7 +85,7 @@ router.get("/:companyId", async (req, res) => {
   try {
     const { companyId } = req.params;
     const company = await Company.findOne({ companyId });
-    
+
     if (!company) return res.status(404).json({ error: "Not Found" });
     res.json(company);
   } catch (err) {

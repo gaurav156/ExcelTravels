@@ -17,12 +17,14 @@ const sendEmail = async (to, subject, text, html = null) => {
     subject,
     text: html ? null : text, // Send text only if no HTML provided
     html,
-    attachments: [{
-      filename: 'logo.png',
-      path: path.join(__dirname, '../public/images/logo.png'),
-      cid: 'companylogo', // Same cid value as in the html img src
-      disposition: 'inline' // This makes the image display inline rather than as attachment
-    }]
+    attachments: [
+      {
+        filename: "logo.png",
+        path: path.join(__dirname, "../public/images/logo.png"),
+        cid: "companylogo", // Same cid value as in the html img src
+        disposition: "inline", // This makes the image display inline rather than as attachment
+      },
+    ],
   };
 
   await transporter.sendMail(mailOptions);

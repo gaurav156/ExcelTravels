@@ -6,14 +6,19 @@ const bcrypt = require("bcrypt");
 const router = express.Router();
 
 // Example: Get all users (only for superadmin)
-router.get("/users", authenticate, checkRole("superadmin"), async (req, res) => {
-  try {
-    const users = await User.find();
-    res.json(users);
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
+router.get(
+  "/users",
+  authenticate,
+  checkRole("superadmin"),
+  async (req, res) => {
+    try {
+      const users = await User.find();
+      res.json(users);
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
+    }
   }
-});
+);
 
 // Get current user's data (protected route)
 router.get("/me", authenticate, async (req, res) => {
@@ -51,7 +56,9 @@ router.get("/protected-data", async (req, res) => {
 
   // Extract username:password from Basic Auth
   const base64Credentials = authHeader.split(" ")[1];
-  const credentials = Buffer.from(base64Credentials, "base64").toString("ascii");
+  const credentials = Buffer.from(base64Credentials, "base64").toString(
+    "ascii"
+  );
   const [username, password] = credentials.split(":");
 
   // Validate credentials
