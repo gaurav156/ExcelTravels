@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const CompanySchema = new mongoose.Schema({
   companyId: { type: String, required: true, unique: true },

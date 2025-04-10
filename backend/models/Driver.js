@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const DriverSchema = new mongoose.Schema({
   driverId: { type: String, required: true, unique: true },

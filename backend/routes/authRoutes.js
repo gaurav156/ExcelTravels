@@ -1,13 +1,13 @@
-const express = require("express");
-const User = require("../models/User");
-const OTP = require("../models/OTP");
-const { authenticate, checkRole } = require("../middlewares/auth");
-const { sendEmail } = require("../utils/sendEmail");
-const { getOTPEmailTemplate } = require("../utils/emailTemplates");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+import { Router } from "express";
+import User from "../models/User";
+import OTP from "../models/OTP";
+import { authenticate, checkRole } from "../middlewares/auth";
+import { sendEmail } from "../utils/sendEmail";
+import { getOTPEmailTemplate } from "../utils/emailTemplates";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
-const router = express.Router();
+const router = Router();
 
 // Login endpoint
 router.post("/login", async (req, res) => {

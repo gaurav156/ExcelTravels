@@ -1,6 +1,7 @@
-const express = require("express");
-const router = express.Router();
-const Company = require("../models/Company");
+import { Router } from "express";
+import Company from "../models/Company";
+
+const router = Router();
 
 // Create Company
 router.post("/", async (req, res) => {

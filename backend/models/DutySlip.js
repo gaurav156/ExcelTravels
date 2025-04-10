@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const DutySlipSchema = new mongoose.Schema({
   dutySlipId: { type: String, required: true, unique: true },

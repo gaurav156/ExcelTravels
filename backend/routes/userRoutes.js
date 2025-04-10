@@ -1,9 +1,9 @@
-const express = require("express");
-const { authenticate, checkRole } = require("../middlewares/auth");
-const User = require("../models/User");
-const bcrypt = require("bcrypt");
+import { Router } from "express";
+import { authenticate, checkRole } from "../middlewares/auth";
+import User from "../models/User";
+import bcrypt from "bcryptjs";
 
-const router = express.Router();
+const router = Router();
 
 // Example: Get all users (only for superadmin)
 router.get(

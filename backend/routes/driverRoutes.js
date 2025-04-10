@@ -1,6 +1,7 @@
-const express = require("express");
-const router = express.Router();
-const Driver = require("../models/Driver");
+import { Router } from "express";
+import Driver from "../models/Driver";
+
+const router = Router();
 
 // Create Driver
 router.post("/", async (req, res) => {

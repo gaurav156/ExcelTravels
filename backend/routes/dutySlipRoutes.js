@@ -1,7 +1,8 @@
-const express = require("express");
-const router = express.Router();
-const DutySlip = require("../models/DutySlip");
-const upload = require("../middlewares/upload");
+import { Router } from "express";
+import DutySlip from "../models/DutySlip";
+// import { upload } from "../middlewares/upload";
+
+const router = Router();
 
 // Create Duty Slip
 router.post("/", async (req, res) => {
@@ -15,71 +16,71 @@ router.post("/", async (req, res) => {
 });
 
 // Create Duty Slip with File Upload
-router.post(
-  "/upload",
-  upload.fields([
-    { name: "startKMPhoto" },
-    { name: "endKMPhoto" },
-    { name: "customerSignature" },
-  ]),
-  async (req, res) => {
-    try {
-      const {
-        dutySlipId,
-        companyId,
-        companyName,
-        customerName,
-        city,
-        address,
-        carBooked,
-        phoneNumber,
-        dutyType,
-        driverName,
-        carNumber,
-        dateFrom,
-        dateTo,
-        tripRoute,
-        startKM,
-        endKM,
-        createdAt,
-      } = req.body;
+// router.post(
+//   "/upload",
+//   upload.fields([
+//     { name: "startKMPhoto" },
+//     { name: "endKMPhoto" },
+//     { name: "customerSignature" },
+//   ]),
+//   async (req, res) => {
+//     try {
+//       const {
+//         dutySlipId,
+//         companyId,
+//         companyName,
+//         customerName,
+//         city,
+//         address,
+//         carBooked,
+//         phoneNumber,
+//         dutyType,
+//         driverName,
+//         carNumber,
+//         dateFrom,
+//         dateTo,
+//         tripRoute,
+//         startKM,
+//         endKM,
+//         createdAt,
+//       } = req.body;
 
-      const newDutySlip = new DutySlip({
-        dutySlipId,
-        companyId,
-        companyName,
-        customerName,
-        city,
-        address,
-        carBooked,
-        phoneNumber,
-        dutyType,
-        driverName,
-        carNumber,
-        dateFrom: new Date(dateFrom),
-        dateTo: new Date(dateTo),
-        tripRoute,
-        startKM,
-        startKMPhoto: req.files["startKMPhoto"]
-          ? `/uploads/${req.files["startKMPhoto"][0].filename}`
-          : "",
-        endKM,
-        endKMPhoto: req.files["endKMPhoto"]
-          ? `/uploads/${req.files["endKMPhoto"][0].filename}`
-          : "",
-        customerSignature: req.files["customerSignature"]
-          ? `/uploads/${req.files["customerSignature"][0].filename}`
-          : "",
-        createdAt: new Date(createdAt),
-      });
+//       const newDutySlip = new DutySlip({
+//         dutySlipId,
+//         companyId,
+//         companyName,
+//         customerName,
+//         city,
+//         address,
+//         carBooked,
+//         phoneNumber,
+//         dutyType,
+//         driverName,
+//         carNumber,
+//         dateFrom: new Date(dateFrom),
+//         dateTo: new Date(dateTo),
+//         tripRoute,
+//         startKM,
+//         startKMPhoto: req.files["startKMPhoto"]
+//           ? `/uploads/${req.files["startKMPhoto"][0].filename}`
+//           : "",
+//         endKM,
+//         endKMPhoto: req.files["endKMPhoto"]
+//           ? `/uploads/${req.files["endKMPhoto"][0].filename}`
+//           : "",
+//         customerSignature: req.files["customerSignature"]
+//           ? `/uploads/${req.files["customerSignature"][0].filename}`
+//           : "",
+//         createdAt: new Date(createdAt),
+//       });
 
-      await newDutySlip.save();
-      res.status(201).json(newDutySlip);
-    } catch (err) {
-      res.status(400).json({ error: err.message });
-    }
-  }
-);
+//       await newDutySlip.save();
+//       res.status(201).json(newDutySlip);
+//     } catch (err) {
+//       res.status(400).json({ error: err.message });
+//     }
+//   }
+// );
 
 // Get All Duty Slips (with optional date range filtering)
 router.get("/", async (req, res) => {
