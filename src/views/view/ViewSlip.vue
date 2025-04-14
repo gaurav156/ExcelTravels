@@ -310,9 +310,17 @@
       v-if="isModalOpen"
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-[1000] overflow-y-auto modal-content"
     >
-      <div
-        class="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden"
-      >
+    <div
+    class="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden"
+    >
+    <div class="print-only" style="display: none;">
+      <div class="print-header">
+        <img src="@/assets/logo.png" alt="Company Logo">
+        <div class="print-contact mt-2">
+          <p class="pr-2 text-sm">excel.travel@rediffmail.com</p>
+        </div>
+      </div>
+    </div>
         <!-- Modal Header with Close Button -->
         <div
           class="flex justify-between items-center p-6 border-b border-gray-200 bg-maroon"
@@ -1899,6 +1907,21 @@ input[type="date"] {
 }
 
 @media print {
+  .print-only {
+    display: block !important;
+    max-height: 20px !important;
+  }
+  .print-only img {
+    height: 40px !important;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  .print-contact {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
   .print-hide {
     display: none !important;
   }
