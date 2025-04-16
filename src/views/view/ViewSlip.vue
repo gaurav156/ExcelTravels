@@ -76,7 +76,7 @@
     <!-- Card Layout for Small and Medium Screens -->
     <div class="sm:block md:block lg:hidden print-hide">
       <div
-        v-for="slip in paginatedData"
+        v-for="slip in dutySlips"
         :key="slip.dutySlipId"
         class="mb-4 p-4 border-2 rounded-lg shadow-sm hover:shadow-md transition-shadow card-style"
       >
@@ -187,7 +187,7 @@
         </thead>
         <tbody>
           <tr
-            v-for="slip in paginatedData"
+            v-for="slip in dutySlips"
             :key="slip.dutySlipId"
             class="hover:bg-gray-100 transition-all"
           >
@@ -295,13 +295,44 @@
     <!-- Pagination -->
     <div class="flex justify-center mt-4">
       <button
-        v-for="page in totalPages"
-        :key="page"
-        @click="currentPage = page"
+        @click="currentPage = 1"
+        :disabled="currentPage === 1"
         class="pagination-btn"
-        :class="{ 'bg-maroon text-white': currentPage === page }"
       >
-        {{ page }}
+        &laquo;
+      </button>
+      <button
+        @click="currentPage--"
+        :disabled="currentPage === 1"
+        class="pagination-btn"
+      >
+        &lsaquo;
+      </button>
+
+      <!-- Show limited page numbers -->
+      <template v-for="page in visiblePages" :key="page">
+        <button
+          @click="currentPage = page"
+          class="pagination-btn"
+          :class="{ 'bg-maroon text-white': currentPage === page }"
+        >
+          {{ page }}
+        </button>
+      </template>
+
+      <button
+        @click="currentPage++"
+        :disabled="currentPage === totalPages"
+        class="pagination-btn"
+      >
+        &rsaquo;
+      </button>
+      <button
+        @click="currentPage = totalPages"
+        :disabled="currentPage === totalPages"
+        class="pagination-btn"
+      >
+        &raquo;
       </button>
     </div>
 
@@ -1105,8 +1136,9 @@ export default {
   },
   data() {
     return {
-      dutySlips: [], // All duty slips fetched from the API
+      dutySlips: [], // Only contains current page's data
       currentPage: 1,
+      totalPages: 1,
       // itemsPerPage: 15,
       dateFilter: "newest", // Default filter: newest first
       nameFilter: "", // Filter by customer/company name
@@ -1123,6 +1155,7 @@ export default {
       parkingFees: 0, // Initialize with 0
       tollFees: 0, // Initialize with 0
       isLoading: false,
+      debounceTimer: null,
     };
   },
   computed: {
@@ -1166,44 +1199,8 @@ export default {
     },
     // Dynamically adjust itemsPerPage based on screen size
     itemsPerPage() {
-      if (this.windowWidth < 1024) {
-        return 5; // 5 items for small and medium screens
-      } else {
-        return 15; // 15 items for large screens
-      }
-    },
-    // Filtered data based on date and name filters
-    filteredData() {
-      let data = this.dutySlips;
 
-      // Filter by customer/company name
-      if (this.nameFilter) {
-        const searchTerm = this.nameFilter.toLowerCase();
-        data = data.filter(
-          (slip) =>
-            slip.customerName.toLowerCase().includes(searchTerm) ||
-            slip.companyName.toLowerCase().includes(searchTerm)
-        );
-        return data;
-      }
-
-      // Filter by date
-      if (this.dateFilter === "newest") {
-        data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // Newest first
-      } else {
-        data.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)); // Oldest first
-      }
-
-      return data;
-    },
-    // Paginated data based on current page
-    paginatedData() {
-      const start = (this.currentPage - 1) * this.itemsPerPage;
-      return this.filteredData.slice(start, start + this.itemsPerPage);
-    },
-    // Total pages for pagination
-    totalPages() {
-      return Math.ceil(this.filteredData.length / this.itemsPerPage);
+      return this.windowWidth < 1024 ? 5 : 10;
     },
     // Filter drivers based on search query
     filteredDrivers() {
@@ -1243,6 +1240,43 @@ export default {
         )
         .slice(0, 5); // Limit the number of displayed options
     },
+    visiblePages() {
+      const range = 2; // Number of pages to show before/after current
+      const start = Math.max(2, this.currentPage - range);
+      const end = Math.min(this.totalPages - 1, this.currentPage + range);
+      
+      const pages = [];
+      
+      // Always include first page
+      pages.push(1);
+      
+      // Add range around current page
+      if (start > 2) pages.push('...');
+      for (let i = start; i <= end; i++) pages.push(i);
+      if (end < this.totalPages - 1) pages.push('...');
+      
+      // Always include last page if different from first
+      if (this.totalPages > 1) pages.push(this.totalPages);
+      
+      return pages;
+    }
+  },
+  watch: {
+    currentPage() {
+      this.fetchDutySlips();
+    },
+    itemsPerPage() {
+      this.currentPage = 1; // Reset to first page when items per page changes
+      this.fetchDutySlips();
+    },
+    nameFilter(newVal) {
+      console.log(newVal);
+      this.debouncedFetch();
+    },
+    dateFilter() {
+      this.currentPage = 1; // Reset to first page when sorting changes
+      this.fetchDutySlips();
+    },
   },
   mounted() {
     const role =
@@ -1258,6 +1292,7 @@ export default {
   },
   beforeUnmount() {
     window.removeEventListener("resize", this.handleResize); // Clean up listener
+    if (this.debounceTimer) clearTimeout(this.debounceTimer);
   },
   methods: {
     handleClickOutside() {
@@ -1356,12 +1391,29 @@ Please login to the app using the credentials above for more details.`;
       }
     },
 
+    debouncedFetch() {
+      if (this.debounceTimer) clearTimeout(this.debounceTimer);
+      this.debounceTimer = setTimeout(() => {
+        this.currentPage = 1; // Reset to first page when filter changes
+        this.fetchDutySlips();
+      }, 500); // 500ms delay
+    },
+
     // Fetch duty slips from the API
     async fetchDutySlips() {
       this.isLoading = true;
       try {
-        const response = await api.get("/dutyslips");
-        this.dutySlips = response.data;
+        const params = {
+          page: this.currentPage,
+          limit: this.itemsPerPage,
+          sort: this.dateFilter,
+          search: this.nameFilter,
+        };
+        
+        const response = await api.get("/dutyslips", { params });
+        this.dutySlips = response.data.dutySlips;
+        this.totalPages = response.data.totalPages;
+        this.currentPage = response.data.currentPage;
       } catch (error) {
         console.error("Error fetching duty slips:", error);
         Swal.fire({
@@ -1371,7 +1423,7 @@ Please login to the app using the credentials above for more details.`;
           confirmButtonColor: "#d33",
           confirmButtonText: "OK",
           customClass: {
-            popup: "swal2-popup", // Apply custom class
+            popup: "swal2-popup",
           },
         });
       } finally {
@@ -1566,7 +1618,8 @@ Please login to the app using the credentials above for more details.`;
           );
 
           // Check if the current page is empty after deletion
-          if (this.paginatedData.length === 0 && this.currentPage > 1) {
+          // if (this.paginatedData.length === 0 && this.currentPage > 1) {
+          if (this.dutySlips.length === 0 && this.currentPage > 1) {
             this.currentPage -= 1; // Move to the previous page
           }
 

@@ -276,15 +276,12 @@ export default {
       this.isLoading = true;
       try {
         this.duty = []; // Clear previous data
-
-        const response = await api.get("/dutyslips", {
+        const response = await api.get("/dutyslips/export", {
           params: {
             dateFrom: this.exportStartDate,
-            dateTo: this.exportEndDate,
-          },
+            dateTo: this.exportEndDate
+          }
         });
-
-        // Always return the data (which might be empty)
         this.duty = response.data || [];
         return this.duty;
       } catch (error) {
