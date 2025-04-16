@@ -82,8 +82,71 @@ router.post("/", async (req, res) => {
 //   }
 // );
 
-// Get All Duty Slips (with optional date range filtering)
+// Get All Duty Slips with pagination, filtering, and sorting
 router.get("/", async (req, res) => {
+  try {
+    // Extract all possible query parameters
+    let { 
+      dateFrom, 
+      dateTo,
+      page = 1, 
+      limit = 15, 
+      sort = 'newest', 
+      search = '' 
+    } = req.query;
+
+    // Initialize filter object with date range if provided
+    let filter = {};
+
+    // Date range filtering (your existing logic)
+    if (dateFrom && dateTo) {
+      let start = new Date(dateFrom);
+      let end = new Date(dateTo);
+
+      if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+        return res.status(400).json({ 
+          error: "Invalid date format. Use YYYY-MM-DD." 
+        });
+      }
+
+      end.setHours(23, 59, 59, 999);
+      filter.createdAt = { $gte: start, $lte: end };
+    }
+
+    // Add search filtering if provided
+    if (search) {
+      filter.$or = [
+        { customerName: { $regex: search, $options: 'i' } },
+        { companyName: { $regex: search, $options: 'i' } }
+      ];
+    }
+
+    // Calculate pagination values
+    const skip = (page - 1) * limit;
+    const total = await DutySlip.countDocuments(filter);
+
+    // Determine sort order
+    const sortOption = sort === 'newest' ? { createdAt: -1 } : { createdAt: 1 };
+
+    // Execute query with pagination and sorting
+    const dutySlips = await DutySlip.find(filter)
+      .sort(sortOption)
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    res.status(200).json({
+      dutySlips,
+      totalPages: Math.ceil(total / limit),
+      currentPage: parseInt(page),
+      totalItems: total
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// New endpoint specifically for exports
+router.get("/export", async (req, res) => {
   try {
     let { dateFrom, dateTo } = req.query;
     let filter = {};
@@ -93,18 +156,17 @@ router.get("/", async (req, res) => {
       let end = new Date(dateTo);
 
       if (isNaN(start.getTime()) || isNaN(end.getTime())) {
-        return res
-          .status(400)
-          .json({ error: "Invalid date format. Use YYYY-MM-DD." });
+        return res.status(400).json({ 
+          error: "Invalid date format. Use YYYY-MM-DD." 
+        });
       }
 
       end.setHours(23, 59, 59, 999);
-
-      filter.dateFrom = { $gte: start, $lte: end };
+      filter.createdAt = { $gte: start, $lte: end };
     }
 
-    const dutySlips = await DutySlip.find(filter);
-    res.status(200).json(dutySlips || []); // Always return an array, even if empty
+    const dutySlips = await DutySlip.find(filter).sort({ createdAt: -1 });
+    res.status(200).json(dutySlips);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
