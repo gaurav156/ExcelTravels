@@ -165,7 +165,8 @@ router.get("/export", async (req, res) => {
       filter.createdAt = { $gte: start, $lte: end };
     }
 
-    const dutySlips = await DutySlip.find(filter).sort({ createdAt: -1 });
+    // Change sort order to ascending (oldest first)
+    const dutySlips = await DutySlip.find(filter).sort({ createdAt: 1 }); // 1 for ascending
     res.status(200).json(dutySlips);
   } catch (err) {
     res.status(500).json({ error: err.message });
