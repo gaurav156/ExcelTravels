@@ -549,7 +549,7 @@ export default {
       this.isLoading = true;
       try {
         const response = await api.get("/dutyslips");
-        this.dutySlips = response.data;
+        this.dutySlips = response.data.dutySlips;
       } catch (error) {
         console.error("Error fetching dutySlips:", error);
         Swal.fire({
@@ -581,7 +581,7 @@ export default {
       // this.isLoading = true;
       try {
         const response = await api.get("/companies");
-        this.companies = response.data;
+        this.companies = response.data.companies;
       } catch (error) {
         console.error("Error fetching companies:", error);
       } finally {
@@ -607,7 +607,7 @@ export default {
       // this.isLoading = true;
       try {
         const response = await api.get("/drivers");
-        this.drivers = response.data;
+        this.drivers = response.data.drivers;
       } catch (error) {
         console.error("Error fetching drivers:", error);
       } finally {
