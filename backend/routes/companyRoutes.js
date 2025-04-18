@@ -14,11 +14,41 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Get All Companies
+// Get All Companies with pagination, filtering, and sorting
 router.get("/", async (req, res) => {
   try {
-    const companies = await Company.find();
-    res.json(companies);
+    // Extract all possible query parameters
+    let { 
+      page = 1, 
+      limit = 10, 
+      search = '' 
+    } = req.query;
+
+    // Initialize filter object with date range if provided
+    let filter = {};
+
+    // Add search filtering if provided
+    if (search) {
+      filter.$or = [
+        { companyName: { $regex: search, $options: 'i' } }
+      ];
+    }
+
+    // Calculate pagination values
+    const skip = (page - 1) * limit;
+    const total = await Company.countDocuments(filter);
+
+    // Execute query with pagination and sorting
+    const companies = await Company.find(filter)
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    res.status(200).json({
+      companies,
+      totalPages: Math.ceil(total / limit),
+      currentPage: parseInt(page),
+      totalItems: total
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
