@@ -89,7 +89,7 @@ router.get("/", async (req, res) => {
       dateFrom, 
       dateTo,
       page = 1, 
-      limit = 15, 
+      limit = 10, 
       sort = 'newest', 
       search = '' 
     } = req.query;

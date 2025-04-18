@@ -41,7 +41,7 @@
     <!-- Card Layout for Small and Medium Screens -->
     <div class="sm:block md:block lg:hidden">
       <div
-        v-for="driver in paginatedData.slice(0, 5)"
+        v-for="driver in drivers"
         :key="driver.driverId"
         class="mb-4 p-4 border-2 rounded-lg shadow-sm hover:shadow-md transition-shadow card-style"
       >
@@ -135,7 +135,7 @@
         </thead>
         <tbody>
           <tr
-            v-for="driver in paginatedData"
+            v-for="driver in drivers"
             :key="driver.driverId"
             class="hover:bg-gray-100 transition-all"
           >
@@ -220,15 +220,46 @@
     </div>
 
     <!-- Pagination -->
-    <div class="flex justify-center mt-4">
+    <div v-if="drivers.length > 0" class="flex justify-center mt-4">
       <button
-        v-for="page in totalPages"
-        :key="page"
+        @click="currentPage = 1"
+        :disabled="currentPage === 1"
+        class="pagination-btn"
+      >
+      &laquo;
+    </button>
+    <button
+      @click="currentPage--"
+      :disabled="currentPage === 1"
+      class="pagination-btn"
+    >
+      &lsaquo;
+    </button>
+
+    <!-- Show limited page numbers -->
+    <template v-for="page in visiblePages" :key="page">
+      <button
         @click="currentPage = page"
         class="pagination-btn"
         :class="{ 'bg-maroon text-white': currentPage === page }"
       >
         {{ page }}
+      </button>
+    </template>
+
+    <button
+      @click="currentPage++"
+      :disabled="currentPage === totalPages"
+      class="pagination-btn"
+    >
+      &rsaquo;
+    </button>
+    <button
+      @click="currentPage = totalPages"
+      :disabled="currentPage === totalPages"
+      class="pagination-btn"
+    >
+      &raquo;
       </button>
     </div>
 
@@ -604,48 +635,56 @@ export default {
   },
   data() {
     return {
-      drivers: [], // All drivers fetched from the API
+      drivers: [], // Only contains current page's data
       currentPage: 1,
+      totalPages: 1,
       nameFilter: "", // Filter by driver name
       isEditMode: false, // Toggles between view and edit modes
       selectedDriver: {}, // Stores the selected driver data
       windowWidth: window.innerWidth, // Track window width for responsiveness
       allowDelete: false,
       isLoading: false,
+      debounceTimer: null,
     };
   },
   computed: {
     // Dynamically adjust itemsPerPage based on screen size
     itemsPerPage() {
-      if (this.windowWidth < 1024) {
-        return 2; // 5 items for small and medium screens
-      } else {
-        return 15; // 15 items for large screens
-      }
+      return this.windowWidth < 1024 ? 5 : 10;
     },
-    // Filtered data based on name filter
-    filteredData() {
-      let data = this.drivers;
-
-      // Filter by driver name
-      if (this.nameFilter) {
-        const searchTerm = this.nameFilter.toLowerCase();
-        data = data.filter((driver) =>
-          driver.name.toLowerCase().includes(searchTerm)
-        );
-      }
-
-      return data;
+    visiblePages() {
+      const range = 2; // Number of pages to show before/after current
+      const start = Math.max(2, this.currentPage - range);
+      const end = Math.min(this.totalPages - 1, this.currentPage + range);
+      
+      const pages = [];
+      
+      // Always include first page
+      pages.push(1);
+      
+      // Add range around current page
+      if (start > 2) pages.push('...');
+      for (let i = start; i <= end; i++) pages.push(i);
+      if (end < this.totalPages - 1) pages.push('...');
+      
+      // Always include last page if different from first
+      if (this.totalPages > 1) pages.push(this.totalPages);
+      
+      return pages;
+    }
+  },
+  watch: {
+    currentPage() {
+      this.fetchDrivers();
     },
-    // Paginated data based on current page
-    paginatedData() {
-      const start = (this.currentPage - 1) * this.itemsPerPage;
-      return this.filteredData.slice(start, start + this.itemsPerPage);
+    itemsPerPage() {
+      this.currentPage = 1; // Reset to first page when items per page changes
+      this.fetchDrivers();
     },
-    // Total pages for pagination
-    totalPages() {
-      return Math.ceil(this.filteredData.length / this.itemsPerPage);
-    },
+    nameFilter(newVal) {
+      console.log(newVal);
+      this.debouncedFetch();
+    }
   },
   mounted() {
     const role =
@@ -659,14 +698,23 @@ export default {
   },
   beforeUnmount() {
     window.removeEventListener("resize", this.handleResize); // Clean up listener
+    if (this.debounceTimer) clearTimeout(this.debounceTimer);
   },
   methods: {
     // Fetch drivers from the API
     async fetchDrivers() {
       this.isLoading = true;
       try {
-        const response = await api.get("/drivers");
-        this.drivers = response.data;
+        const params = {
+            page: this.currentPage,
+            limit: this.itemsPerPage,
+            search: this.nameFilter,
+          };
+          
+          const response = await api.get("/drivers", { params });
+          this.drivers = response.data.drivers;
+          this.totalPages = response.data.totalPages;
+          this.currentPage = response.data.currentPage;
       } catch (error) {
         console.error("Error fetching drivers:", error);
         Swal.fire({
@@ -682,6 +730,13 @@ export default {
       } finally {
         this.isLoading = false;
       }
+    },
+    debouncedFetch() {
+      if (this.debounceTimer) clearTimeout(this.debounceTimer);
+      this.debounceTimer = setTimeout(() => {
+        this.currentPage = 1; // Reset to first page when filter changes
+        this.fetchDrivers();
+      }, 500); // 500ms delay
     },
     // Handle window resize to update windowWidth
     handleResize() {
@@ -833,7 +888,7 @@ export default {
           );
 
           // Check if the current page is empty after deletion
-          if (this.paginatedData.length === 0 && this.currentPage > 1) {
+          if (this.drivers.length === 0 && this.currentPage > 1) {
             this.currentPage -= 1; // Move to the previous page
           }
 

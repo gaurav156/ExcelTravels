@@ -13,11 +13,41 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Get All Drivers
+// Get All Drivers with pagination, filtering, and sorting
 router.get("/", async (req, res) => {
   try {
-    const drivers = await Driver.find();
-    res.json(drivers);
+    // Extract all possible query parameters
+    let { 
+      page = 1, 
+      limit = 10, 
+      search = '' 
+    } = req.query;
+
+    // Initialize filter object with date range if provided
+    let filter = {};
+
+    // Add search filtering if provided
+    if (search) {
+      filter.$or = [
+        { name: { $regex: search, $options: 'i' } }
+      ];
+    }
+
+    // Calculate pagination values
+    const skip = (page - 1) * limit;
+    const total = await Driver.countDocuments(filter);
+
+    // Execute query with pagination and sorting
+    const drivers = await Driver.find(filter)
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    res.status(200).json({
+      drivers,
+      totalPages: Math.ceil(total / limit),
+      currentPage: parseInt(page),
+      totalItems: total
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

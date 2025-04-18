@@ -293,7 +293,7 @@
       </table>
     </div>
     <!-- Pagination -->
-    <div class="flex justify-center mt-4">
+    <div v-if="dutySlips.length > 0" class="flex justify-center mt-4">
       <button
         @click="currentPage = 1"
         :disabled="currentPage === 1"
