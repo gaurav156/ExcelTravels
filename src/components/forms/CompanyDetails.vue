@@ -176,7 +176,7 @@ export default {
       this.isLoading = true;
       try {
         const response = await api.get("/companies");
-        this.companies = response.data;
+        this.companies = response.data.companies;
       } catch (error) {
         console.error("Error fetching companies:", error);
         Swal.fire({

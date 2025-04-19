@@ -124,9 +124,28 @@
             />
           </div>
 
+          <!-- Customer Phone Number -->
+          <div>
+            <label
+              for="customerPhoneNumber"
+              class="block text-sm font-medium text-maroon"
+            >
+              Customer Phone Number
+            </label>
+            <input
+              type="tel"
+              id="customerPhoneNumber"
+              v-model="form.customerPhoneNumber"
+              placeholder="Enter Customer Phone Number"
+              class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
+              pattern="[0-9]{10}"
+              title="Please enter a 10-digit phone number"
+            />
+          </div>
+
           <!-- City -->
           <div>
-            <label for="city" class="block text-sm font-medium text-maroon"
+            <label for="city" class="block text-sm font-medium text-maroon mb-1"
               >City</label
             >
             <VueSelect
@@ -302,13 +321,13 @@
               for="phoneNumber"
               class="block text-sm font-medium text-maroon"
             >
-              Phone Number
+              Driver Phone Number
             </label>
             <input
               type="tel"
               id="phoneNumber"
               v-model="form.phoneNumber"
-              placeholder="Enter Phone Number"
+              placeholder="Enter Driver Phone Number"
               class="focus:ring-[#800000] focus:outline-none mt-1 block w-full px-4 py-2 border border-gray-400 rounded-md shadow-sm bg-gray-50 focus:ring-maroon focus:border-maroon"
               required
               pattern="[0-9]{10}"
@@ -470,6 +489,7 @@ export default {
         companyId: "", // Rename to CompanyID if required
         companyName: "", // Rename to PartyName if required
         customerName: "", // Rename to CustomerName if required
+        customerPhoneNumber: "",
         city: "",
         address: "",
         carBooked: "",
@@ -527,8 +547,10 @@ export default {
         errors.companyName = "Company Name is required.";
       if (!this.form.customerName)
         errors.customerName = "Customer Name is required.";
+      if (!this.form.customerPhoneNumber)
+        errors.customerName = "Customer Phone Number is required.";
       if (!this.form.phoneNumber)
-        errors.phoneNumber = "Phone Number is required.";
+        errors.phoneNumber = "Driver Phone Number is required.";
       if (!this.form.carNumber) errors.carNumber = "Car Number is required.";
       if (!this.form.pickupTime) errors.pickupTime = "Pickup Time is required.";
       // New validation: Ensure dateTo is not smaller than dateFrom
@@ -704,6 +726,7 @@ export default {
         companyId: "",
         companyName: "",
         customerName: "",
+        customerPhoneNumber: "",
         city: "",
         address: "",
         carBooked: "",

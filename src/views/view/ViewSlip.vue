@@ -439,6 +439,12 @@
                   </p>
                 </div>
                 <div>
+                  <p class="text-sm font-medium text-gray-700">Customer Phone Number</p>
+                  <p class="text-gray-500">
+                    {{ selectedSlip.customerPhoneNumber }}
+                  </p>
+                </div>
+                <div>
                   <p class="text-sm font-medium text-gray-700">City</p>
                   <p class="text-gray-500">
                     {{ selectedSlip.city }}
@@ -472,7 +478,7 @@
                   </p>
                 </div>
                 <div>
-                  <p class="text-sm font-medium text-gray-700">Phone Number</p>
+                  <p class="text-sm font-medium text-gray-700">Driver Phone Number</p>
                   <p class="text-gray-500">
                     {{ selectedSlip.phoneNumber }}
                   </p>
@@ -861,6 +867,19 @@
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700">
+                  Customer Phone Number <span class="text-red-500">*</span>
+                </label>
+                <input
+                  v-model="selectedSlip.customerPhoneNumber"
+                  type="tel"
+                  class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
+                  required
+                  pattern="[0-9]{10}"
+                  title="Please enter a 10-digit phone number"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700">
                   City <span class="text-red-500">*</span>
                 </label>
                 <VueSelect
@@ -907,13 +926,15 @@
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700">
-                  Phone Number <span class="text-red-500">*</span>
+                  Driver Phone Number <span class="text-red-500">*</span>
                 </label>
                 <input
                   v-model="selectedSlip.phoneNumber"
                   type="tel"
                   class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-maroon focus:border-maroon"
                   required
+                  pattern="[0-9]{10}"
+                  title="Please enter a 10-digit phone number"
                 />
               </div>
               <div>
@@ -1488,6 +1509,7 @@ Please login to the app using the credentials above for more details.`;
       const requiredFields = [
         "companyName",
         "customerName",
+        "customerPhoneNumber",
         "city",
         "address",
         "carBooked",
@@ -1687,7 +1709,7 @@ Please login to the app using the credentials above for more details.`;
       // this.isLoading = true;
       try {
         const response = await api.get("/drivers");
-        this.drivers = response.data;
+        this.drivers = response.data.drivers;
       } catch (error) {
         console.error("Error fetching drivers:", error);
         Swal.fire({
@@ -1734,7 +1756,7 @@ Please login to the app using the credentials above for more details.`;
       // this.isLoading = true;
       try {
         const response = await api.get("/companies");
-        this.companies = response.data;
+        this.companies = response.data.companies;
       } catch (error) {
         console.error("Error fetching companies:", error);
         Swal.fire({
