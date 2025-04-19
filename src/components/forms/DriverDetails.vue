@@ -385,7 +385,7 @@ export default {
       this.isLoading = true;
       try {
         const response = await api.get("/drivers");
-        this.drivers = response.data;
+        this.drivers = response.data.drivers;
       } catch (error) {
         console.error("Error fetching drivers:", error);
         Swal.fire({
