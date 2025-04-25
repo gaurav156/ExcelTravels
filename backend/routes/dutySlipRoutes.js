@@ -92,7 +92,8 @@ router.get("/", async (req, res) => {
       page = 1, 
       limit = 10, 
       sort = 'newest', 
-      search = '' 
+      search = '',
+      status // Add status filter parameter
     } = req.query;
 
     // Initialize filter object with date range if provided
@@ -111,6 +112,11 @@ router.get("/", async (req, res) => {
 
       end.setHours(23, 59, 59, 999);
       filter.createdAt = { $gte: start, $lte: end };
+    }
+
+    // Add status filter if provided and not 'all'
+    if (status && status !== 'all') {
+      filter.status = status;
     }
 
     // Add search filtering if provided

@@ -113,7 +113,7 @@
     <!-- Card Layout for Small and Medium Screens -->
     <div class="sm:block md:block lg:hidden print-hide">
       <div 
-        v-for="slip in filteredDutySlips"
+        v-for="slip in dutySlips"
         :key="slip.dutySlipId"
         class="mb-4 p-4 border-2 rounded-lg shadow-sm hover:shadow-md transition-shadow card-style"
         :class="{
@@ -242,7 +242,7 @@
         <tbody>
         <!-- Update your table row to include status highlighting -->
             <tr
-              v-for="slip in filteredDutySlips"
+              v-for="slip in dutySlips"
               :key="slip.dutySlipId"
               class=" transition-all"
               :class="{
@@ -1248,32 +1248,6 @@ export default {
         default: return 'All Statuses';
       }
     },
-    filteredDutySlips() {
-    let filtered = this.dutySlips;
-    
-    // Apply status filter
-    if (this.statusFilter !== 'all') {
-      filtered = filtered.filter(slip => slip.status === this.statusFilter);
-    }
-    
-    // Apply existing filters (name, date)
-    if (this.nameFilter) {
-      const searchTerm = this.nameFilter.toLowerCase();
-      filtered = filtered.filter(slip => 
-        slip.customerName.toLowerCase().includes(searchTerm) ||
-        slip.companyName.toLowerCase().includes(searchTerm)
-      );
-    }
-    
-    // Apply date sorting
-    if (this.dateFilter === 'newest') {
-      filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    } else {
-      filtered.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-    }
-    
-    return filtered;
-  },
     totalKM() {
       // Ensure values are numbers and calculate difference
       return (
@@ -1392,8 +1366,9 @@ export default {
       this.fetchDutySlips();
     },
     statusFilter() {
-    this.currentPage = 1; // Reset to first page when filter changes
-  },
+      this.currentPage = 1; // Reset to first page when filter changes
+      this.fetchDutySlips(); // This will now fetch filtered data from the backend
+    },
   },
   mounted() {
     const role =
@@ -1535,7 +1510,11 @@ Please login to the app using the credentials above for more details.`;
           limit: this.itemsPerPage,
           sort: this.dateFilter,
           search: this.nameFilter,
+          status: this.statusFilter !== 'all' ? this.statusFilter : undefined
         };
+        
+        // Remove undefined params
+        Object.keys(params).forEach(key => params[key] === undefined && delete params[key]);
         
         const response = await api.get("/dutyslips", { params });
         this.dutySlips = response.data.dutySlips;
