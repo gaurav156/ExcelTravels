@@ -70,16 +70,70 @@
           />
         </svg>
       </div>
+
+      <!-- Status Filter Dropdown -->
+      <div v-click-outside="handleClickOutsideStatus" class="flex items-center relative">
+        <label class="mr-2 font-medium text-maroon">Filter by Status:</label>
+        <div class="relative">
+          <button
+            @click="toggleStatusDropdown"
+            class="p-2 border border-maroon rounded-md focus:ring-maroon focus:border-maroon custom-fselect"
+          >
+            {{ statusFilterLabel }}
+          </button>
+          <div
+            v-if="isStatusDropdownOpen"
+            class="absolute mt-1 w-full bg-white border border-maroon rounded-md shadow-lg z-10"
+          >
+            <div
+              @click="selectStatusFilter('all')"
+              class="p-2 hover:bg-[#800000] hover:text-white cursor-pointer"
+            >
+              All Statuses
+            </div>
+            <div
+              @click="selectStatusFilter('pending')"
+              class="p-2 hover:bg-[#800000] hover:text-white cursor-pointer"
+            >
+              Pending
+            </div>
+            <div
+              @click="selectStatusFilter('completed')"
+              class="p-2 hover:bg-[#800000] hover:text-white cursor-pointer"
+            >
+              Completed
+            </div>
+          </div>
+        </div>
+      </div>
+
+
     </div>
 
-    <!-- Table -->
     <!-- Card Layout for Small and Medium Screens -->
     <div class="sm:block md:block lg:hidden print-hide">
-      <div
-        v-for="slip in dutySlips"
+      <div 
+        v-for="slip in filteredDutySlips"
         :key="slip.dutySlipId"
         class="mb-4 p-4 border-2 rounded-lg shadow-sm hover:shadow-md transition-shadow card-style"
+        :class="{
+          'border-green-200': slip.status === 'completed',
+          'border-yellow-200': slip.status === 'pending'
+        }"
       >
+
+      <!-- Add status badge -->
+      <div class="flex justify-between items-start mb-2">
+        <span 
+          class="px-2 py-1 rounded-full text-xs font-semibold mb-2"
+          :class="{
+            'bg-green-100 text-green-800': slip.status === 'completed',
+            'bg-yellow-100 text-yellow-800': slip.status === 'pending'
+          }"
+        >
+          {{ slip.status }}
+        </span>
+      </div>
         <!-- Duty Slip Details -->
         <div class="space-y-2">
           <p><strong>Slip ID:</strong> {{ slip.dutySlipId }}</p>
@@ -186,12 +240,17 @@
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="slip in dutySlips"
-            :key="slip.dutySlipId"
-            class="hover:bg-gray-100 transition-all"
-          >
-            <td class="border p-2 text-center font-bold">
+        <!-- Update your table row to include status highlighting -->
+            <tr
+              v-for="slip in filteredDutySlips"
+              :key="slip.dutySlipId"
+              class="hover:bg-gray-100 transition-all"
+              :class="{
+                'bg-green-50': slip.status === 'completed',
+                'bg-yellow-50': slip.status === 'pending'
+              }"
+            >
+                        <td class="border p-2 text-center font-bold">
               {{ slip.dutySlipId }}
             </td>
             <td class="border p-2 font-bold hidden md:table-cell">
@@ -232,7 +291,7 @@
               <svg
                 @click="editSlip(slip.dutySlipId)"
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6 text-green-500 hover:text-green-700 cursor-pointer mx-auto"
+                class="h-6 w-6 text-blue-500 hover:text-blue-700 cursor-pointer"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -1177,9 +1236,44 @@ export default {
       tollFees: 0, // Initialize with 0
       isLoading: false,
       debounceTimer: null,
+      statusFilter: 'all',
+      isStatusDropdownOpen: false,
     };
   },
   computed: {
+    statusFilterLabel() {
+      switch (this.statusFilter) {
+        case 'pending': return 'Pending';
+        case 'completed': return 'Completed';
+        default: return 'All Statuses';
+      }
+    },
+    filteredDutySlips() {
+    let filtered = this.dutySlips;
+    
+    // Apply status filter
+    if (this.statusFilter !== 'all') {
+      filtered = filtered.filter(slip => slip.status === this.statusFilter);
+    }
+    
+    // Apply existing filters (name, date)
+    if (this.nameFilter) {
+      const searchTerm = this.nameFilter.toLowerCase();
+      filtered = filtered.filter(slip => 
+        slip.customerName.toLowerCase().includes(searchTerm) ||
+        slip.companyName.toLowerCase().includes(searchTerm)
+      );
+    }
+    
+    // Apply date sorting
+    if (this.dateFilter === 'newest') {
+      filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    } else {
+      filtered.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+    }
+    
+    return filtered;
+  },
     totalKM() {
       // Ensure values are numbers and calculate difference
       return (
@@ -1220,8 +1314,7 @@ export default {
     },
     // Dynamically adjust itemsPerPage based on screen size
     itemsPerPage() {
-
-      return this.windowWidth < 1024 ? 5 : 10;
+      return this.windowWidth < 1024 ? 5 : 10; 
     },
     // Filter drivers based on search query
     filteredDrivers() {
@@ -1298,6 +1391,9 @@ export default {
       this.currentPage = 1; // Reset to first page when sorting changes
       this.fetchDutySlips();
     },
+    statusFilter() {
+    this.currentPage = 1; // Reset to first page when filter changes
+  },
   },
   mounted() {
     const role =
@@ -1316,6 +1412,16 @@ export default {
     if (this.debounceTimer) clearTimeout(this.debounceTimer);
   },
   methods: {
+      toggleStatusDropdown() {
+      this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
+    },
+    selectStatusFilter(status) {
+      this.statusFilter = status;
+      this.isStatusDropdownOpen = false;
+    },
+    handleClickOutsideStatus() {
+      this.isStatusDropdownOpen = false;
+    },
     handleClickOutside() {
       this.isDateDropdownOpen = false;
     },
@@ -2049,5 +2155,19 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 input[type="time"] {
   -webkit-appearance: none;
   appearance: none;
+}
+
+/* Add these styles to your style section */
+.bg-green-50 {
+  background-color: rgb(116, 246, 155); /* Very light green */
+}
+.bg-yellow-50 {
+  background-color: rgb(247, 235, 103); /* Very light yellow */
+}
+.border-green-200 {
+  border-color: #01ff34; /* Light green border */
+}
+.border-yellow-200 {
+  border-color: #ffe30d; /* Light yellow border */
 }
 </style>
