@@ -148,8 +148,10 @@ router.get("/", async (req, res) => {
 // New endpoint specifically for exports
 router.get("/export", async (req, res) => {
   try {
-    let { dateFrom, dateTo } = req.query;
-    let filter = {};
+    let { dateFrom, dateTo, status = "completed" } = req.query;
+    let filter = {
+      status: status 
+    };
 
     if (dateFrom && dateTo) {
       let start = new Date(dateFrom);
