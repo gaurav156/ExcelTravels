@@ -244,7 +244,7 @@
             <tr
               v-for="slip in filteredDutySlips"
               :key="slip.dutySlipId"
-              class="hover:bg-gray-100 transition-all"
+              class=" transition-all"
               :class="{
                 'bg-green-50': slip.status === 'completed',
                 'bg-yellow-50': slip.status === 'pending'
