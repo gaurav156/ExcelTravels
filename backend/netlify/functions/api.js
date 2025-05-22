@@ -9,6 +9,7 @@ import companyRoutes from "../../routes/companyRoutes";
 import driverRoutes from "../../routes/driverRoutes";
 import authRoutes from "../../routes/authRoutes";
 import userRoutes from "../../routes/userRoutes";
+import driverAuthRoutes from "../../routes/auth";
 // import { authenticate } from "../../middlewares/auth";
 // import path from "path";
 // import fs from "fs";
@@ -20,6 +21,7 @@ const app = express();
 // Read and split the allowed origins from .env
 const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [
   "http://localhost:8080",
+  "http://localhost:8081",
 ];
 
 app.use(
@@ -65,6 +67,7 @@ app.use("/api/companies", companyRoutes);
 app.use("/api/drivers", driverRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/driverauth", driverAuthRoutes);
 
 // Serve static files (uploaded images)
 // app.use("/uploads", express.static(uploadDir));
