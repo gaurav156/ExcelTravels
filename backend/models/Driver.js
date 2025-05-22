@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 const DriverSchema = new mongoose.Schema({
   driverId: { type: String, required: true, unique: true },
