@@ -28,7 +28,14 @@ DriverSchema.pre("save", async function (next) {
 
   try {
     if (!this.password) {
-      this.password = this.contact;
+      // Extract last 5 digits of driver's contact
+      if (this.contact) {
+        const driverContact = this.contact;
+        const lastFiveDigits = driverContact.slice(-5);
+        this.password = lastFiveDigits;
+      } else {
+        this.password = this.contact;
+      }
     }
     this.password = await bcrypt.hash(this.password, 10);
     next();
