@@ -2,7 +2,7 @@ import { Router } from "express";
 import Driver from "../models/Driver";
 import OTP from "../models/OTP";
 import { sendOtpSms } from "../services/smsService";
-// import { otpLimiter } from "../middlewares/rateLimiter";
+import jwt from 'jsonwebtoken';
 
 const router = Router();
 
@@ -36,12 +36,23 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
+    // Create JWT token
+    const token = jwt.sign(
+      { 
+        id: driver._id,
+        driverId: driver.driverId 
+      },
+      process.env.JWT_SECRET,
+      // { expiresIn: '7d' } // Token expires in 7 days
+    );
+
     // Successful login
     res.json({
       message: "Login successful",
+      token,
       driver: {
         id: driver._id,
-        driverId: driver.driverId, // D001
+        driverId: driver.driverId,
         name: driver.name,
         email: driver.email,
         contact: driver.contact,
