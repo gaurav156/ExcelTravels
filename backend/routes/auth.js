@@ -4,6 +4,7 @@ const Driver = require("../models/Driver");
 const OTP = require("../models/OTP");
 const { sendOtpSms } = require("../services/smsService");
 const { otpLimiter } = require("../middlewares/rateLimiter");
+const jwt = require('jsonwebtoken');
 
 // Login endpoint
 router.post("/login", async (req, res) => {
@@ -35,12 +36,23 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
+    // Create JWT token
+    const token = jwt.sign(
+      { 
+        id: driver._id,
+        driverId: driver.driverId 
+      },
+      process.env.JWT_SECRET,
+      // { expiresIn: '7d' } // Token expires in 7 days
+    );
+
     // Successful login
     res.json({
       message: "Login successful",
+      token,
       driver: {
         id: driver._id,
-        driverId: driver.driverId, // D001
+        driverId: driver.driverId,
         name: driver.name,
         email: driver.email,
         contact: driver.contact,
