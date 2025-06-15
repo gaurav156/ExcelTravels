@@ -18,16 +18,14 @@ const DriverSchema = new mongoose.Schema({
   panNumber: { type: String, required: true, unique: true },
   licenseNumber: { type: String, required: true, unique: true },
   createdAt: { type: Date, default: Date.now },
-  password: { type: String, required: true },
+  password: { type: String },
   profilePic: { type: String }, // Add this line for profile picture URL
 });
 
 // Hash password before saving
 DriverSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
-
-  try {
-    if (!this.password) {
+  if (this.isModified("password") || this.password === null || !this.password) {
+    try {
       // Extract last 5 digits of driver's contact
       if (this.contact) {
         const driverContact = this.contact;
@@ -36,11 +34,13 @@ DriverSchema.pre("save", async function (next) {
       } else {
         this.password = this.contact;
       }
+      this.password = await bcrypt.hash(this.password, 10);
+      next();
+    } catch (error) {
+      next(error);
     }
-    this.password = await bcrypt.hash(this.password, 10);
-    next();
-  } catch (error) {
-    next(error);
+  } else {
+    return next(); 
   }
 });
 
